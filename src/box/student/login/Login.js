@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-class Student extends Component {
+class Login extends Component {
   render() {
     return (
       <div>
@@ -11,4 +11,4 @@ class Student extends Component {
   }
 }
 
-export default Student;
+export default Login;

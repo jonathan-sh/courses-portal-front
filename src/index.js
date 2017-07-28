@@ -5,8 +5,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Route, BrowserRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker';
 import App from './App';
-import LoginProvider from './box/login/Provider'
-import LoginStudent from './box/login/Student'
+import LoginProvider from './box/provider/login/Login';
+import LoginStudent from './box/student/login/Login';
+import AboultPovider from './box/provider/aboult/Aboult';
 
 injectTapEventPlugin();
 
@@ -18,6 +19,7 @@ const Main = () => (
             <Route exact path='/' component={App} />
             <Route path='/login/provider' component={LoginProvider} />
             <Route path='/login/student' component={LoginStudent} />
+            <Route path='/provider/aboult' component={AboultPovider} />
             </div>
         </BrowserRouter>
     </MuiThemeProvider>

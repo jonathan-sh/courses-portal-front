@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import httpService from './../../service/HttpService';
+import httpService from '../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-class Provider extends Component {
+class Login extends Component {
 
     constructor() {
         super()
@@ -29,7 +29,7 @@ class Provider extends Component {
     makeDataForLogin= () => {
         return {email:this.email.input.value,
                 password:this.password.input.value,
-                entity:'student'}
+                entity:'provider'}
     }
 
 
@@ -54,12 +54,14 @@ class Provider extends Component {
                     onTouchTap={this.makeLogin.bind(this)}
                     label="Default" style={{ margin: 12,}} />
                 <br/>
-                <span style={{fontFamily: 'Roboto', fontSize: '20px'}}>{this.state.msg}</span>
+                <span style={{fontFamily: 'Roboto', fontSize: '20px',}}>
+                    {this.state.msg}
+                </span>
             </div>
         );
     }
 }
 
-export default Provider;
+export default Login;
 
 
