@@ -1,28 +1,24 @@
 import React, { Component } from "react";
+import httpService from './../../service/HttpService';
 
 class Provider extends Component {
 
     constructor() {
         super()
         this.state = { msg: '' }
+        this.httpService = new httpService();
     }
 
     envia(event) {
+
         event.preventDefault();
 
-        const resquetInfo = {
-            method: 'POST',
-            body: JSON.stringify({ email:'johtnathan@mail.com' , password:'123456', entity:'provider'}),
-            headers: new Headers({'Content-type': 'application/json;charset=UTF-8'}),
-        };
+        let dados = { email:'igor@mail.com', password:'123456', entity:'student'};
 
-        fetch('http://localhost:4212/login',resquetInfo)
-            .then(response => {
-                console.log(response);
-                return response.json();
-            })
-            .then(sucess => console.log(sucess))
-            .catch(error => console.log("meu erro:" + error));
+        this.httpService.post('/login',dados)
+                        .then(response => {return response.json();})
+                        .then(sucess => console.log(sucess))
+                        .catch(error => console.log(error));
     }
 
 
