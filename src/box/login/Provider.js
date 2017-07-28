@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import httpService from './../../service/HttpService';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 class Provider extends Component {
 
@@ -9,27 +11,50 @@ class Provider extends Component {
         this.httpService = new httpService();
     }
 
-    envia(event) {
 
+    makeLogin = (event) => {
         event.preventDefault();
+        this.httpService.post('/login', this.makeDataForLogin())
+            .then(response => {
+                if (response.status !== 501 )
+                {
+                    return response.json();
+                }
+                this.setState({msg:'falha no login'});
+            })
+            .then(sucess => this.setState({msg:'vosso token madame: '+ sucess.token}))
+            .catch(error => console.log(error));
+    }
 
-        let dados = { email:'igor@mail.com', password:'123456', entity:'student'};
-
-        this.httpService.post('/login',dados)
-                        .then(response => {return response.json();})
-                        .then(sucess => console.log(sucess))
-                        .catch(error => console.log(error));
+    makeDataForLogin= () => {
+        return {email:this.email.input.value,
+                password:this.password.input.value,
+                entity:'student'}
     }
 
 
     render() {
         return (
             <div>
-                <form onSubmit={this.envia.bind(this)}>
-                    <input type="text" ref={(input) => this.login = input} />
-                    <input type="text" ref={(input) => this.senha = input} />
-                    <input type="submit" value="login" />
-                </form>
+                <TextField
+                    hintText="Email"
+                    floatingLabelText="Email"
+                    fullWidth={true}
+                    ref={(input) => { this.email = input; }}
+                />
+                <TextField
+                    hintText="Senha"
+                    floatingLabelText="Senha"
+                    type="password"
+                    fullWidth={true}
+                    ref={(input) => { this.password = input; }}
+                />
+                <RaisedButton
+
+                    onTouchTap={this.makeLogin.bind(this)}
+                    label="Default" style={{ margin: 12,}} />
+                <br/>
+                <span style={{fontFamily: 'Roboto', fontSize: '20px'}}>{this.state.msg}</span>
             </div>
         );
     }
