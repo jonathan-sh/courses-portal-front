@@ -7,19 +7,18 @@ import registerServiceWorker from './registerServiceWorker';
 import App from './App';
 import LoginProvider from './box/provider/login/Login';
 import LoginStudent from './box/student/login/Login';
-import AboultPovider from './box/provider/aboult/Aboult';
+import AboutPovider from './box/provider/about/About';
 
 injectTapEventPlugin();
-
 
 const Main = () => (
     <MuiThemeProvider>
         <BrowserRouter>
             <div>
-            <Route exact path='/' component={App} />
-            <Route path='/login/provider' component={LoginProvider} />
-            <Route path='/login/student' component={LoginStudent} />
-            <Route path='/provider/aboult' component={AboultPovider} />
+                <Route exact path='/' component={App} />
+                <Route path='/login/provider' component={LoginProvider} />
+                <Route path='/login/student' component={LoginStudent} />
+                <Route path='/provider/about' component={AboutPovider} />
             </div>
         </BrowserRouter>
     </MuiThemeProvider>
