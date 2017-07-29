@@ -7,7 +7,8 @@ import registerServiceWorker from './registerServiceWorker';
 import App from './App';
 import LoginProvider from './box/provider/login/Login';
 import LoginStudent from './box/student/login/Login';
-import AboutPovider from './box/provider/about/About';
+import AboutProvider from './box/provider/about/About';
+import DashProvider from './box/provider/dash/Dash'
 
 injectTapEventPlugin();
 
@@ -18,7 +19,8 @@ const Main = () => (
                 <Route exact path='/' component={App} />
                 <Route path='/login/provider' component={LoginProvider} />
                 <Route path='/login/student' component={LoginStudent} />
-                <Route path='/provider/about' component={AboutPovider} />
+                <Route path='/provider/about' component={AboutProvider} />
+                <Route path='/provider/dash' component={DashProvider} />
             </div>
         </BrowserRouter>
     </MuiThemeProvider>
