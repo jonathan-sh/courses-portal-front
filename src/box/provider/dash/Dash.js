@@ -13,7 +13,10 @@ class Dash extends Component {
     render() {
         return (
             <div>
-
+                <AppBar
+                    title="Title"
+                    showMenuIconButton={false}
+                />
                 <Drawer open={true}>
                     <AppBar
                         title="Title"
