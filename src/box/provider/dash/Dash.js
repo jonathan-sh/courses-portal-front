@@ -3,8 +3,6 @@ import HeaderBar from './HeaderBar';
 import NavigationBar from './NavigationBar';
 import './../../../style/css/provider/provider.css';
 
-
-
 class Dash extends Component {
 
     render() {

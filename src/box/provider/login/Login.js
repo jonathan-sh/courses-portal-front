@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import {Card} from 'material-ui/Card';
 import {Link} from 'react-router-dom';
 import history from '../../../service/Router';
+import '../../../style/css/provider/login.css';
 
 class Login extends Component {
 
@@ -25,7 +26,7 @@ class Login extends Component {
                 }
                 this.setState({msg:'falha ao realizar login!'});
             })
-            .then(sucess => {history.push('/provider/dash');})
+            .then(sucess => {history.push('/provider/about');})
             .catch(error => console.log(error));
     }
 
@@ -66,7 +67,9 @@ class Login extends Component {
                                     label="Login Facebook" className="button"
                                 />
                             </div>
-                            <p className="font forgot-password"><Link to={"/"} className="forgot-password">Esqueci minha senha</Link></p>
+                            <p className="font forgot-password">
+                                <Link to={"/"} className="forgot-password">Esqueci minha senha</Link>
+                            </p>
                             <span className="font">
                                 {this.state.msg}
                             </span>

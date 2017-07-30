@@ -8,9 +8,10 @@ import Marketing from 'material-ui/svg-icons/action/dashboard';
 import CourseIco from 'material-ui/svg-icons/social/school';
 import RegisterIco from 'material-ui/svg-icons/content/create';
 import AnalyticIco from 'material-ui/svg-icons/action/trending-up';
-class NavigationBar extends Component {
+import {Link} from 'react-router-dom';
 
-
+class NavigationBar extends Component 
+{
     render() {
         return (
             <div>
@@ -19,32 +20,41 @@ class NavigationBar extends Component {
                         title="Title"
                         showMenuIconButton={false}
                     />
-                    <MenuItem
-                        primaryText="Sobre"
-                        leftIcon={<AboutIco  />}
-                    />
+                    <Link to={'/provider/about'} className={"link-routes"}>
+                        <MenuItem
+                            primaryText="Sobre"
+                            leftIcon={<AboutIco  />}
+                        />
+                    </Link>
                     <Divider />
-                    <MenuItem
-                        primaryText="Marketing"
-                        leftIcon={<Marketing/>}
-                    />
+                    <Link to={'/provider/marketing'} className={"link-routes"}>
+                        <MenuItem
+                            primaryText="Marketing"
+                            leftIcon={<Marketing/>}
+                        />
+                    </Link>
                     <Divider />
-                    <MenuItem
-                        primaryText="Curso"
-                        leftIcon={<CourseIco/>}
-                    />
+                    <Link to={'/provider/course'} className={"link-routes"}>
+                        <MenuItem
+                            primaryText="Curso"
+                            leftIcon={<CourseIco/>}
+                        />
+                    </Link>
                     <Divider />
-                    <MenuItem
-                        primaryText="Matricula"
-                        leftIcon={<RegisterIco  />}
-                    />
+                    <Link to={'/provider/registration'} className={"link-routes"}>
+                        <MenuItem
+                            primaryText="Matricula"
+                            leftIcon={<RegisterIco  />}
+                        />
+                    </Link>
                     <Divider />
-                    <MenuItem
-                        primaryText="Analitico"
-                        leftIcon={<AnalyticIco  />}
-                    />
+                    <Link to={'/provider/analytical'} className={"link-routes"}>
+                        <MenuItem
+                            primaryText="Analitico"
+                            leftIcon={<AnalyticIco  />}
+                        />
+                    </Link>
                     <Divider />
-
                 </Drawer>
             </div>
         );
