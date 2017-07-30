@@ -5,17 +5,22 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import AboutIco from 'material-ui/svg-icons/action/perm-identity';
 import Marketing from 'material-ui/svg-icons/action/dashboard';
-import CourseIco from 'material-ui/svg-icons/action/toc';
+import CourseIco from 'material-ui/svg-icons/social/school';
 import RegisterIco from 'material-ui/svg-icons/content/create';
-import AnaliticIco from 'material-ui/svg-icons/action/trending-up';
+import AnalyticIco from 'material-ui/svg-icons/action/trending-up';
+import IconButton from 'material-ui/IconButton';
+import LogoutIco from 'material-ui/svg-icons/navigation/arrow-forward';
+
 class Dash extends Component {
 
     render() {
         return (
             <div>
                 <AppBar
-                    title="Title"
                     showMenuIconButton={false}
+                    iconElementRight={  <IconButton tooltip="Sair">
+                                            <LogoutIco/>
+                                        </IconButton>}
                 />
                 <Drawer open={true}>
                     <AppBar
@@ -44,7 +49,7 @@ class Dash extends Component {
                     <Divider />
                     <MenuItem
                         primaryText="Analitico"
-                        leftIcon={<AnaliticIco  />}
+                        leftIcon={<AnalyticIco  />}
                     />
                     <Divider />
 
