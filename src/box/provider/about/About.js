@@ -3,11 +3,10 @@ import httpService from './../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-class Aboult extends Component {
+class About extends Component {
 
     constructor() {
         super()
-        this.state = { msg: '' }
         this.httpService = new httpService();
     }
 
@@ -44,4 +43,4 @@ class Aboult extends Component {
         )
     }
 }
-export default Aboult;
+export default About;

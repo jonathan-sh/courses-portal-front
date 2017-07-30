@@ -14,7 +14,7 @@ class NavigationBar extends Component {
     render() {
         return (
             <div>
-                <Drawer open={true}>
+                <Drawer open={true} width={200}>
                     <AppBar
                         title="Title"
                         showMenuIconButton={false}
