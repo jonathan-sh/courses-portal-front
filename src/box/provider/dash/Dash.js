@@ -8,17 +8,6 @@ const Dash = (props) =>
 {
     const player = DashRoute.get(props.match.params.way);
 
-    render()
-        return (
-            <div>
-                <HeaderBar />
-                <NavigationBar />
-                <div className="content-child center padding-left-200">
-                    {this.props.children}
-                </div>
-            </div>
-        );
-
     if (!player) 
     {
         return <div><h1>404 CARALHO</h1></div>
@@ -28,8 +17,8 @@ const Dash = (props) =>
         <div>
             <HeaderBar />
             <NavigationBar />
-            <div className="content-child">
-                < player.item />
+            <div className="content-child center padding-left-200">
+                <player.item />
             </div>
         </div>
     );

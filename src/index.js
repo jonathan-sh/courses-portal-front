@@ -18,9 +18,9 @@ const Main = () => (
             <Router history={history}>
                 <div>
                     <Route exact path='/' component={App} />
-                    <Route exact path='/student/login' component={LoginStudent} />
-                    <Route exact path='/provider/login' component={LoginProvider} />
-                    <Route path='/provider/dash/:way' component={Dash} />
+                    <Route exact path='/login/student' component={LoginStudent} />
+                    <Route exact path='/login/provider' component={LoginProvider} />
+                    <Route path='/provider/:way' component={Dash} />
                 </div>
             </Router>
         </BrowserRouter>
