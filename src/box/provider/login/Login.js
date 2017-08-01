@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import {Card} from 'material-ui/Card';
 import {Link} from 'react-router-dom';
-import history from '../../../service/Router';
+import history from '../../../service/router/History';
 import '../../../style/css/provider/login.css';
 
 class Login extends Component {

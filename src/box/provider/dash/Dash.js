@@ -2,13 +2,13 @@ import React from "react";
 import HeaderBar from './HeaderBar';
 import NavigationBar from './NavigationBar';
 import './../../../style/css/provider/provider.css';
-import DashRoute from './../../../box/provider/dash/DashRoute';
+import Routers from './../../../service/router/Routers';
 
 const Dash = (props) => 
 {
-    const player = DashRoute.get(props.match.params.way);
+    const dash = Routers.get(props.match.params.way);
 
-    if (!player) 
+    if (!dash) 
     {
         return <div><h1>404 CARALHO</h1></div>
     }
@@ -18,7 +18,7 @@ const Dash = (props) =>
             <HeaderBar />
             <NavigationBar />
             <div className="content-child center padding-left-200">
-                <player.item />
+                <dash.item />
             </div>
         </div>
     );

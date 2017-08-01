@@ -8,7 +8,7 @@ import App from './App';
 import Dash from './box/provider/dash/Dash';
 import LoginProvider from './box/provider/login/Login';
 import LoginStudent from './box/student/login/Login';
-import history from './service/Router';
+import history from './service/router/History';
 
 injectTapEventPlugin();
 
