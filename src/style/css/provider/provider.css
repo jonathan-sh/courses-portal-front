@@ -1,6 +1,19 @@
 .content-child{
-    width:90%;
+    width:80%;
+}
+
+.center{
     text-align:center;
-    margin:auto;
+    margin: auto;
+    left: 0;
+    right: 0;
+}
+
+.center-absolute{
+    position: absolute;
+    display: block;
+}
+
+.padding-left-200{
     padding-left: 200px;
 }

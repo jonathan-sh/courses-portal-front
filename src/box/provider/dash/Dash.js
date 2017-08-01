@@ -10,7 +10,7 @@ class Dash extends Component {
             <div>
                 <HeaderBar />
                 <NavigationBar />
-                <div className="content-child">
+                <div className="content-child center padding-left-200">
                     {this.props.children}
                 </div>
             </div>

@@ -6,8 +6,7 @@
     width: 60%; 
 }
 
-.div-info 
-{  
+.div-info {
     text-align: justify;
     margin-right: 50%;
 }
@@ -41,5 +40,9 @@
 .forgot-password
 {
     margin-top: 8%;
-    color: black;
+    color: #ff7500;
+}
+
+.display-block{
+    display:block;
 }

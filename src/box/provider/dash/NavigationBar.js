@@ -6,7 +6,7 @@ import Divider from 'material-ui/Divider';
 import AboutIco from 'material-ui/svg-icons/action/perm-identity';
 import Marketing from 'material-ui/svg-icons/action/dashboard';
 import CourseIco from 'material-ui/svg-icons/social/school';
-import RegisterIco from 'material-ui/svg-icons/content/create';
+import RegisterIco from 'material-ui/svg-icons/editor/format-align-justify';
 import AnalyticIco from 'material-ui/svg-icons/action/trending-up';
 import {Link} from 'react-router-dom';
 
