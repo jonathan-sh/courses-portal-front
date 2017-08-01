@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import HeaderBar from './HeaderBar';
 import NavigationBar from './NavigationBar';
 import './../../../style/css/provider/provider.css';
+import DashRoute from './../../../box/provider/dash/DashRoute';
 
-class Dash extends Component {
+const Dash = (props) => 
+{
+    const player = DashRoute.get(props.match.params.way);
 
-    render() {
+    render()
         return (
             <div>
                 <HeaderBar />
@@ -15,7 +18,21 @@ class Dash extends Component {
                 </div>
             </div>
         );
+
+    if (!player) 
+    {
+        return <div><h1>404 CARALHO</h1></div>
     }
+
+    return (
+        <div>
+            <HeaderBar />
+            <NavigationBar />
+            <div className="content-child">
+                < player.item />
+            </div>
+        </div>
+    );
 }
 
 export default Dash;
