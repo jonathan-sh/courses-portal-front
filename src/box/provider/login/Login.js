@@ -26,7 +26,10 @@ class Login extends Component {
                 }
                 this.setState({msg:'falha ao realizar login!'});
             })
-            .then(sucess => {history.push('/provider/about');})
+            .then(success => {
+                    localStorage.setItem('auth-token', success.token);
+                    history.push('/provider/about');
+            })
             .catch(error => console.log(error));
     }
 
@@ -35,7 +38,6 @@ class Login extends Component {
                 password:this.password.input.value,
                 entity:'provider'}
     }
-
 
     render() {
         return (
