@@ -1,15 +1,38 @@
 import React, {Component} from "react";
 import RaisedButton from 'material-ui/RaisedButton';
-import DeleteIco from 'material-ui/svg-icons/action/delete';
 import EditIco from 'material-ui/svg-icons/content/create';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 
 class TableCourse extends Component {
 
+    constructor() {
+        super()
+        this.state = { msg: '' }
+    }
+
     styles = {
         tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
         tableBody: {cursor: 'pointer'},
     };
+
+    editCourse = (x) => alert(x);
+
+    courses = [{name:'Nome do curso', status:true, _id:1},{name:'Nome do curso', status:false, _id: 2}];
+    rows = this.courses.map((course) =>
+        <TableRow key={course._id}>
+            <TableRowColumn>{course.name}</TableRowColumn>
+            <TableRowColumn>{course.status ? 'ativo' : 'inativo' }</TableRowColumn>
+            <TableRowColumn>
+                <RaisedButton
+                    label="editar"
+                    backgroundColor="#00a1fc"
+                    onTouchTap={()=> this.editCourse(course._id)}
+                    icon={<EditIco color="#FFF"/>}
+                    labelStyle={{color: 'white'}}/>
+            </TableRowColumn>
+        </TableRow>
+    );
+
 
     render() {
         return (
@@ -31,24 +54,7 @@ class TableCourse extends Component {
                                showRowHover={true}
                                style={this.styles.tableBody}>
 
-                        {/*repeat rows here*/}
-                        <TableRow>
-                            <TableRowColumn>Tecnologia De Engenharia Civil</TableRowColumn>
-                            <TableRowColumn>Ativo</TableRowColumn>
-                            <TableRowColumn>
-                                <RaisedButton
-                                    label="editar"
-                                    backgroundColor="#00a1fc"
-                                    icon={<EditIco color="#FFF"/>}
-                                    labelStyle={{color: 'white'}}
-                                    style={{marginRight: '20px'}}/>
-                                <RaisedButton
-                                    label="deletar"
-                                    backgroundColor="#ff4661"
-                                    labelStyle={{color: 'white'}}
-                                    icon={<DeleteIco color="#FFF"/>}/>
-                            </TableRowColumn>
-                        </TableRow>
+                        {this.rows}
 
                     </TableBody>
                 </Table>

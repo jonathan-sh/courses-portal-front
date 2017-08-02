@@ -47,6 +47,8 @@ class NewCourse extends Component {
                         'resolve approval issues.'}
                     </p>
                 );
+            default:
+                return ((<span>error</span>))
         }
     }
 
