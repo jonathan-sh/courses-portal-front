@@ -6,7 +6,7 @@ import InformationCourse from './InformationCourse'
 class NewCourse extends Component {
 
     constructor() {
-        super()
+        super();
         this.state={showInformationCourse:false}
     }
 

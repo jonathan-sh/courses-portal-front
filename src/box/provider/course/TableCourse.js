@@ -23,7 +23,6 @@ class TableCourse extends Component {
 
     fncFindCourse = () => this.setState({newCourse: false});
 
-
     courses = [{name:'Nome do curso', status:true, _id:1},{name:'Nome do curso', status:false, _id: 2}];
     rows = this.courses.map((course) =>
         <TableRow key={course._id}>
