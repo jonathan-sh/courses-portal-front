@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-class InfosCourse extends Component {
+class InformationCourse extends Component {
     state = {
         open: true,
         step: false
@@ -88,4 +88,4 @@ class InfosCourse extends Component {
     }
 }
 
-export default InfosCourse;
+export default InformationCourse;

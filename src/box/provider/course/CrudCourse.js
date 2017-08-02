@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import RaisedButton from 'material-ui/RaisedButton';
 import NewIco from 'material-ui/svg-icons/content/add';
-import InformationCourse from './InfosCourse'
+import InformationCourse from './InformationCourse'
 
 class NewCourse extends Component {
 
