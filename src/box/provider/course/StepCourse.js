@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import NewIco from 'material-ui/svg-icons/content/add';
+
 import {
     Step,
     Stepper,
@@ -73,6 +75,22 @@ class NewCourse extends Component {
 
         return (
             <div >
+                <div>
+                    <RaisedButton
+                        label="INFORMAÇÕES BÁSICAS DO CURSO"
+                        fullWidth={true}
+                        labelStyle={{color:'#0ac752'}}/>
+                    <RaisedButton
+                        label="adicionar etapa"
+                        backgroundColor="#0ac752"
+                        icon={<NewIco color="#FFF"/>}
+                        labelStyle={{color: 'white'}}
+                        keyboardFocused={true}
+                        style={{float:'right', margin:'20px 0 20px 20px'}}/>
+                </div>
+
+
+
                 <div>
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon />}>
                         <Step>

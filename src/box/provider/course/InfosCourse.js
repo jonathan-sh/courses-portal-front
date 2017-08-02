@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-class NewCourse extends Component {
+class InfosCourse extends Component {
     state = {
         open: true,
         step: false
@@ -24,7 +24,7 @@ class NewCourse extends Component {
                 onTouchTap={this.handleClose}
             />,
             <RaisedButton
-                label="salvar"
+                label="Salvar"
                 backgroundColor="#0ac752"
                 labelStyle={{color:'white'}}
                 onTouchTap={this.handleSave}
@@ -88,4 +88,4 @@ class NewCourse extends Component {
     }
 }
 
-export default NewCourse;
+export default InfosCourse;

@@ -1,21 +1,28 @@
 import React, {Component} from "react";
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
+import FindIco from 'material-ui/svg-icons/action/search';
+import TextField from 'material-ui/TextField';
+import NewIco from 'material-ui/svg-icons/content/add';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 
 class TableCourse extends Component {
 
-    constructor() {
-        super()
-        this.state = { msg: '' }
-    }
 
     styles = {
         tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
         tableBody: {cursor: 'pointer'},
+        inputTextCourse: {width: '72%'},
+        btnFindCourse: {width: '12%', marginRight: '2%', marginLeft: '2%'},
+        btnNewCourse: {width: '12%'}
     };
 
-    editCourse = (x) => alert(x);
+    fncEditCourse = (x) => alert(x);
+
+    fncNewCourse  = () => this.setState({newCourse: true});
+
+    fncFindCourse = () => this.setState({newCourse: false});
+
 
     courses = [{name:'Nome do curso', status:true, _id:1},{name:'Nome do curso', status:false, _id: 2}];
     rows = this.courses.map((course) =>
@@ -26,7 +33,7 @@ class TableCourse extends Component {
                 <RaisedButton
                     label="editar"
                     backgroundColor="#00a1fc"
-                    onTouchTap={()=> this.editCourse(course._id)}
+                    onTouchTap={()=> this.fncEditCourse(course._id)}
                     icon={<EditIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}/>
             </TableRowColumn>
@@ -37,6 +44,34 @@ class TableCourse extends Component {
     render() {
         return (
             <div>
+
+                {/*header found*/}
+                <span className="display-block">
+                  <TextField
+                      hintText="pesquisar curso"
+                      floatingLabelText="Pesquisar"
+                      type="text"
+                      fullWidth={false}
+                      style={this.styles.inputTextCourse}
+                      ref={(input) => this.search = input}/>
+                <RaisedButton
+                    label="buscar"
+                    backgroundColor="#ff7500"
+                    icon={<FindIco color="#FFF"/>}
+                    onTouchTap={this.fncFindCourse}
+                    style={this.styles.btnFindCourse}
+                    labelStyle={{color: 'white'}}/>
+                <RaisedButton
+                    label="novo"
+                    backgroundColor="#0ac752"
+                    icon={<NewIco color="#FFF"/>}
+                    onTouchTap={this.fncNewCourse}
+                    style={this.styles.btnNewCourse}
+                    labelStyle={{color: 'white'}}/>
+                </span>
+
+                <br/>
+
                 {/*courses found*/}
                 <Table>
                     <TableHeader
