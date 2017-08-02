@@ -42,7 +42,7 @@ class InformationCourse extends Component {
                     open={this.state.open}
                 >
                     <TextField
-                        hintText="nome do curso"
+                        hintText="Nome do curso"
                         floatingLabelText="Nome"
                         type="text"
                         fullWidth={true}
