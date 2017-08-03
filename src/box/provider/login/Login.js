@@ -24,11 +24,11 @@ class Login extends Component {
                 {
                     return response.json();
                 }
-                this.setState({msg:'falha ao realizar login!'});
+                this.setState({msg:'Usuário ou senha incorreto!'});
             })
             .then(success => {
-                    localStorage.setItem('auth-token', success.token);
-                    history.push('/provider/about');
+                localStorage.setItem('auth-token', success.token);
+                history.push('/provider/about');
             })
             .catch(error => console.log(error));
     }
@@ -69,12 +69,14 @@ class Login extends Component {
                                     label="Login Facebook" className="button"
                                 />
                             </div>
+                            <div className="font">
+                                <span>
+                                    {this.state.msg}
+                                </span>
+                            </div>
                             <p className="font forgot-password">
                                 <Link to={"/"} className="forgot-password">Esqueci minha senha</Link>
                             </p>
-                            <span className="font">
-                                {this.state.msg}
-                            </span>
                         </div>
                     </Card>
                     <div className="div-info">
