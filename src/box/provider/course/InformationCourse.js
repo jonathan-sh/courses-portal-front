@@ -27,6 +27,8 @@ class InformationCourse extends Component {
                 label="Salvar"
                 backgroundColor="#0ac752"
                 labelStyle={{color:'white'}}
+
+
                 onTouchTap={this.handleSave}
                 style={{float:'right', marginRight:'10px'}}/>
            ,

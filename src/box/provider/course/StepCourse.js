@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import NewIco from 'material-ui/svg-icons/content/add';
+import Dialog from 'material-ui/Dialog';
 
 import {
     Step,
@@ -13,40 +14,81 @@ import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 class NewCourse extends Component {
     constructor(props) {
         super(props);
+        this.state={showStep:true, stepIndex: 0 };
 
-        this.handleNext = this.handleNext.bind(this);
-        this.handlePrev = this.handlePrev.bind(this);
     }
 
-    state = {
-        stepIndex: 0,
+    fncCanStep = ()=> this.setState({showStep: false});
+    fncHandleNext = () => {
+        const {stepIndex} = this.state;
+
+        if (stepIndex < 2) {
+            this.setState({stepIndex: stepIndex + 1});
+        }
     };
+    fncHandlePrev= () => {
+        const {stepIndex} = this.state;
+
+        if (stepIndex > 0) {
+            this.setState({stepIndex: stepIndex - 1});
+        }
+    };
+
+    materials = [1,2,3];
+    material = this.materials.map((material) =>
+            <RaisedButton
+                key={material}
+                label={"MATERIAL " + material}
+                fullWidth={true}
+                backgroundColor="#2dc7a2"
+                labelStyle={{color: '#FFF'}}
+                style={{marginTop: '5px'}}>
+            </RaisedButton>
+
+    );
 
     getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
                 return (
-                    <p>
-                        {'For each ad campaign that you create, you can control how much you\'re willing to ' +
-                        'spend on clicks and conversions, which networks and geographical locations you want ' +
-                        'your ads to show on, and more.'}
-                    </p>
+                    <div>
+                        <div style={{overflow:'auto', height:'200px'}}>
+                            {this.material}
+                        </div>
+                        <RaisedButton
+                            label="material"
+                            backgroundColor="#0ac752"
+                            icon={<NewIco color="#FFF"/>}
+                            labelStyle={{color: 'white'}}
+                            keyboardFocused={true}
+                            style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+
+                    </div>
                 );
 
             case 1:
                 return (
                     <p>
-                        {'An ad group contains one or more ads which target a shared set of keywords.'}
+                        <div>
+                            <div style={{overflow:'auto', height:'200px'}}>
+                                {this.material}
+                            </div>
+                            <RaisedButton
+                                label="material"
+                                backgroundColor="#0ac752"
+                                icon={<NewIco color="#FFF"/>}
+                                labelStyle={{color: 'white'}}
+                                keyboardFocused={true}
+                                style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+
+                        </div>
                     </p>
                 );
 
             case 2:
                 return (
                     <p>
-                        {'Try out different ad text to see what brings in the most customers, and learn ' +
-                        'how to enhance your ads using features like ad extensions. If you run into any ' +
-                        'problems with your ads, find out how to tell if they\'re running and how to ' +
-                        'resolve approval issues.'}
+                        {'prova'}
                     </p>
                 );
             default:
@@ -54,44 +96,34 @@ class NewCourse extends Component {
         }
     }
 
-    handleNext() {
-        const {stepIndex} = this.state;
-
-        if (stepIndex < 2) {
-            this.setState({stepIndex: stepIndex + 1});
-        }
-    }
-
-    handlePrev() {
-        const {stepIndex} = this.state;
-
-        if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
-        }
-    }
-
     render() {
         const {stepIndex} = this.state;
 
+        const actions = [
+            <FlatButton
+                label={stepIndex === 0 ? 'Cancelar' : 'Voltar'}
+                primary={true}
+                onTouchTap={stepIndex === 0 ? this.fncCanStep : this.fncHandlePrev}
+            />,
+            <RaisedButton
+                backgroundColor="#0ac752"
+                labelStyle={{color:'white'}}
+                label={stepIndex === 2 ? 'Concluir' : 'Proximo'}
+                primary={true}
+                onTouchTap={this.fncHandleNext}
+                style={{float:'right', marginRight:'10px'}}/>
+            ,
+        ];
+
         return (
             <div >
-                <div>
-                    <RaisedButton
-                        label="INFORMAÇÕES BÁSICAS DO CURSO"
-                        fullWidth={true}
-                        labelStyle={{color:'#0ac752'}}/>
-                    <RaisedButton
-                        label="adicionar etapa"
-                        backgroundColor="#0ac752"
-                        icon={<NewIco color="#FFF"/>}
-                        labelStyle={{color: 'white'}}
-                        keyboardFocused={true}
-                        style={{float:'right', margin:'20px 0 20px 20px'}}/>
-                </div>
-
-
-
-                <div>
+                <Dialog
+                    title="Adicionando uma etapa"
+                    actions={actions}
+                    modal={true}
+                    contentStyle={{width: '80%', maxWidth: 'none'}}
+                    open={true}
+                >
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon />}>
                         <Step>
                             <StepLabel>Conteúdo didático</StepLabel>
@@ -106,20 +138,7 @@ class NewCourse extends Component {
                         </Step>
                     </Stepper>
                     {this.getStepContent(stepIndex)}
-                    <div style={{marginTop: 24, marginBottom: 12, float:'right'}}>
-                        <FlatButton
-                            label="Back"
-                            disabled={stepIndex === 0}
-                            onTouchTap={this.handlePrev}
-                            style={{marginRight: 12}}
-                        />
-                        <RaisedButton
-                            label={stepIndex === 2 ? 'Finish' : 'Next'}
-                            primary={true}
-                            onTouchTap={this.handleNext}
-                        />
-                    </div>
-                </div>
+                </Dialog>
             </div>
         );
     }
