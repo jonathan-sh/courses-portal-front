@@ -5,26 +5,34 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import ActionFavorite from 'material-ui/svg-icons/action/check-circle';
+import AddImage from 'material-ui/svg-icons/image/add-a-photo';
 import ActionFavoriteBorder from 'material-ui/svg-icons/toggle/radio-button-unchecked';
 import _ from 'lodash';
 
 
 class Question extends Component {
-    state = {
-        open: true,
-        checked: {A: false, B: false, C: false, D: false, E: false},
-        errorText:{statement: '',
-                   alternativeA:'',
-                   alternativeB:'',
-                   alternativeC:'',
-                   alternativeD:'',
-                   alternativeE:''}
+    constructor() {
+        super();
+        this.state = {
+            open: true,
+            checked: {A: false, B: false, C: false, D: false, E: false},
+            correct: '',
+            errorText: {
+                statement: '',
+                A: '',
+                B: '',
+                C: '',
+                D: '',
+                E: ''
+            }
 
-    };
+        };
+    }
 
     styles = {
-        inputText: {width: '85%', float: 'right'},
-        icon: {width: '15%', float: 'left', paddingTop: '3%'},
+        inputText: {width: '94%', float: 'right'},
+        icon: {width: '5%', float: 'left', paddingTop: '3.2%'},
+        btnAddImage: {}
 
     };
 
@@ -38,6 +46,7 @@ class Question extends Component {
 
     fncSelected = (outKey) => {
         this.setState({errorText: {statement: ''}});
+        this.setState({correct: outKey});
         let checked = this.state.checked;
         checked = _.forEach(checked, (c, key) => {
             checked[key] = key === outKey;
@@ -45,46 +54,61 @@ class Question extends Component {
         this.setState({'checked': checked});
     };
 
-
     fncValidQuestion = () => {
-        let clean = {statement:'',
-                      alternativeA: '',
-                      alternativeB: '',
-                      alternativeC: '',
-                      alternativeD: '',
-                      alternativeE: ''};
+        let errors = {
+            statement: '',
+            A: '',
+            B: '',
+            C: '',
+            D: '',
+            E: ''
+        };
 
-        this.setState({'errorText': clean});
+        this.setState({'errorText': errors});
+
         let status = false;
-        let errors = {statement:'',
-                      alternativeA: this.alternativeA.input.value,
-                      alternativeB: this.alternativeB.input.value,
-                      alternativeC: this.alternativeC.input.value,
-                      alternativeD: this.alternativeD.input.value,
-                      alternativeE: this.alternativeE.input.value};
+        let question = this.fncMakeQuestionData();
 
+        status = this.fncValidValue(question.statement) && this.fncValidValue(question.correct);
+        if (!status) {
+            errors.statement = 'Informe o enunciado e alternativa correta'
+        }
 
-        _.forEach(this.state.checked, (c) => {
-            if (!status) {
-                status = (c === true)
-            }
-        });
+        _.forEach(question.alternatives, (value, key) => {
 
-        if (!status) {errors.statement='Informe a  alternativa certa'}
-
-        _.forEach(errors, (value, key) => {
-
-            console.log(value);
-            if (value === undefined)
-            {
+            if (!this.fncValidValue(value)) {
                 status = false;
-                errors[key]='Descreva esta alternativa';
+                errors[key] = 'Informe a descricação da alternativa [ ' + key + ' ]';
             }
         });
 
         this.setState({'errorText': errors});
 
         return status;
+    };
+
+    fncValidValue = (value) => {
+        return value !== undefined && value !== ""
+    };
+
+    fncMakeQuestionData = () => {
+        let alternatives = {
+            A: this.alternativeA.input.value,
+            B: this.alternativeB.input.value,
+            C: this.alternativeC.input.value,
+            D: this.alternativeD.input.value,
+            E: this.alternativeE.input.value
+        };
+        let statement = this.statement.input.refs.input.value;
+        let correct = this.state.correct;
+
+        let question = {
+            'statement': statement,
+            'alternatives': alternatives,
+            'correct': correct
+        };
+
+        return question;
     };
 
 
@@ -106,13 +130,15 @@ class Question extends Component {
     render() {
         return (
             <Dialog
-                title="Adicionando material"
+                title="Adicionando questão"
+                autoScrollBodyContent={true}
                 actions={this.actions}
                 modal={true}
-                contentStyle={{width: '80%', maxWidth: 'none'}}
-                open={this.state.open}
-            >
-
+                style={{margin:'0'}}
+                titleStyle={{padding:'15px'}}
+                bodyStyle={{minHeight: '480px'}}
+                contentStyle={{width: '90%', maxWidth: 'none', marginTop:'-50px'}}
+                open={this.state.open}>
 
                 <TextField
                     hintText="Informe o enunciado"
@@ -125,25 +151,34 @@ class Question extends Component {
                     fullWidth={true}
                     ref={(input) => this.statement = input}/>
 
+                <RaisedButton
+                    label="adicionar image"
+                    backgroundColor="rgb(77, 156, 138)"
+                    icon={<AddImage color="#FFF"/>}
+                    onTouchTap={this.fncNewCourse}
+                    style={this.styles.btnAddImage}
+                    labelStyle={{color: 'white'}}/>
 
                 <span className="display-block height-80">
-                    <Checkbox
-                        checked={this.state.checked.A}
-                        style={this.styles.icon}
-                        onCheck={() => this.fncSelected('A')}
-                        checkedIcon={<ActionFavorite/>}
-                        uncheckedIcon={<ActionFavoriteBorder/>}
-                        label="Esta é a certa"
-                    />
-                <TextField
-                    hintText="descreva a alternatica A"
-                    floatingLabelText="Alternativa A"
-                    type="text"
-                    style={this.styles.inputText}
-                    errorText={this.state.errorText.alternativeA}
-                    fullWidth={true}
-                    ref={(input) => this.alternativeA = input}/>
+                        <Checkbox
+                             checked={this.state.checked.A}
+                             style={this.styles.icon}
+                             onCheck={() => this.fncSelected('A')}
+                             checkedIcon={<ActionFavorite/>}
+                             uncheckedIcon={<ActionFavoriteBorder/>}
+                             label="[A]"/>
+
+                        <TextField
+                            hintText="descreva a alternatica A"
+                            floatingLabelText="Alternativa A"
+                            type="text"
+                            style={this.styles.inputText}
+                            errorText={this.state.errorText.A}
+                            fullWidth={true}
+                            ref={(input) => this.alternativeA = input}/>
+
                 </span>
+
 
                 <span className="display-block height-80">
                     <Checkbox
@@ -152,17 +187,18 @@ class Question extends Component {
                         onCheck={() => this.fncSelected('B')}
                         checkedIcon={<ActionFavorite/>}
                         uncheckedIcon={<ActionFavoriteBorder/>}
-                        label="Esta é a certa"
+                        label="[B]"
                     />
                     <TextField
                         hintText="descreva a alternatica B"
                         floatingLabelText="Alternativa B"
                         type="text"
                         style={this.styles.inputText}
-                        errorText={this.state.errorText.alternativeB}
+                        errorText={this.state.errorText.B}
                         fullWidth={true}
                         ref={(input) => this.alternativeB = input}/>
                 </span>
+
                 <span className="display-block height-80">
                     <Checkbox
                         checked={this.state.checked.C}
@@ -170,14 +206,14 @@ class Question extends Component {
                         onCheck={() => this.fncSelected('C')}
                         checkedIcon={<ActionFavorite/>}
                         uncheckedIcon={<ActionFavoriteBorder/>}
-                        label="Esta é a certa"
+                        label="[C]"
                     />
                     <TextField
                         hintText="descreva a alternatica C"
                         floatingLabelText="Alternativa C"
                         type="text"
                         style={this.styles.inputText}
-                        errorText={this.state.errorText.alternativeC}
+                        errorText={this.state.errorText.C}
                         fullWidth={true}
                         ref={(input) => this.alternativeC = input}/>
                 </span>
@@ -188,14 +224,14 @@ class Question extends Component {
                         onCheck={() => this.fncSelected('D')}
                         checkedIcon={<ActionFavorite/>}
                         uncheckedIcon={<ActionFavoriteBorder/>}
-                        label="Esta é a certa"
+                        label="[D]"
                     />
                     <TextField
                         hintText="descreva a alternatica D"
                         floatingLabelText="Alternativa D"
                         type="text"
                         style={this.styles.inputText}
-                        errorText={this.state.errorText.alternativeD}
+                        errorText={this.state.errorText.D}
                         fullWidth={true}
                         ref={(input) => this.alternativeD = input}/>
                 </span>
@@ -206,14 +242,14 @@ class Question extends Component {
                         onCheck={() => this.fncSelected('E')}
                         checkedIcon={<ActionFavorite/>}
                         uncheckedIcon={<ActionFavoriteBorder/>}
-                        label="Esta é a certa"
+                        label="[E]"
                     />
                     <TextField
                         hintText="descreva a alternatica E"
                         floatingLabelText="Alternativa E"
                         type="text"
                         style={this.styles.inputText}
-                        errorText={this.state.errorText.alternativeE}
+                        errorText={this.state.errorText.E}
                         fullWidth={true}
                         ref={(input) => this.alternativeE = input}/>
                 </span>

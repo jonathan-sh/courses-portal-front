@@ -65,7 +65,7 @@ class TableFind extends Component {
                     backgroundColor="#0ac752"
                     icon={<NewIco color="#FFF"/>}
                     onTouchTap={this.fncNewCourse}
-                    style={this.styles.btnNewCourse}
+                    style={this.styles.btnAddImage}
                     labelStyle={{color: 'white'}}/>
                 </span>
 

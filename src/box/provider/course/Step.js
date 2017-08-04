@@ -33,7 +33,7 @@ class Steps extends Component {
         }
     };
 
-    materials = [1, 2, 3];
+    materials = [1];
     material = this.materials.map((material) =>
         <RaisedButton
             key={material}
@@ -45,11 +45,24 @@ class Steps extends Component {
         </RaisedButton>
     );
 
-    questions = [1, 2, 3];
+    questions = [1];
     question = this.questions.map((question) =>
         <RaisedButton
             key={question}
             label={"QUESTÃO " + question}
+            fullWidth={true}
+            backgroundColor="#2dc7a2"
+            labelStyle={{color: '#FFF'}}
+            style={{marginTop: '5px'}}>
+        </RaisedButton>
+    );
+
+
+    proves = [1];
+    prove = this.proves.map((prove) =>
+        <RaisedButton
+            key={prove}
+            label={"PROVA " + prove}
             fullWidth={true}
             backgroundColor="#2dc7a2"
             labelStyle={{color: '#FFF'}}
@@ -96,9 +109,18 @@ class Steps extends Component {
 
             case 2:
                 return (
-                    <p>
-                        {'prova'}
-                    </p>
+                   <div>
+                       <div style={{overflow: 'auto', height: '200px'}}>
+                           {this.prove}
+                       </div>
+                       <RaisedButton
+                           label="provas"
+                           backgroundColor="#0ac752"
+                           icon={<NewIco color="#FFF"/>}
+                           labelStyle={{color: 'white'}}
+                           keyboardFocused={true}
+                           style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+                   </div>
                 );
             default:
                 return ((<span>error</span>))
