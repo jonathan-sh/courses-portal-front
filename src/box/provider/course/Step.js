@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import NewIco from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import Question from './Question';
+import Prove from './Prove';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -18,6 +19,7 @@ class Steps extends Component {
 
     fncCanStep = () => this.setState({showStep: false});
     fncShowQuestion = () => this.setState({showQuestion: true});
+    fncShowProve = () => this.setState({showProve: true});
     fncHandleNext = () => {
         const {stepIndex} = this.state;
 
@@ -110,15 +112,17 @@ class Steps extends Component {
             case 2:
                 return (
                    <div>
+                       {this.state.showProve? (<Prove/>):null}
                        <div style={{overflow: 'auto', height: '200px'}}>
                            {this.prove}
                        </div>
                        <RaisedButton
-                           label="provas"
+                           label="prova"
                            backgroundColor="#0ac752"
                            icon={<NewIco color="#FFF"/>}
                            labelStyle={{color: 'white'}}
                            keyboardFocused={true}
+                           onTouchTap={this.fncShowProve}
                            style={{float: 'right', margin: '20px 0 20px 20px'}}/>
                    </div>
                 );
