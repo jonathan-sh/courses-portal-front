@@ -14,23 +14,25 @@ class About extends Component {
         return (
             <div>
                 <TextField
-                    hintText="Nome"
-                    floatingLabelText="Nome"
-                    fullWidth={true}
-                    ref={(input) => { this.name = input; }}
-                />
-                <TextField
+                    disabled={true}
                     hintText="Email"
                     floatingLabelText="Email"
                     fullWidth={true}
                     ref={(input) => { this.email = input; }}
                 />
                 <TextField
+                    hintText="Nome"
+                    floatingLabelText="Nome"
+                    fullWidth={true}
+                    errorText={''}
+                    ref={(input) => { this.name = input; }}
+                />
+                <TextField
                     hintText="Senha"
                     floatingLabelText="Senha"
                     type="password"
                     fullWidth={true}
-                    errorText={'Yes me !'}
+                    errorText={''}
                     ref={(input) => { this.password = input; }}
                 />
                 <RaisedButton

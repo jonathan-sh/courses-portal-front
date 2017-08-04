@@ -24,13 +24,13 @@ class Login extends Component {
                 {
                     return response.json();
                 }
-                this.setState({msg:'Usuário ou senha incorreto!'});
+                throw new Error('Usuário ou senha incorreto!');
             })
             .then(success => {
                 localStorage.setItem('auth-token', success.token);
                 history.push('/provider/about');
             })
-            .catch(error => console.log(error));
+            .catch(error => {this.setState({msg:error.message});});
     }
 
     makeDataForLogin= () => {
