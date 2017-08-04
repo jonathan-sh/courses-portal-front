@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import RaisedButton from 'material-ui/RaisedButton';
 import NewIco from 'material-ui/svg-icons/content/add';
-import InformationCourse from './InformationCourse';
-import Steps from './StepCourse';
+import Information from './Information';
+import Steps from './Step';
 
-class NewCourse extends Component {
+class Crud extends Component {
 
     constructor() {
         super();
@@ -32,7 +32,7 @@ class NewCourse extends Component {
                     onTouchTap={this.fncInfoStep}
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
 
-                {this.state.showInformationCourse ? (<InformationCourse/>) : null}
+                {this.state.showInformationCourse ? (<Information/>) : null}
 
                 {this.state.showStep ? (<Steps/>) : null}
 
@@ -40,4 +40,4 @@ class NewCourse extends Component {
         );
     }
 }
-export default NewCourse;
+export default Crud;

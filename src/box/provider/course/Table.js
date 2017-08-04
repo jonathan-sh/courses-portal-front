@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import NewIco from 'material-ui/svg-icons/content/add';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 
-class TableCourse extends Component {
+class TableFind extends Component {
 
 
     styles = {
@@ -97,4 +97,4 @@ class TableCourse extends Component {
     }
 }
 
-export default TableCourse;
+export default TableFind;

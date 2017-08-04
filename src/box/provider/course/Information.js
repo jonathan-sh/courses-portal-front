@@ -2,12 +2,12 @@ import React, {Component} from "react";
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import Steps from './StepCourse';
+import Steps from './Step';
 import InputMask from 'react-input-mask';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-class InformationCourse extends Component {
+class Information extends Component {
     state = {
         open: true,
         step: false
@@ -90,4 +90,4 @@ class InformationCourse extends Component {
     }
 }
 
-export default InformationCourse;
+export default Information;

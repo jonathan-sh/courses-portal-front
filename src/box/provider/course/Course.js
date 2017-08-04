@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import TableFound from './TableCourse';
-import CrudCourse from './CrudCourse';
+import TableFound from './Table';
+import CrudCourse from './Crud';
 
 class Course extends Component {
 
