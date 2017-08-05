@@ -4,33 +4,31 @@ import IconButton from 'material-ui/IconButton';
 import LogoutIco from 'material-ui/svg-icons/navigation/arrow-forward';
 import history from '../../../service/router/History';
 
-class HeaderBar extends Component {
-
-    constructor()
-    {
-        super();
-    }
-
+class HeaderBar extends Component
+{
     logOut = () =>
     {
        localStorage.removeItem('auth-token');
        history.push('/login/provider');
-    }
+    };
 
-    render() {
+    render()
+    {
         return (
             <div>
                 <AppBar
                     showMenuIconButton={false}
-                    iconElementRight={
+                    iconElementRight=
+                    {
                         <IconButton tooltip="Sair"
-                                    onTouchTap={this.logOut}>
+                        onTouchTap={this.logOut}>
                             <LogoutIco/>
-                        </IconButton>}
+                        </IconButton>
+                    }
                 />
             </div>
         )
-    }
+    };
 }
 
 export default HeaderBar;

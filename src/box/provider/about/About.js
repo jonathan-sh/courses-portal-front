@@ -8,7 +8,14 @@ class About extends Component {
     constructor() {
         super()
         this.httpService = new httpService();
-    }
+        this.state = { classConfirmPassword: 'none' }
+    };
+
+    appearConfirmPassword = () =>
+    {
+        this.password.input.value.length >= 4 ?
+        (this.setState({classConfirmPassword: ''})) : ((this.setState({classConfirmPassword: 'none'})));
+    };
 
     render() {
         return (
@@ -34,6 +41,7 @@ class About extends Component {
                     fullWidth={true}
                     errorText={''}
                     ref={(input) => { this.password = input; }}
+                    onChange={this.appearConfirmPassword}
                 />
                 <TextField
                     hintText="Confirmar senha"
@@ -41,7 +49,7 @@ class About extends Component {
                     type="password"
                     fullWidth={true}
                     errorText={''}
-                    style={{display: "none"}}
+                    style={{display: this.state.classConfirmPassword}}
                     ref={(input) => { this.confirmPassword = input; }}
                 />
                 <RaisedButton
