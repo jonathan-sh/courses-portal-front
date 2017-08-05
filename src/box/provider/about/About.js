@@ -35,11 +35,21 @@ class About extends Component {
                     errorText={''}
                     ref={(input) => { this.password = input; }}
                 />
+                <TextField
+                    hintText="Confirmar senha"
+                    floatingLabelText="Confirmar senha"
+                    type="password"
+                    fullWidth={true}
+                    errorText={''}
+                    style={{display: "none"}}
+                    ref={(input) => { this.confirmPassword = input; }}
+                />
                 <RaisedButton
                     label="salvar"
                     backgroundColor="#0ac752"
-                    labelStyle={{color:'white'}}
-                    style={{float:'right', margin:'0px 25px 20px 20px'}}/>
+                    labelStyle={{color: 'white'}}
+                    keyboardFocused={true}
+                    style={{float: 'right', margin: '20px 0 20px 20px'}}/>
                 <br/>
             </div>
         )

@@ -50,6 +50,7 @@ class Login extends Component {
                             <TextField
                             hintText="Email"
                             floatingLabelText="Email"
+                            type="email"
                             fullWidth={true}
                             ref={(input) => { this.email = input; }}
                             />
