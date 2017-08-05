@@ -3,12 +3,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 import NewIco from 'material-ui/svg-icons/content/add';
 import Information from './Information';
 import Steps from './Step';
+import PubSub from 'pubsub-js';
 
 class Crud extends Component {
 
     constructor() {
         super();
         this.state={showInformationCourse:false, showStep:false}
+    }
+
+
+    componentDidMount(){
+        PubSub.publish('header-label','Editando curso');
+        PubSub.publish('switch-to-crud', true);
     }
 
     fncInfoCourse = ()=> this.setState({showInformationCourse: true});

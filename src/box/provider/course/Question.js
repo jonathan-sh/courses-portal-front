@@ -17,14 +17,12 @@ class Question extends Component {
             open: true,
             checked: {A: false, B: false, C: false, D: false, E: false},
             correct: '',
-            errorText: {
-                statement: '',
-                A: '',
-                B: '',
-                C: '',
-                D: '',
-                E: ''
-            }
+            errorText: { statement: '',
+                         A: '',
+                         B: '',
+                         C: '',
+                         D: '',
+                         E: ''}
 
         };
     }
