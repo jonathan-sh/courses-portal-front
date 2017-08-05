@@ -10,8 +10,8 @@ import '../../../style/css/provider/login.css';
 class Login extends Component {
 
     constructor() {
-        super()
-        this.state = { msg: '' }
+        super();
+        this.state = { msg: '' };
         this.httpService = new httpService();
     };
 

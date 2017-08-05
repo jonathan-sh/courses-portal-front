@@ -13,7 +13,7 @@ class About extends Component {
     };
 
     componentDidMount(){
-        PubSub.publish('header-route',"Sobre")
+        PubSub.publish('header-label',"Sobre")
     }
 
 
