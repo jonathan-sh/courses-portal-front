@@ -2,26 +2,46 @@ import React, {Component} from "react";
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import Crud from './Crud';
+import httpService from '../../../service/HttpService';
 import InputMask from 'react-input-mask';
 import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
+import LinearProgress from 'material-ui/LinearProgress';
 
 class Information extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.httpService = new httpService();
         this.state = {
             open: true,
             crud: false,
+            makeSave:false,
             errorText: {name: '',
                         operation: '',
                         objective: '',
                         price: '',
-                        hours: ''}};
+                        hours: ''},
+            course:{_id:'',
+                    name:'',
+                    operation:'',
+                    objective:'',
+                    price:'',
+                    hours:''}};
 
     }
+
+    componentDidMount(){
+      this.fncFillInformation();
+    }
+
+    fncFillInformation =()=>{
+        console.log(this.props.course);
+        if (this.props.course !== undefined){
+            this.setState({'course':this.props.course})
+        }
+    };
 
     fncHandleClose = () =>  {
         PubSub.publish('switch-to-crud', false);
@@ -29,13 +49,51 @@ class Information extends Component {
     };
 
     fncHandleSave = () => {
-        if (this.fncValidData()) {
-            this.setState({crud: true, open: false});
+        if (this.fncValidData())
+        {
+            this.setState({makeSave: true});
+
+           if (this.state.course._id !== undefined && this.state.course._id !== '')
+           {
+               this.httpService.post('/course',this.fncGetDataCourse(),localStorage.getItem('auth-token'))
+                   .then(response => {
+                       if (response.status !== 501 )
+                       {
+                           return response.json();
+                       }
+                       throw new Error('Falha de autenticação.');
+                   })
+                   .then(success => {
+                       PubSub.publish('switch-to-crud', false);
+                       PubSub.publish('search-courses');
+                       this.setState({crud: true, open: false});
+                   })
+                   .catch(error => {this.setState({msg:error.message});});
+           }
+           else
+           {
+               this.httpService.put('/course',this.fncGetDataCourse(),localStorage.getItem('auth-token'))
+                   .then(response => {
+                       if (response.status !== 501 )
+                       {
+                           return response.json();
+                       }
+                       throw new Error('Falha de autenticação.');
+                   })
+                   .then(success => {
+                       PubSub.publish('switch-to-crud', false);
+                       PubSub.publish('search-courses');
+                       this.setState({crud: true, open: false});
+                   })
+                   .catch(error => {this.setState({msg:error.message});});
+           }
+
         }
     };
 
     fncGetDataCourse = () => {
-        let course = { name: this.name.input.value,
+        let course = { _id: this.state.course._id,
+                       name: this.name.input.value,
                        operation: this.operation.input.value,
                        objective: this.objective.input.value,
                        price: this.price.input.value,
@@ -90,54 +148,63 @@ class Information extends Component {
         return (
             <div>
                 <Dialog
-                    title="Criando um novo curso"
+                    title='Informações básicas do curso'
                     actions={this.actions}
                     modal={true}
                     contentStyle={{width: '80%', maxWidth: 'none'}}
                     open={this.state.open}>
+                    {this.state.makeSave?  <LinearProgress mode="indeterminate" /> : null}
                     <TextField
                         hintText="Nome do curso"
                         floatingLabelText="Nome"
                         type="text"
+                        disabled={this.state.makeSave}
                         errorText={this.state.errorText.name}
                         fullWidth={true}
+                        value={this.state.course.name}
                         ref={(input) => this.name = input}/>
                     <TextField
                         hintText="Informe a operação do curso"
                         floatingLabelText="Operação"
                         type="text"
+                        disabled={this.state.makeSave}
                         errorText={this.state.errorText.operation}
                         fullWidth={true}
+                        value={this.state.course.operation}
                         ref={(input) => this.operation = input}/>
                     <TextField
                         hintText="Informe o objetivo do curso"
                         floatingLabelText="Objetivo"
                         type="text"
+                        disabled={this.state.makeSave}
                         errorText={this.state.errorText.objective}
                         fullWidth={true}
+                        value={this.state.course.objective}
                         ref={(input) => this.objective = input}/>
 
                     <TextField
                         hintText="Informe o preço do curso. Exemplo de mil reais (1000.00)"
                         floatingLabelText="Preço"
                         type="number"
+                        disabled={this.state.makeSave}
                         errorText={this.state.errorText.price}
                         style={{width: '49%', float: 'left'}}
+                        value={this.state.course.price}
                         ref={(input) => this.price = input}>
                     </TextField>
                     <TextField
                         hintText="Informe a carga horária do curso"
                         floatingLabelText="Carga hora"
                         type="number"
+                        disabled={this.state.makeSave}
                         errorText={this.state.errorText.hours}
                         style={{width: '49%', float: 'right'}}
+                        value={this.state.course.hours}
                         ref={(input) => this.hours = input}>
                         <InputMask mask="9999" maskChar={null}/>
                     </TextField>
 
                 </Dialog>
-
-                {this.state.crud ? (<Crud/>) : null}
 
             </div>
         );

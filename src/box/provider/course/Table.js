@@ -4,6 +4,8 @@ import httpService from '../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
 import PubSub from 'pubsub-js';
+import Information from './Information';
+import _ from 'lodash';
 
 
 class TableFind extends Component {
@@ -11,7 +13,7 @@ class TableFind extends Component {
 
     constructor(){
         super();
-        this.state={rows:''};
+        this.state={rows:'',courses:'', course:'', mimimi:false};
         this.httpService = new httpService();
     }
 
@@ -24,6 +26,7 @@ class TableFind extends Component {
 
     componentDidMount(){
         PubSub.publish('header-label','Pesquisar curso');
+        PubSub.subscribe('search-courses',this.fncSearchCourses);
         this.fncSearchCourses();
     }
 
@@ -37,15 +40,16 @@ class TableFind extends Component {
                 throw new Error('Falha de autenticação.');
             })
             .then(success => {
-               this.fncMakeRows(success);
+                this.setState({'courses':success});
+               this.fncMakeRows();
             })
             .catch(error => {this.setState({msg:error.message});});
 
     };
 
 
-    fncMakeRows = (courses) =>{
-        let rows = courses.map((course) =>
+    fncMakeRows = () =>{
+        let rows = this.state.courses.map((course) =>
             <TableRow key={course._id}>
                 <TableRowColumn>{course.name}</TableRowColumn>
                 <TableRowColumn>{course.status ? 'ativo' : 'inativo' }</TableRowColumn>
@@ -64,31 +68,37 @@ class TableFind extends Component {
     };
 
 
-    fncEditCourse = (x) => alert(x);
+    fncEditCourse = (id) => {
+        let course = _.filter(this.state.courses, (course)=> {return course._id === id})[0];
+        this.setState({'course':course});
+        this.setState({'mimimi':true});
+        PubSub.publish('switch-to-crud',true);
+    };
 
     render() {
         return (
 
-                <Table>
-                    <TableHeader
-                        adjustForCheckbox={false}
-                        enableSelectAll={false}
-                        displaySelectAll={false}
-                        style={this.styles.tableHeader}>
-                        <TableRow>
-                            <TableHeaderColumn>Nome do curso</TableHeaderColumn>
-                            <TableHeaderColumn>Status do curso</TableHeaderColumn>
-                            <TableHeaderColumn>-</TableHeaderColumn>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}
-                               showRowHover={true}
-                               style={this.styles.tableBody}>
-
-                        {this.state.rows}
-
-                    </TableBody>
-                </Table>
+              <div>
+                  {this.state.mimimi? <Information course={this.state.course}/> : null}
+                  <Table>
+                      <TableHeader
+                          adjustForCheckbox={false}
+                          enableSelectAll={false}
+                          displaySelectAll={false}
+                          style={this.styles.tableHeader}>
+                          <TableRow>
+                              <TableHeaderColumn>Nome do curso</TableHeaderColumn>
+                              <TableHeaderColumn>Status do curso</TableHeaderColumn>
+                              <TableHeaderColumn>-</TableHeaderColumn>
+                          </TableRow>
+                      </TableHeader>
+                      <TableBody displayRowCheckbox={false}
+                                 showRowHover={true}
+                                 style={this.styles.tableBody}>
+                          {this.state.rows}
+                      </TableBody>
+                  </Table>
+              </div>
 
         )
     }
