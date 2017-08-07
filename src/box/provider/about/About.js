@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import httpService from './../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import httpService from './../../../service/HttpService';
 import PubSub from 'pubsub-js';
 
 class About extends Component {

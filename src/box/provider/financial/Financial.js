@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import PubSub from 'pubsub-js';
 
-class Marketing extends Component {
+class Financial extends Component {
 
     constructor() {
         super()
     };
 
     componentDidMount(){
-        PubSub.publish('header-label',"Marketing")
+        PubSub.publish('header-label',"Financeiro")
     }
 
     render() {
@@ -20,4 +20,4 @@ class Marketing extends Component {
     }
 }
 
-export default Marketing;
+export default Financial;
