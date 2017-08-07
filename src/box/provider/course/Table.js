@@ -4,7 +4,6 @@ import httpService from '../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
 import PubSub from 'pubsub-js';
-import Information from './Information';
 import _ from 'lodash';
 
 
@@ -13,7 +12,7 @@ class TableFind extends Component {
 
     constructor(){
         super();
-        this.state={rows:'',courses:'', course:'', mimimi:false};
+        this.state={rows:'',courses:'', course:'',};
         this.httpService = new httpService();
     }
 
@@ -57,7 +56,7 @@ class TableFind extends Component {
                     <RaisedButton
                         label="editar"
                         backgroundColor="#00a1fc"
-                        onTouchTap={()=> this.fncEditCourse(course._id)}
+                        onTouchTap={() => this.fncEditCourse(course._id)}
                         icon={<EditIco color="#FFF"/>}
                         labelStyle={{color: 'white'}}/>
                 </TableRowColumn>
@@ -71,15 +70,13 @@ class TableFind extends Component {
     fncEditCourse = (id) => {
         let course = _.filter(this.state.courses, (course)=> {return course._id === id})[0];
         this.setState({'course':course});
-        this.setState({'mimimi':true});
-        PubSub.publish('switch-to-crud',true);
+        PubSub.publish('switch-to-crud',true,this.state.course);
     };
 
     render() {
         return (
 
               <div>
-                  {this.state.mimimi? <Information course={this.state.course}/> : null}
                   <Table>
                       <TableHeader
                           adjustForCheckbox={false}

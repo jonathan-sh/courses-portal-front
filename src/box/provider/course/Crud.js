@@ -18,6 +18,19 @@ class Crud extends Component {
         PubSub.publish('switch-to-crud', true);
     }
 
+
+    componentWillMount(){
+        this.fncFillInformation();
+    }
+
+    fncFillInformation =()=>{
+        console.log(this.props.course);
+        if (this.props.course !== undefined){
+            this.setState({'course':this.props.course})
+        }
+    };
+
+
     fncInfoCourse = ()=> this.setState({showInformationCourse: true});
     fncInfoStep = ()=> this.setState({showStep: true});
 

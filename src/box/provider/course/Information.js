@@ -32,7 +32,7 @@ class Information extends Component {
 
     }
 
-    componentDidMount(){
+    componentWillMount(){
       this.fncFillInformation();
     }
 
@@ -51,49 +51,27 @@ class Information extends Component {
     fncHandleSave = () => {
         if (this.fncValidData())
         {
-            this.setState({makeSave: true});
+           this.setState({makeSave: true});
 
-           if (this.state.course._id !== undefined && this.state.course._id !== '')
-           {
-               this.httpService.post('/course',this.fncGetDataCourse(),localStorage.getItem('auth-token'))
-                   .then(response => {
-                       if (response.status !== 501 )
-                       {
-                           return response.json();
-                       }
-                       throw new Error('Falha de autenticação.');
-                   })
-                   .then(success => {
-                       PubSub.publish('switch-to-crud', false);
-                       PubSub.publish('search-courses');
-                       this.setState({crud: true, open: false});
-                   })
-                   .catch(error => {this.setState({msg:error.message});});
-           }
-           else
-           {
-               this.httpService.put('/course',this.fncGetDataCourse(),localStorage.getItem('auth-token'))
-                   .then(response => {
-                       if (response.status !== 501 )
-                       {
-                           return response.json();
-                       }
-                       throw new Error('Falha de autenticação.');
-                   })
-                   .then(success => {
-                       PubSub.publish('switch-to-crud', false);
-                       PubSub.publish('search-courses');
-                       this.setState({crud: true, open: false});
-                   })
-                   .catch(error => {this.setState({msg:error.message});});
-           }
-
+           this.httpService.post('/course',this.fncGetDataCourse(),localStorage.getItem('auth-token'))
+               .then(response => {
+                   if (response.status !== 501 )
+                   {
+                       return response.json();
+                   }
+                   throw new Error('Falha de autenticação.');
+               })
+               .then(success => {
+                   PubSub.publish('switch-to-crud', false);
+                   PubSub.publish('search-courses');
+                   this.setState({crud: true, open: false});
+               })
+               .catch(error => {this.setState({msg:error.message});});
         }
     };
 
     fncGetDataCourse = () => {
-        let course = { _id: this.state.course._id,
-                       name: this.name.input.value,
+        let course = { name: this.name.input.value,
                        operation: this.operation.input.value,
                        objective: this.objective.input.value,
                        price: this.price.input.value,
@@ -161,7 +139,6 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.name}
                         fullWidth={true}
-                        value={this.state.course.name}
                         ref={(input) => this.name = input}/>
                     <TextField
                         hintText="Informe a operação do curso"
@@ -170,7 +147,6 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.operation}
                         fullWidth={true}
-                        value={this.state.course.operation}
                         ref={(input) => this.operation = input}/>
                     <TextField
                         hintText="Informe o objetivo do curso"
@@ -179,7 +155,6 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.objective}
                         fullWidth={true}
-                        value={this.state.course.objective}
                         ref={(input) => this.objective = input}/>
 
                     <TextField
@@ -189,7 +164,6 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.price}
                         style={{width: '49%', float: 'left'}}
-                        value={this.state.course.price}
                         ref={(input) => this.price = input}>
                     </TextField>
                     <TextField
@@ -199,7 +173,6 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.hours}
                         style={{width: '49%', float: 'right'}}
-                        value={this.state.course.hours}
                         ref={(input) => this.hours = input}>
                         <InputMask mask="9999" maskChar={null}/>
                     </TextField>

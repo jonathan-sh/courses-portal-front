@@ -7,13 +7,14 @@ import BackIco from 'material-ui/svg-icons/content/reply-all';
 import RaisedButton from 'material-ui/RaisedButton';
 import Information from './Information';
 import PubSub from 'pubsub-js';
+import Crud from "./Crud";
 
 class Course extends Component {
 
 
     constructor() {
         super();
-        this.state = {isCrud: false, newCourse: false, showTable:true};
+        this.state = {isCrud: false, newCourse: false, showTable:true, course:''};
     }
 
     componentDidMount(){
@@ -33,10 +34,10 @@ class Course extends Component {
 
     fncFindCourse = () => alert('alert');
 
-    fncInCrud = (key, value) => {
+    fncInCrud = (key, value, course) => {
         if (value)
         {
-            this.setState({isCrud: true, showTable: false});
+            this.setState({isCrud: true, showTable: false, 'course':course});
         }
         else
         {
@@ -82,9 +83,11 @@ class Course extends Component {
                 <br/>
 
 
-                {this.fncCheck() ? <Information/>  : null}
+                {this.state.newCourse ? <Information/>  : null}
 
                 {this.state.showTable ? <TableFound/>  : null}
+
+                {this.state.isCrud ? <Crud course={this.state.course} />  : null}
 
 
             </div>
