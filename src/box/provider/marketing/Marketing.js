@@ -5,10 +5,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 class Marketing extends Component {
 
-    constructor() {
-        super()
-    };
-
     componentDidMount(){
         PubSub.publish('header-label',"Marketing")
     }

@@ -3,10 +3,6 @@ import PubSub from 'pubsub-js';
 
 class Registration extends Component {
 
-    constructor() {
-        super()
-    };
-
     componentDidMount(){
         PubSub.publish('header-label',"Matriculas")
     }
