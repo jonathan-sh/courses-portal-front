@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import httpService from './../../../service/HttpService';
 import PubSub from 'pubsub-js';
+import QuestionPhoto from '../course/QuestionPhoto';
 
 class About extends Component {
 
@@ -15,7 +16,6 @@ class About extends Component {
     componentDidMount(){
         PubSub.publish('header-label',"Sobre")
     }
-
 
     appearConfirmPassword = () =>
     {
@@ -64,6 +64,9 @@ class About extends Component {
                     labelStyle={{color: 'white'}}
                     keyboardFocused={true}
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+
+                <QuestionPhoto/>
+
                 <br/>
             </div>
         )
