@@ -5,6 +5,7 @@ import NewIco from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import Question from './Question';
 import Prove from './Prove';
+import MaterialAdd from './MaterialAdd';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -80,13 +81,8 @@ class Steps extends Component {
                         <div style={{overflow: 'auto', height: '200px'}}>
                             {this.material}
                         </div>
-                        <RaisedButton
-                            label="material"
-                            backgroundColor="#0ac752"
-                            icon={<NewIco color="#FFF"/>}
-                            labelStyle={{color: 'white'}}
-                            keyboardFocused={true}
-                            style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+
+                        <MaterialAdd/>
 
                     </div>
                 );
