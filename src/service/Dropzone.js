@@ -12,7 +12,7 @@ class Dropzone extends Component
     constructor(props)
     {
         super(props);
-        this.state = {file: ''};
+        this.state = {file: '', limitFile: props.limitFile};
 
         // For a full list of possible configurations,
         // please consult http://www.dropzonejs.com/#configuration
@@ -30,12 +30,26 @@ class Dropzone extends Component
             postUrl: '/url-server-upload'
         };
 
+        this.handlePost = this.handlePost.bind(this);
+
         this.dropzone = null;
+    }
+
+    limitFileService()
+    {
+        if(this.state.limitFile === true)
+        {
+            if (this.dropzone.files[1] != null)
+            {
+                this.dropzone.removeFile(this.dropzone.files[0]);
+            }
+        }
     }
 
     handleFileAdded(file)
     {
-        console.log(file);
+        console.log(this.dropzone);
+        this.limitFileService();
         this.setState({file: file});
     }
 
@@ -58,11 +72,18 @@ class Dropzone extends Component
         }
 
         return (
-            <div>
-                <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
+            <div style={{marginTop: '2%'}}>
+                <DropzoneComponent
+                    config={config}
+                    eventHandlers={eventHandlers}
+                    djsConfig={djsConfig}
+                />
                 <button onClick={this.handlePost.bind(this)}>Upload</button>
             </div>
         );
     }
 }
-export default Dropzone;
+
+export
+default
+Dropzone;
