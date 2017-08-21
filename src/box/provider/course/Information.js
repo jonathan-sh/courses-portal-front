@@ -149,6 +149,7 @@ class Information extends Component {
                         fullWidth={true}
                         ref={(input) => this.operation = input}/>
                     <TextField
+                        id="jonathan"
                         hintText="Informe o objetivo do curso"
                         floatingLabelText="Objetivo"
                         type="text"
