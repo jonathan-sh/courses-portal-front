@@ -1,3 +1,9 @@
+.title{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: left;
+}
+
 .content-child{
     width:80%;
 }
