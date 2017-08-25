@@ -34,7 +34,10 @@ class About extends Component {
     };
 
     setData = (event, value, attribute)=>{
-        this.setState({"provider":{[attribute]:value}});
+        let provider = this.state.provider;
+        provider[attribute] = value;
+        console.log(provider)
+        this.setState(provider);
     };
 
     render() {

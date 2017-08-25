@@ -28,7 +28,6 @@ class QuestionPhoto extends Component
 
     fncHandleSave = () => {
         this.setState({makeSave: true});
-        Dropzone.handlePost;
     };
 
     handleChange = () =>

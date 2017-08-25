@@ -27,8 +27,9 @@ class Login extends Component {
                 throw new Error('Usuário ou senha incorreto!');
             })
             .then(success => {
+                console.log(success);
                 localStorage.setItem('auth-token', success.token);
-                history.push('/provider/about');
+                history.push('/provider/about', success);
             })
             .catch(error => {this.setState({msg:error.message});});
     };
