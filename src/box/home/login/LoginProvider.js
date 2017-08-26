@@ -49,9 +49,9 @@ export default class LoginProvider extends Component {
     };
 
 
-    handleClose = () => {
+    handleClose = (value) => {
         this.setState({open: false});
-        PubSub.publish('close-home-model', true);
+        PubSub.publish('close-home-model', value);
         history.push('/');
     };
 
@@ -61,12 +61,12 @@ export default class LoginProvider extends Component {
                 label="Cancelar"
                 primary={false}
                 style={{color:"#767676"}}
-                onClick={this.handleClose}
+                onClick={() => this.handleClose(false)}
             />,
             <FlatButton
-                label="Equeci a senha"
+                label="Esqueci a senha"
                 primary={true}
-                onClick={this.handleClose}
+                onClick={() => this.handleClose(true)}
             />,
             <RaisedButton onClick={this.makeLogin.bind(this)}
                           label="Fazer login"
@@ -86,7 +86,7 @@ export default class LoginProvider extends Component {
                     modal={true}
                     autoScrollBodyContent={false}
                     open={this.state.open}
-                    onRequestClose={this.handleClose}>
+                    onRequestClose={() => this.handleClose(false)}>
                     <TextField
                         hintText="Email"
                         floatingLabelText="Email"

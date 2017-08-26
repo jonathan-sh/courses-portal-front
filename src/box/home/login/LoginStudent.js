@@ -11,12 +11,12 @@ export default class LoginStudent extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {open: true,slideIndex: 0,};
+        this.state = {open: true};
     }
 
-    handleClose = () => {
+    handleClose = (value) => {
         this.setState({open: false});
-        PubSub.publish('close-home-model', true);
+        PubSub.publish('close-home-model', value);
     };
 
     render() {
@@ -25,12 +25,12 @@ export default class LoginStudent extends Component {
                 label="Cancelar"
                 primary={false}
                 style={{color:"#767676"}}
-                onClick={this.handleClose}
+                onClick={() => this.handleClose(false)}
             />,
             <FlatButton
-                label="Equeci a senha"
+                label="Esqueci a senha"
                 primary={true}
-                onClick={this.handleClose}
+                onClick={() => this.handleClose(true)}
             />,
             <RaisedButton label="Fazer login"
                           primary={true}  />,
@@ -49,7 +49,7 @@ export default class LoginStudent extends Component {
                     modal={true}
                     autoScrollBodyContent={false}
                     open={this.state.open}
-                    onRequestClose={this.handleClose}>
+                    onRequestClose={() => this.handleClose(false)}>
 
                     <TextField
                         hintText="Email"

@@ -6,12 +6,16 @@ import FlatButton from 'material-ui/FlatButton';
 import SingIn from './box/home/sign-in/SingIn';
 import LoginStudent from './box/home/login/LoginStudent';
 import LoginProvider from './box/home/login/LoginProvider';
+import ForgotPassword from './box/home/login/ForgotPassword';
 import PubSub from 'pubsub-js';
 class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {showModalLoginStudent:false,showModalSingIn:false, showModalLoginProvider:false};
+        this.state = {showModalLoginStudent:false,
+                      showModalSingIn:false,
+                      showModalForgotPassword:false,
+                      showModalLoginProvider:false};
     }
 
     componentDidMount(){
@@ -23,8 +27,11 @@ class App extends Component {
         menu:{display: 'inline-block',margin: '16px 32px 16px 0',}
     };
 
-    closeAll = () =>{
-        this.setState({showModalLoginStudent:false,showModalSingIn:false, showModalLoginProvider:false});
+    closeAll = (key, value) =>{
+        this.setState({showModalLoginStudent:false,
+                       showModalSingIn:false,
+                       showModalForgotPassword:value,
+                       showModalLoginProvider:false});
     };
 
     showModal = (type)=>{
@@ -62,6 +69,7 @@ class App extends Component {
                {(this.state.showModalSingIn) ? <SingIn/> : null}
                {(this.state.showModalLoginStudent) ? <LoginStudent/> : null}
                {(this.state.showModalLoginProvider) ? <LoginProvider/> : null}
+               {(this.state.showModalForgotPassword) ? <ForgotPassword/> : null}
            </div>
         );
     }
