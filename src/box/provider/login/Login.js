@@ -3,10 +3,6 @@ import LoginProvider from './../../home/login/LoginProvider';
 
 class Login extends Component {
 
-    constructor() {
-        super();
-    };
-
     render() {
         return (
             <div className="home">
