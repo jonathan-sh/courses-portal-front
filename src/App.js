@@ -4,13 +4,14 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import SingIn from './box/home/sign-in/SingIn';
-import Login from './box/home/login/Login';
+import LoginStudent from './box/home/login/LoginStudent';
+import LoginProvider from './box/home/login/LoginProvider';
 import PubSub from 'pubsub-js';
 class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {showModalLogin:false,showModalSingIn:false};
+        this.state = {showModalLoginStudent:false,showModalSingIn:false, showModalLoginProvider:false};
     }
 
     componentDidMount(){
@@ -23,7 +24,7 @@ class App extends Component {
     };
 
     closeAll = () =>{
-        this.setState({showModalLogin:false,showModalSingIn:false});
+        this.setState({showModalLoginStudent:false,showModalSingIn:false, showModalLoginProvider:false});
     };
 
     showModal = (type)=>{
@@ -39,8 +40,12 @@ class App extends Component {
                            onClick={()=>this.showModal('showModalSingIn')}/>
             <FlatButton rippleColor="#fff"
                         style={this.style.btLogin}
-                        label="LOGIN" secondary={false}
-                        onClick={()=>this.showModal('showModalLogin')}/>
+                        label="Estudante" secondary={false}
+                        onClick={()=>this.showModal('showModalLoginStudent')}/>
+            <FlatButton rippleColor="#fff"
+                        style={this.style.btLogin}
+                        label="Empresa" secondary={false}
+                        onClick={()=>this.showModal('showModalLoginProvider')}/>
         </div>
     );
 
@@ -55,7 +60,8 @@ class App extends Component {
                    iconElementRight={this.leftButtons()}
                />
                {(this.state.showModalSingIn) ? <SingIn/> : null}
-               {(this.state.showModalLogin) ? <Login/> : null}
+               {(this.state.showModalLoginStudent) ? <LoginStudent/> : null}
+               {(this.state.showModalLoginProvider) ? <LoginProvider/> : null}
            </div>
         );
     }

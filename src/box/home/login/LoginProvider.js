@@ -5,28 +5,71 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
+import httpService from '../../../service/HttpService';
+import history from '../../../service/router/History';
 
-export default class Login extends Component {
+export default class LoginProvider extends Component {
 
+    constructor() {
+        super();
+        this.state = { open: true, msg: '' };
+        this.httpService = new httpService();
+    };
 
-    constructor(props) {
-        super(props);
-        this.state = {open: true,slideIndex: 0,};
-    }
+    setItemsLocalStorage = (objects) =>
+    {
+        objects.entity.provider.password = null;
+        localStorage.setItem('auth-token', objects.token);
+        localStorage.setItem('provider', JSON.stringify(objects.entity.provider));
+        localStorage.setItem('courses', JSON.stringify(objects.entity.courses));
+    };
+
+    makeLogin = (event) => {
+        event.preventDefault();
+        this.httpService.post('/login', this.makeDataForLogin())
+            .then(response => {
+                if (response.status !== 501 )
+                {
+                    return response.json();
+                }
+                throw new Error('Usuário ou senha incorreto!');
+            })
+            .then(success => {
+                console.log(success);
+                this.setItemsLocalStorage(success);
+                history.push('/provider/about', success);
+            })
+            .catch(error => {this.setState({msg:error.message});});
+    };
+
+    makeDataForLogin= () => {
+        return {email:this.email.input.value,
+            password:this.password.input.value,
+            entity:'provider'}
+    };
+
 
     handleClose = () => {
         this.setState({open: false});
         PubSub.publish('close-home-model', true);
+        history.push('/');
     };
 
     render() {
         const actions = [
             <FlatButton
                 label="Cancelar"
+                primary={false}
+                style={{color:"#767676"}}
+                onClick={this.handleClose}
+            />,
+            <FlatButton
+                label="Equeci a senha"
                 primary={true}
                 onClick={this.handleClose}
             />,
-            <RaisedButton label="Entrar"
+            <RaisedButton onClick={this.makeLogin.bind(this)}
+                          label="Fazer login"
                           primary={true}  />,
         ];
 
@@ -37,14 +80,13 @@ export default class Login extends Component {
             <div>
                 <Dialog
                     titleStyle={style.title}
-                    title="Olha quem voltou :D"
+                    title="Login empresarial"
                     actions={actions}
                     bodyStyle={{minHeight: '180px'}}
                     modal={true}
                     autoScrollBodyContent={false}
                     open={this.state.open}
                     onRequestClose={this.handleClose}>
-
                     <TextField
                         hintText="Email"
                         floatingLabelText="Email"
@@ -59,25 +101,6 @@ export default class Login extends Component {
                         fullWidth={true}
                         ref={(input) => { this.password = input; }}
                     />
-                    <br/>
-                    <br/>
-                    <div style={{textAlign:'center'}}>
-                        <h4 className="title">ou</h4>
-                        <FlatButton
-                            label="Facebook"
-                            labelPosition="after"
-                            primary={true}
-                            style={{marginRight:'5%'}}
-                            icon={<i className="fa fa-facebook"/>}
-                        />
-                        <FlatButton
-                            label="Google"
-                            labelPosition="after"
-                            primary={true}
-                            icon={<i className="fa fa-google"/>}
-                        />
-                    </div>
-
                 </Dialog>
             </div>
         );

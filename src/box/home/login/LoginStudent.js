@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
+import './../../../style/font/font-awesome-4.7.0/css/font-awesome.min.css';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
 
-export default class SingIn extends Component {
+export default class LoginStudent extends Component {
 
 
-    constructor() {
-        super();
-        this.state = { open: true};
+    constructor(props) {
+        super(props);
+        this.state = {open: true,slideIndex: 0,};
     }
 
     handleClose = () => {
@@ -22,12 +23,19 @@ export default class SingIn extends Component {
         const actions = [
             <FlatButton
                 label="Cancelar"
+                primary={false}
+                style={{color:"#767676"}}
+                onClick={this.handleClose}
+            />,
+            <FlatButton
+                label="Equeci a senha"
                 primary={true}
                 onClick={this.handleClose}
             />,
-            <RaisedButton label="Criar conta"
+            <RaisedButton label="Fazer login"
                           primary={true}  />,
         ];
+
 
         const style = {title:{fontFamily: 'Roboto',fontWeight: 300, textAlign:'center'}};
 
@@ -35,18 +43,13 @@ export default class SingIn extends Component {
             <div>
                 <Dialog
                     titleStyle={style.title}
-                    title="Seja bem vindo :)"
+                    title="Olha quem voltou :D"
                     actions={actions}
+                    bodyStyle={{minHeight: '180px'}}
                     modal={true}
+                    autoScrollBodyContent={false}
                     open={this.state.open}
                     onRequestClose={this.handleClose}>
-                    <TextField
-                        hintText="Nome"
-                        floatingLabelText="Nome"
-                        type="text"
-                        fullWidth={true}
-                        ref={(input) => { this.name = input; }}
-                    />
 
                     <TextField
                         hintText="Email"
@@ -62,6 +65,8 @@ export default class SingIn extends Component {
                         fullWidth={true}
                         ref={(input) => { this.password = input; }}
                     />
+                    <br/>
+                    <br/>
                     <div style={{textAlign:'center'}}>
                         <h4 className="title">ou</h4>
                         <FlatButton
@@ -79,6 +84,7 @@ export default class SingIn extends Component {
                             icon={<i className="fa fa-google"/>}
                         />
                     </div>
+
                 </Dialog>
             </div>
         );

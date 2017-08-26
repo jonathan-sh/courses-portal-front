@@ -1,104 +1,20 @@
 import React, { Component } from "react";
-import httpService from '../../../service/HttpService';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import {Card} from 'material-ui/Card';
-import {Link} from 'react-router-dom';
-import history from '../../../service/router/History';
-import '../../../style/css/provider/login.css';
+import LoginProvider from './../../home/login/LoginProvider';
 
 class Login extends Component {
 
     constructor() {
         super();
-        this.state = { msg: '' };
-        this.httpService = new httpService();
-    };
-
-    setItemsLocalStorage = (objects) =>
-    {
-        objects.entity.provider.password = null;
-        localStorage.setItem('auth-token', objects.token);
-        localStorage.setItem('provider', JSON.stringify(objects.entity.provider));
-        localStorage.setItem('courses', JSON.stringify(objects.entity.courses));
-    }
-
-    makeLogin = (event) => {
-        event.preventDefault();
-        this.httpService.post('/login', this.makeDataForLogin())
-            .then(response => {
-                if (response.status !== 501 )
-                {
-                    return response.json();
-                }
-                throw new Error('Usuário ou senha incorreto!');
-            })
-            .then(success => {
-                console.log(success);
-                this.setItemsLocalStorage(success);
-                history.push('/provider/about', success);
-            })
-            .catch(error => {this.setState({msg:error.message});});
-    };
-
-    makeDataForLogin= () => {
-        return {email:this.email.input.value,
-                password:this.password.input.value,
-                entity:'provider'}
     };
 
     render() {
         return (
-            <div>
-                <div className="div-dad">
-                    <Card className="div-login">
-                        <div>
-                            <h2 className="font">Bem vindo professor!</h2>
-                            <p className="font">Vamos começar a aula?</p>
-                            <TextField
-                            hintText="Email"
-                            floatingLabelText="Email"
-                            type="email"
-                            fullWidth={true}
-                            ref={(input) => { this.email = input; }}
-                            />
-                            <TextField
-                                hintText="Senha"
-                                floatingLabelText="Senha"
-                                type="password"
-                                fullWidth={true}
-                                ref={(input) => { this.password = input; }}
-                            />
-                            <div className="div-action">
-                                <RaisedButton
-                                    onTouchTap={this.makeLogin.bind(this)}
-                                    label="Login" className="button" 
-                                />
-                                <RaisedButton
-                                    label="Login Facebook" className="button"
-                                />
-                            </div>
-                            <div className="font">
-                                <span>
-                                    {this.state.msg}
-                                </span>
-                            </div>
-                            <p className="font forgot-password">
-                                <Link to={"/"} className="forgot-password">Esqueci minha senha</Link>
-                            </p>
-                        </div>
-                    </Card>
-                    <div className="div-info">
-                        Lorem ipsum elementum aliquet laoreet tempor lectus nullam, senectus ornare accumsan inceptos tempor leo suspendisse, sit augue hendrerit potenti per dolor. sit aenean vulputate porttitor tempus aliquam himenaeos primis augue lobortis, sapien iaculis blandit ipsum vulputate id iaculis suspendisse lobortis, rhoncus quisque lacus lobortis ipsum lorem nec aliquam. vestibulum dictumst potenti a mauris consectetur himenaeos eget cursus, quam id nisi praesent luctus adipiscing posuere, velit nec orci ornare tortor dictum at. amet laoreet lacus porttitor enim gravida fringilla orci senectus luctus, ligula tempus ut senectus fringilla accumsan quis semper nostra neque, nostra himenaeos nullam elementum fames curabitur metus et.
-
-                        Pharetra nullam curabitur cubilia urna lorem lobortis blandit donec, aenean etiam risus arcu nunc interdum ornare. fusce feugiat aliquam ac habitant nunc platea magna laoreet vehicula, quisque consequat semper taciti justo auctor aptent aenean ut quis, aliquam mi posuere primis phasellus lacinia nam conubia. massa metus consequat curabitur semper faucibus mollis etiam litora lacus bibendum, nunc arcu aliquam velit molestie imperdiet leo auctor vitae, sodales cursus varius justo interdum felis luctus scelerisque laoreet. venenatis ut nulla eros ut vestibulum iaculis platea, convallis tincidunt bibendum viverra quis eu ligula, lacinia dictumst quis torquent convallis ultricies.
-                    </div>
-                </div>
+            <div className="home">
+                <LoginProvider/>
             </div>
         );
     }
 }
-
 export default Login;
 
 
