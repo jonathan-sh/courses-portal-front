@@ -18,7 +18,7 @@ export default class LoginProvider extends Component {
 
     setItemsLocalStorage = (objects) =>
     {
-        objects.entity.provider.password = null;
+        objects.entity.provider.password = '';
         localStorage.setItem('auth-token', objects.token);
         localStorage.setItem('provider', JSON.stringify(objects.entity.provider));
         localStorage.setItem('courses', JSON.stringify(objects.entity.courses));

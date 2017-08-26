@@ -4,21 +4,28 @@ import TextField from 'material-ui/TextField';
 import httpService from './../../../service/HttpService';
 import PubSub from 'pubsub-js';
 
-class About extends Component {
-
-    constructor() {
-        super()
+class About extends Component
+{
+    constructor()
+    {
+        super();
         this.httpService = new httpService();
-        this.state = { provider: JSON.parse(localStorage.getItem('provider')), classConfirmPassword: 'none' };
-
+        this.state =
+        {
+            provider: JSON.parse(localStorage.getItem('provider')),
+            classConfirmPassword: 'none',
+            errorText:{name:'', password:'', confirmPassword: ''}
+        };
     };
 
-    componentDidMount(){
+    componentWillMount()
+    {
         PubSub.publish('header-label','Sobre');
         console.log(this.state.provider)
-    }
+    };
 
-    updateProvider = ()=>{
+    updateProvider = () =>
+    {
         this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
                 if (response.status !== 501 )
@@ -28,19 +35,32 @@ class About extends Component {
                 throw new Error('Falha de autenticação.');
             })
             .then(success => {
-                success.password = null;
-                this.setState({"provider":success});
-                localStorage.setItem('provider', JSON.stringify(success));
+                this.responseUpdate(success);
             })
             .catch(error => { console.log(error);});
 
     };
 
-    setData = (event, value, attribute)=>{
+    responseUpdate = (response) =>
+    {
+        response.password = '';
+        this.setState({"provider":response});
+        localStorage.setItem('provider', JSON.stringify(response));
+        this.clearPasswords();
+        console.log('Success');
+    };
+
+    clearPasswords = () =>
+    {
+        this.password.setState({ value: "" });
+        this.setState({classConfirmPassword: 'none'});
+    };
+
+    setData = (event, value, attribute) =>
+    {
         let provider = this.state.provider;
         provider[attribute] = value;
         this.setState(provider);
-        console.log(provider)
 
         if(attribute === 'password')
         {
@@ -49,7 +69,54 @@ class About extends Component {
         }
     };
 
-    render() {
+    isValidationFields = () =>
+    {
+        const errorName = 'Informe o nome';
+        const errorPassword = 'A senha deve conter mais de quatro caracteres caso queria altera-lá';
+        const errorConfirmPassword = 'As senhas não conferem';
+        let errors =
+        {
+            name:'',
+            password:'',
+            confirmPassword:''
+        };
+
+        this.setState({'errorText':errors});
+
+        this.password.input.value.length <= 3 ?
+        (
+            this.password.input.value !== '' ?
+                errors.password = errorPassword : errors.password = ''
+        )
+            :
+        (
+            this.password.input.value !== this.confirmPassword.input.value ?
+                errors.confirmPassword = errorConfirmPassword :  errors.confirmPassword = ''
+        )
+
+        this.name.input.value === '' ?
+            (errors.name = errorName) : (errors.name = '')
+
+        this.setState({'errorsText': errors});
+
+        if(errors.name === '' && errors.password === '' && errors.confirmPassword === '')
+        {
+            return true;
+        }
+        return false;
+
+    };
+
+    fncMakeUpdateProvider = () =>
+    {
+        if(this.isValidationFields())
+        {
+            this.updateProvider();
+        }
+    };
+
+    render()
+    {
         return (
             <div>
                 <TextField
@@ -65,7 +132,7 @@ class About extends Component {
                     hintText="Nome"
                     floatingLabelText="Nome"
                     fullWidth={true}
-                    errorText={''}
+                    errorText={this.state.errorText.name}
                     onChange={ (event, value) =>  this.setData(event, value, 'name')}
                     ref={(input) => { this.name = input; }}
                     value= {this.state.provider.name}
@@ -76,9 +143,10 @@ class About extends Component {
                     floatingLabelText="Senha"
                     type="password"
                     fullWidth={true}
-                    errorText={''}
+                    errorText={this.state.errorText.password}
                     onChange={ (event, value) =>  this.setData(event, value, 'password')}
                     ref={(input) => { this.password = input; }}
+                    value= {this.state.provider.password}
                 />
                 <TextField
                     id="password1"
@@ -86,7 +154,7 @@ class About extends Component {
                     floatingLabelText="Confirmar senha"
                     type="password"
                     fullWidth={true}
-                    errorText={''}
+                    errorText={this.state.errorText.confirmPassword}
                     style={{display: this.state.classConfirmPassword}}
                     ref={(input) => { this.confirmPassword = input; }}
                 />
@@ -95,7 +163,7 @@ class About extends Component {
                     backgroundColor="#0ac752"
                     labelStyle={{color: 'white'}}
                     keyboardFocused={true}
-                    onTouchTap={this.updateProvider}
+                    onTouchTap={this.fncMakeUpdateProvider}
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
 
                 <br/>
