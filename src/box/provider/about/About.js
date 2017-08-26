@@ -72,8 +72,8 @@ class About extends Component
     isValidationFields = () =>
     {
         const errorName = 'Informe o nome';
-        const errorPassword = 'A senha deve conter mais de quatro caracteres caso queria altera-lá';
-        const errorConfirmPassword = 'As senhas não conferem';
+        const errorPassword = 'A senha deve conter quatro caracteres ou mais caso queria altera-lá';
+        const errorConfirmPassword = 'As senhas devem ser iguais';
         let errors =
         {
             name:'',
@@ -156,6 +156,7 @@ class About extends Component
                     fullWidth={true}
                     errorText={this.state.errorText.confirmPassword}
                     style={{display: this.state.classConfirmPassword}}
+                    onChange={ this.isValidationFields }
                     ref={(input) => { this.confirmPassword = input; }}
                 />
                 <RaisedButton

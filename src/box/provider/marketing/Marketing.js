@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import PubSub from 'pubsub-js';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
-import Grade from './Grade';
+import Bar from './Bar';
+import Body from './Body';
+import Footer from './Footer';
 
 class Marketing extends Component {
 
@@ -45,12 +45,9 @@ class Marketing extends Component {
         }
     };
 
-    fncShowGrade = () => this.setState({showGrade: true});
-
     render() {
         return (
             <div>
-                {this.state.showGrade ? <Grade/>  : null}
                 <br/>
                 <br/>
                 <Tabs
@@ -66,60 +63,10 @@ class Marketing extends Component {
                     index={this.state.slideIndex}
                     onChangeIndex={this.handleChange}
                 >
-                    <div>
-                        <h3 className="title">Categorias</h3>
-                        <RaisedButton
-                            label={"CATEGORIA A"}
-                            fullWidth={true}
-                            backgroundColor="#2dc7a2"
-                            labelStyle={{color: '#FFF'}}
-                            style={{marginTop: '10px'}}>
-                        </RaisedButton>
-                        <RaisedButton
-                            label={"CATEGORIA B"}
-                            fullWidth={true}
-                            backgroundColor="#2dc7a2"
-                            labelStyle={{color: '#FFF'}}
-                            style={{marginTop: '10px'}}>
-                        </RaisedButton>
-                        <RaisedButton
-                            label={"CATEGORIA C"}
-                            fullWidth={true}
-                            backgroundColor="#2dc7a2"
-                            labelStyle={{color: '#FFF'}}
-                            style={{marginTop: '10px'}}>
-                        </RaisedButton>
-                        <RaisedButton
-                            onTouchTap={() => this.fncShowGrade()}
-                            label="adicinar categoria"
-                            backgroundColor="#0ac752"
-                            labelStyle={{color: 'white'}}
-                            style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+                    <Bar />
+                    <Body style={this.styles.slide} />
+                    <Footer style={this.styles.slide} />
 
-                    </div>
-                    <div style={this.styles.slide}>
-                        <TextField
-                            id="description"
-                            hintText="Descrivo"
-                            floatingLabelText="Descrivo"
-                            fullWidth={true}
-                            errorText={''}
-                        />
-                        <TextField
-                            id="about"
-                            hintText="Sobre"
-                            floatingLabelText="Sobre"
-                            fullWidth={true}
-                        />
-                    </div>
-                    <div style={this.styles.slide}>
-                        <TextField
-                            id="footer"
-                            hintText="Roda-pé"
-                            floatingLabelText="Roda-pé"
-                            fullWidth={true}
-                        />
-                    </div>
                 </SwipeableViews>
 
 
