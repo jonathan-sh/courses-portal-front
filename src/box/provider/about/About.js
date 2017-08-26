@@ -9,16 +9,17 @@ class About extends Component {
     constructor() {
         super()
         this.httpService = new httpService();
-        this.state = { provider: {name:'', email:'',} }
+        this.state = { provider: JSON.parse(localStorage.getItem('provider')), classConfirmPassword: 'none' };
+
     };
 
     componentDidMount(){
         PubSub.publish('header-label','Sobre');
-        this.findProvider();
+        console.log(this.state.provider)
     }
 
-    findProvider = ()=>{
-        this.httpService.get('/provider', localStorage.getItem('auth-token'))
+    updateProvider = ()=>{
+        this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
                 if (response.status !== 501 )
                 {
@@ -27,7 +28,9 @@ class About extends Component {
                 throw new Error('Falha de autenticação.');
             })
             .then(success => {
+                success.password = null;
                 this.setState({"provider":success});
+                localStorage.setItem('provider', JSON.stringify(success));
             })
             .catch(error => { console.log(error);});
 
@@ -37,6 +40,13 @@ class About extends Component {
         let provider = this.state.provider;
         provider[attribute] = value;
         this.setState(provider);
+        console.log(provider)
+
+        if(attribute === 'password')
+        {
+            value.length >= 4 ?
+            (this.setState({classConfirmPassword: ''})) : ((this.setState({classConfirmPassword: 'none'})));
+        }
     };
 
     render() {
@@ -67,8 +77,8 @@ class About extends Component {
                     type="password"
                     fullWidth={true}
                     errorText={''}
+                    onChange={ (event, value) =>  this.setData(event, value, 'password')}
                     ref={(input) => { this.password = input; }}
-                    onChange={this.appearConfirmPassword}
                 />
                 <TextField
                     id="password1"
@@ -77,6 +87,7 @@ class About extends Component {
                     type="password"
                     fullWidth={true}
                     errorText={''}
+                    style={{display: this.state.classConfirmPassword}}
                     ref={(input) => { this.confirmPassword = input; }}
                 />
                 <RaisedButton
@@ -84,7 +95,7 @@ class About extends Component {
                     backgroundColor="#0ac752"
                     labelStyle={{color: 'white'}}
                     keyboardFocused={true}
-                    onTouchTap={this.fncFindCourse}
+                    onTouchTap={this.updateProvider}
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
 
                 <br/>

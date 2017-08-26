@@ -10,6 +10,8 @@ class HeaderBar extends Component
     logOut = () =>
     {
        localStorage.removeItem('auth-token');
+       localStorage.removeItem('provider');
+       localStorage.removeItem('courses');
        history.push('/login/provider');
     };
 

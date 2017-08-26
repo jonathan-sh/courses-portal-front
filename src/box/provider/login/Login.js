@@ -15,6 +15,13 @@ class Login extends Component {
         this.httpService = new httpService();
     };
 
+    setItemsLocalStorage = (objects) =>
+    {
+        objects.entity.provider.password = null;
+        localStorage.setItem('auth-token', objects.token);
+        localStorage.setItem('provider', JSON.stringify(objects.entity.provider));
+        localStorage.setItem('courses', JSON.stringify(objects.entity.courses));
+    }
 
     makeLogin = (event) => {
         event.preventDefault();
@@ -28,7 +35,7 @@ class Login extends Component {
             })
             .then(success => {
                 console.log(success);
-                localStorage.setItem('auth-token', success.token);
+                this.setItemsLocalStorage(success);
                 history.push('/provider/about', success);
             })
             .catch(error => {this.setState({msg:error.message});});
