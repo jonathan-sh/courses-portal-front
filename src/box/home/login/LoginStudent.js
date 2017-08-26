@@ -5,6 +5,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
+import history from '../../../service/router/History';
 
 export default class LoginStudent extends Component {
 
@@ -17,6 +18,7 @@ export default class LoginStudent extends Component {
     handleClose = (value) => {
         this.setState({open: false});
         PubSub.publish('close-home-model', value);
+        history.push('/');
     };
 
     render() {

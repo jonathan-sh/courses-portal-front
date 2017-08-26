@@ -92,10 +92,10 @@ class About extends Component
         (
             this.password.input.value !== this.confirmPassword.input.value ?
                 errors.confirmPassword = errorConfirmPassword :  errors.confirmPassword = ''
-        )
+        );
 
         this.name.input.value === '' ?
-            (errors.name = errorName) : (errors.name = '')
+            (errors.name = errorName) : (errors.name = '');
 
         this.setState({'errorsText': errors});
 
