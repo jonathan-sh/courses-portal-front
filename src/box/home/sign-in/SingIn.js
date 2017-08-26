@@ -62,6 +62,20 @@ export default class SingIn extends Component {
                         fullWidth={true}
                         ref={(input) => { this.password = input; }}
                     />
+                    <h4 className="title">ou</h4>
+                    <FlatButton
+                        label="Facebook"
+                        labelPosition="after"
+                        primary={true}
+                        style={{marginRight:'5%'}}
+                        icon={<i className="fa fa-facebook"/>}
+                    />
+                    <FlatButton
+                        label="Google"
+                        labelPosition="after"
+                        primary={true}
+                        icon={<i className="fa fa-google"/>}
+                    />
                 </Dialog>
             </div>
         );
