@@ -21,7 +21,6 @@ class About extends Component
     componentWillMount()
     {
         PubSub.publish('header-label','Sobre');
-        console.log(this.state.provider)
     };
 
     updateProvider = () =>
@@ -43,7 +42,7 @@ class About extends Component
 
     responseUpdate = (response) =>
     {
-        response.password = '';
+        response.password = null;
         this.setState({"provider":response});
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearPasswords();
@@ -61,6 +60,7 @@ class About extends Component
         let provider = this.state.provider;
         provider[attribute] = value;
         this.setState(provider);
+        console.log(provider);
 
         if(attribute === 'password')
         {
@@ -146,7 +146,6 @@ class About extends Component
                     errorText={this.state.errorText.password}
                     onChange={ (event, value) =>  this.setData(event, value, 'password')}
                     ref={(input) => { this.password = input; }}
-                    value= {this.state.provider.password}
                 />
                 <TextField
                     id="password1"

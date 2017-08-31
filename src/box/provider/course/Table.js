@@ -40,7 +40,8 @@ class TableFind extends Component {
             })
             .then(success => {
                 this.setState({'courses':success});
-               this.fncMakeRows();
+                localStorage.setItem('courses', JSON.stringify(success));
+                this.fncMakeRows();
             })
             .catch(error => {this.setState({msg:error.message});});
 
