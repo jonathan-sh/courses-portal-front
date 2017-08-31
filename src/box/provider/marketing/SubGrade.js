@@ -4,22 +4,85 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
+import PubSub from 'pubsub-js';
+import array from '../../../service/Array';
 
 class SubGrade extends Component {
 
     constructor() {
         super();
-        this.state = {
-            open: true,};
+        this.array = new array();
+        this.state =
+        {
+            open: true,
+            courses: JSON.parse(localStorage.getItem('courses')),
+            subGrade: {description:'', courses:[]},
+            errorText: {description:'', courses:''}
+        };
     }
 
-    fncHandleClose = () => this.setState({open: false});
+    fncHandleClose = () =>
+    {
+        PubSub.publish('show-sub-grade', false);
+        this.setState({open: false});
+    };
 
-    fncHandleSave = () => this.setState({open: false});
+    fncHandleSave = () =>
+    {
+        if(this.isValidationFields())
+        {
+            PubSub.publish('sub-grade',this.state.subGrade);
+            PubSub.publish('show-sub-grade', false);
+            this.setState({open: false});
+        }
+    };
 
-    questions = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
-    question = this.questions.map((question) =>
-        <Checkbox key={question} label={"Descrição do curso "+ question}/>
+    setData = (event, value, attribute) =>
+    {
+        let subGrade = this.state.subGrade;
+        subGrade[attribute] = value;
+        this.setState(subGrade);
+    };
+
+    fncHandleCheck = (event) =>
+    {
+        let subGrade = this.state.subGrade.courses;
+        let value = event.target.id;
+        subGrade = this.array.control(subGrade, value);
+        this.setState(subGrade);
+    };
+
+    isValidationFields = () =>
+    {
+        const errorDescription = 'Informe a descrição';
+        const errorCourses = 'Informe pelo menos um curso';
+        let errors =
+        {
+            description:'',
+            courses:'',
+        };
+
+        this.setState({'errorText':errors});
+
+        this.description.input.value === '' ?
+            (errors.description = errorDescription) : (errors.description = '');
+
+        this.state.subGrade.courses.length === 0 ?
+            (errors.courses = errorCourses) : (errors.courses = '');
+
+        this.setState({'errorsText': errors});
+
+        if(errors.description === '' && errors.courses === '')
+        {
+            return true;
+        }
+        return false;
+
+    };
+
+    courses = JSON.parse(localStorage.getItem('courses'));
+    course = this.courses.map((course) =>
+        <Checkbox id={course._id} key={course.id} label={course.name} onCheck={this.fncHandleCheck.bind(this)}/>
     );
 
     actions = [
@@ -53,11 +116,14 @@ class SubGrade extends Component {
                     hintText="Nome da sub categoria"
                     floatingLabelText="Nome da sub categoria"
                     fullWidth={true}
-                    errorText={''}
+                    errorText={this.state.errorText.description}
+                    ref={(input) => { this.description = input; }}
+                    onChange={(event, value) =>  this.setData(event, value, 'description')}
                 />
-                <h4 className="title">Cursos</h4>
+                <h4 className="title" style={{marginBottom: '0px'}}>Cursos</h4>
+                <h5 style={{color:'#f44335', fontFamily: 'Roboto', fontWeight: '500', marginTop:'0%'}}>{this.state.errorText.courses}</h5>
                 <div style={{overflow: 'auto', height: '200px'}}>
-                    {this.question}
+                    {this.course}
                 </div>
                 <br/>
 

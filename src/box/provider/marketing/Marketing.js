@@ -10,20 +10,15 @@ class Marketing extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            slideIndex: 0,
-        };
+        this.state = {slideIndex: 0};
     }
 
-    componentDidMount(){
-        PubSub.publish('header-label',"Marketing")
+    componentDidMount()
+    {
+        PubSub.publish('header-label',"Marketing");
     }
 
-    handleChange = (value) => {
-        this.setState({
-            slideIndex: value,
-        });
-    };
+    handleChange = (value) => this.setState({slideIndex: value});
 
     styles = {
         headline: {
@@ -53,24 +48,20 @@ class Marketing extends Component {
                 <Tabs
                     inkBarStyle={this.styles.tabs}
                     onChange={this.handleChange}
-                    value={this.state.slideIndex}
-                >
+                    value={this.state.slideIndex} >
                     <Tab style={this.styles.tab} label="Barra" value={0} />
                     <Tab style={this.styles.tab} label="Sobre" value={1} />
                     <Tab style={this.styles.tab} label="Roda-pé" value={2} />
                 </Tabs>
                 <SwipeableViews
                     index={this.state.slideIndex}
-                    onChangeIndex={this.handleChange}
-                >
+                    onChangeIndex={this.handleChange} >
+
                     <Bar />
                     <Body style={this.styles.slide} />
                     <Footer style={this.styles.slide} />
 
                 </SwipeableViews>
-
-
-
             </div>
         )
     }
