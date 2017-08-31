@@ -6,19 +6,68 @@
 body {
     margin: 0;
     padding: 0;
-    overflow-y:hidden;
 }
+.subTitle{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: center;
+    position: absolute;
+    margin: auto;
+    margin-top: 20%;
+    left: 0;
+    right: 0;
+    padding: 2%;
+    font-size: 40px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    z-index: 0;
+}
+
+.plainTitle{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: center;
+    margin: auto;
+    padding-top: 4%;
+    left: 0;
+    right: 0;
+    display: inherit;
+    color: #fff;
+    font-size: 1.5em;
+}
+
 .title{
     font-family: 'Roboto';
     font-weight: 300;
     text-align: center;
 }
 
+
 .home{
     background-image: url("./../img/home-background.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
     background-size: 100%;
     height:980px;
+}
 
+.headerBar{
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+}
+
+.about{
+    padding: 0% 7% 5% 7%;
+    background: #ffffff;
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: center;
+    font-size: 18px;
+}
+
+.home-plans{
+    background-image: url("./../img/home-plans.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height:980px;
+    text-align: center;
 }
