@@ -4,12 +4,13 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { BrowserRouter, Router, Route, Redirect } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker';
+import history from './service/router/History';
 import App from './App';
 import Dash from './box/provider/dash/Dash';
 import LoginProvider from './box/provider/login/Login';
 import LoginStudent from './box/student/login/Login';
 import ResettingPassword from './box/home/login/ResettingPassword';
-import history from './service/router/History';
+import CourseInformation from './box/home/course/Information'
 
 injectTapEventPlugin(); 
 
@@ -29,6 +30,7 @@ const Main = () => (
                     <Route exact path='/login/student' component={LoginStudent} />
                     <Route exact path='/login/provider' component={LoginProvider} />
                     <Route exact path='/resetting-password/:v1/:v2/:v3' component={ResettingPassword} />
+                    <Route exact path='/course/:id' component={CourseInformation} />
                     <PrivateRoute path='/provider/:way' component={Dash} />
                 </div>
             </Router>

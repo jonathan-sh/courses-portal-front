@@ -7,6 +7,13 @@ body {
     margin: 0;
     padding: 0;
 }
+
+p {
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: justify;
+}
+
 .subTitle{
     font-family: 'Roboto';
     font-weight: 300;
