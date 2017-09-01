@@ -42,19 +42,23 @@ class Grade extends Component
 
     fncListSubGrade = (topic, subGrade) =>
     {
+
         this.state.grade.subGrades.push(subGrade);
 
-        let subGrades = this.state.grade.subGrades.map((subGrade, index) =>
-            <RaisedButton
-                key={index += 1}
-                label={subGrade.description}
-                fullWidth={true}
-                backgroundColor="#2dc7a2"
-                labelStyle={{color: '#FFF'}}
-                style={{marginTop: '10px'}}
-            />
-        );
-        this.setState({'subGrades':subGrades});
+        if (this.state.grade.subGrades !== null)
+        {
+            let subGrades = this.state.grade.subGrades.map((subGrade, index) =>
+                <RaisedButton
+                    key={index += 1}
+                    label={subGrade.description}
+                    fullWidth={true}
+                    backgroundColor="#2dc7a2"
+                    labelStyle={{color: '#FFF'}}
+                    style={{marginTop: '10px'}}
+                />
+            );
+            this.setState({'subGrades':subGrades});
+        }
     };
 
     isValidationFields = () =>

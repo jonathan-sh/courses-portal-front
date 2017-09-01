@@ -28,18 +28,20 @@ class Bar extends Component
     {
         this.setState({'provider': JSON.parse(localStorage.getItem('provider'))});
 
-        let grades = this.state.provider.grades.map((grade, index) =>
-            <RaisedButton
-                key={index += 1}
-                label={grade.description}
-                fullWidth={true}
-                backgroundColor="#2dc7a2"
-                labelStyle={{color: '#FFF'}}
-                style={{marginTop: '10px'}}
-            />
-        );
+        if (this.state.provider.grades !== null) {
+            let grades = this.state.provider.grades.map((grade, index) =>
+                <RaisedButton
+                    key={index += 1}
+                    label={grade.description}
+                    fullWidth={true}
+                    backgroundColor="#2dc7a2"
+                    labelStyle={{color: '#FFF'}}
+                    style={{marginTop: '10px'}}
+                />
+            );
 
-        this.setState({'grades':grades});
+            this.setState({'grades': grades});
+        }
     };
 
     fncShowGrade = () => this.setState({showGrade: true});
