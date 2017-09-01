@@ -15,7 +15,7 @@ export default class SingIn extends Component {
 
     handleClose = () => {
         this.setState({open: false});
-        PubSub.publish('close-home-model', true);
+        PubSub.publish('close-home-model', false);
     };
 
     render() {

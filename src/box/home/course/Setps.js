@@ -12,14 +12,14 @@ import {
 class VerticalNonLinear extends React.Component {
 
     state = {
-        stepIndex: -1,
+        stepIndex: 0,
     };
 
     setp = [0,1,2,3,4,5];
     steps = this.setp.map((s) =>
         <Step key={s}>
             <StepButton onClick={() => this.setState({stepIndex: s})}>
-                Descritivo fase
+                 <div style={{color:'rgba(255, 255, 255, 1)'}}> Descritivo fase</div>
             </StepButton>
             <StepContent>
                 <p>
@@ -40,7 +40,7 @@ class VerticalNonLinear extends React.Component {
 
         return (
       <div>
-          <h3 className="title">Confira a grade do curso</h3>
+          <h3 className="headerInfoCurse">Confira a grade do curso</h3>
           <div style={{width: '100%', margin: 'auto'}}>
               <Stepper
                   activeStep={stepIndex}
