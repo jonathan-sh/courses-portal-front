@@ -6,9 +6,12 @@ import React, {Component} from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import 'react-dropzone-component/styles/filepicker.css';
 import 'dropzone/dist/min/dropzone.min.css';
+import PubSub from 'pubsub-js';
+
 
 class Dropzone extends Component
 {
+
     constructor(props)
     {
         super(props);
@@ -33,7 +36,9 @@ class Dropzone extends Component
         this.handlePost = this.handlePost.bind(this);
 
         this.dropzone = null;
-    }
+
+        PubSub.subscribe('dropzone-make-upload', this.handlePost);
+    };
 
     limitFileService()
     {
@@ -44,20 +49,20 @@ class Dropzone extends Component
                 this.dropzone.removeFile(this.dropzone.files[0]);
             }
         }
-    }
+    };
 
     handleFileAdded(file)
     {
         console.log(this.dropzone);
         this.limitFileService();
         this.setState({file: file});
-    }
+    };
 
     handlePost()
     {
+        alert("uppando ...");
         this.dropzone.processQueue();
-        console.log(this.state.file);
-    }
+    };
 
     render()
     {
@@ -69,7 +74,7 @@ class Dropzone extends Component
         {
             init: dz => this.dropzone = dz,
             addedfile: this.handleFileAdded.bind(this)
-        }
+        };
 
         return (
             <div style={{marginTop: '2%'}}>
@@ -78,12 +83,9 @@ class Dropzone extends Component
                     eventHandlers={eventHandlers}
                     djsConfig={djsConfig}
                 />
-                <button onClick={this.handlePost.bind(this)}>Upload</button>
             </div>
         );
     }
 }
 
-export
-default
-Dropzone;
+export default Dropzone;

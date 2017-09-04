@@ -49,6 +49,14 @@ p {
     text-align: center;
 }
 
+.subTopic{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: left;
+    width: 100%;
+    display: inline-flex;
+}
+
 
 .home{
     background-image: url("./../img/home-background.jpg");

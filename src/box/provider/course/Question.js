@@ -30,7 +30,7 @@ class Question extends Component {
     styles = {
         inputText: {width: '94%', float: 'right'},
         icon: {width: '5%', float: 'left', paddingTop: '3.2%'},
-        btnAddImage: {}
+        btAddImage:{'display':'block'}
 
     };
 
@@ -149,13 +149,13 @@ class Question extends Component {
                     fullWidth={true}
                     ref={(input) => this.statement = input}/>
 
-                <RaisedButton
-                    label="adicionar image"
-                    backgroundColor="rgb(77, 156, 138)"
-                    icon={<AddImage color="#FFF"/>}
-                    onTouchTap={this.fncNewCourse}
-                    style={this.styles.btnAddImage}
-                    labelStyle={{color: 'white'}}/>
+                <span style={this.styles.btAddImage}>
+                    <RaisedButton
+                        label="adicionar image"
+                        backgroundColor="rgb(77, 156, 138)"
+                        icon={<AddImage color="#FFF"/>}
+                        labelStyle={{color: 'white'}}/>
+                </span>
 
                 <span className="display-block height-80">
                         <Checkbox

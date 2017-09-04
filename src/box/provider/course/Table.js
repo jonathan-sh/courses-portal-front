@@ -70,8 +70,7 @@ class TableFind extends Component {
 
     fncEditCourse = (id) => {
         let course = _.filter(this.state.courses, (course)=> {return course._id === id})[0];
-        this.setState({'course':course});
-        PubSub.publish('switch-to-crud',true,this.state.course);
+        PubSub.publish('switch-to-crud',course);
     };
 
     render() {

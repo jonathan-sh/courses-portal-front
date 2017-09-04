@@ -5,7 +5,7 @@ import NewIco from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import Question from './Question';
 import Prove from './Prove';
-import MaterialAdd from './MaterialAdd';
+import MaterialAdd from './Material';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -15,10 +15,11 @@ class Steps extends Component {
         super(props);
         this.state = {showStep: true,
                       showQuestion: false,
-                      stepIndex: 0};
+                      stepIndex: 0,
+                      steps:[]};
     }
 
-    fncCanStep = () => this.setState({showStep: false});
+    fncCanStep = () => this.setState({showNewStep: false});
     fncShowQuestion = () => this.setState({showQuestion: true});
     fncShowProve = () => this.setState({showProve: true});
     fncHandleNext = () => {
@@ -153,7 +154,7 @@ class Steps extends Component {
                     actions={actions}
                     modal={true}
                     contentStyle={{width: '80%', maxWidth: 'none'}}
-                    open={this.state.showStep}
+                    open={this.state.showNewStep}
                 >
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon/>}>
                         <Step>

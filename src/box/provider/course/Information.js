@@ -3,7 +3,6 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import httpService from '../../../service/HttpService';
-import InputMask from 'react-input-mask';
 import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
@@ -16,7 +15,7 @@ class Information extends Component {
         this.httpService = new httpService();
         this.state = {
             open: true,
-            crud: false,
+            isUpdate: false,
             makeSave:false,
             errorText: {name: '',
                         operation: '',
@@ -33,18 +32,18 @@ class Information extends Component {
     }
 
     componentWillMount(){
-      this.fncFillInformation();
+       this.fncFillInformation();
     }
 
     fncFillInformation =()=>{
-        console.log(this.props.course);
         if (this.props.course !== undefined){
-            this.setState({'course':this.props.course})
+            this.setState({'course':this.props.course,'isUpdate':true});
+
         }
     };
 
     fncHandleClose = () =>  {
-        PubSub.publish('switch-to-crud', false);
+       if(!this.state.isUpdate){ PubSub.publish('switch-to-crud', false);}
         this.setState({open: false});
     };
 
@@ -62,9 +61,7 @@ class Information extends Component {
                    throw new Error('Falha de autenticação.');
                })
                .then(success => {
-                   PubSub.publish('switch-to-crud', false);
-                   PubSub.publish('search-courses');
-                   this.setState({crud: true, open: false});
+
                })
                .catch(error => {this.setState({msg:error.message});});
         }
@@ -106,6 +103,13 @@ class Information extends Component {
 
     fncValidValue = (value) => { return value !== undefined && value !== ""};
 
+    setData = (event, value, attribute) =>
+    {
+        let course = this.state.course;
+        course[attribute] = value;
+        this.setState(course);
+    };
+
     actions = [
         <FlatButton
             label="Cancelar"
@@ -139,7 +143,9 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.name}
                         fullWidth={true}
-                        ref={(input) => this.name = input}/>
+                        ref={(input) => this.name = input}
+                        onChange={ (event, value) =>  this.setData(event, value, 'name')}
+                        value= {this.state.course.name}/>
                     <TextField
                         hintText="Informe a operação do curso"
                         floatingLabelText="Operação"
@@ -147,16 +153,19 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.operation}
                         fullWidth={true}
-                        ref={(input) => this.operation = input}/>
+                        ref={(input) => this.operation = input}
+                        onChange={ (event, value) =>  this.setData(event, value, 'operation')}
+                        value= {this.state.course.operation}/>
                     <TextField
-                        id="jonathan"
                         hintText="Informe o objetivo do curso"
                         floatingLabelText="Objetivo"
                         type="text"
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.objective}
                         fullWidth={true}
-                        ref={(input) => this.objective = input}/>
+                        ref={(input) => this.objective = input}
+                        onChange={ (event, value) =>  this.setData(event, value, 'objective')}
+                        value= {this.state.course.objective}/>
 
                     <TextField
                         hintText="Informe o preço do curso. Exemplo de mil reais (1000.00)"
@@ -165,7 +174,9 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.price}
                         style={{width: '49%', float: 'left'}}
-                        ref={(input) => this.price = input}>
+                        ref={(input) => this.price = input}
+                        onChange={ (event, value) =>  this.setData(event, value, 'price')}
+                        value= {this.state.course.price}>
                     </TextField>
                     <TextField
                         hintText="Informe a carga horária do curso"
@@ -174,8 +185,9 @@ class Information extends Component {
                         disabled={this.state.makeSave}
                         errorText={this.state.errorText.hours}
                         style={{width: '49%', float: 'right'}}
-                        ref={(input) => this.hours = input}>
-                        <InputMask mask="9999" maskChar={null}/>
+                        ref={(input) => this.hours = input}
+                        value= {this.state.course.hours}
+                        onChange={ (event, value) =>  this.setData(event, value, 'hours')}>
                     </TextField>
 
                 </Dialog>
@@ -185,6 +197,4 @@ class Information extends Component {
     }
 }
 
-export
-default
-Information;
+export default Information;

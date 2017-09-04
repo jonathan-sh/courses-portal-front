@@ -46,7 +46,6 @@ class About extends Component
         this.setState({"provider":response});
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearPasswords();
-        console.log('Success');
     };
 
     clearPasswords = () =>

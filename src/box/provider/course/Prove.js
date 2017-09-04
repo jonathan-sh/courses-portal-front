@@ -10,6 +10,7 @@ class Prove extends Component {
         super();
         this.state = {
             open: true,};
+
     }
 
     fncHandleClose = () => this.setState({open: false});
@@ -18,7 +19,9 @@ class Prove extends Component {
 
     questions = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
     question = this.questions.map((question) =>
-        <Checkbox key={question} label={"Descrição da pergunda "+ question}/>
+        <Checkbox
+
+            key={question} label={"Descrição da pergunda "+ question}/>
     );
 
     actions = [

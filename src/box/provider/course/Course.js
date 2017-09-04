@@ -11,7 +11,6 @@ import Crud from "./Crud";
 
 class Course extends Component {
 
-
     constructor() {
         super();
         this.state = {isCrud: false, newCourse: false, showTable:true, course:''};
@@ -32,10 +31,10 @@ class Course extends Component {
         this.setState({newCourse: true});
     };
 
-    fncFindCourse = () => alert('alert');
+    fncFindCourse = () => alert('find');
 
-    fncInCrud = (key, value, course) => {
-        if (value)
+    fncInCrud = (key, course) => {
+        if (course !== undefined && course !==false)
         {
             this.setState({isCrud: true, showTable: false, 'course':course});
         }
