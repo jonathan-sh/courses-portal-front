@@ -14,6 +14,7 @@ import LoginStudent from './../login/LoginStudent';
 import LoginProvider from './../login/LoginProvider';
 import ForgotPassword from './../login/ForgotPassword';
 import PubSub from 'pubsub-js';
+import history from '../../../service/router/History';
 
 class App extends Component {
 
@@ -44,6 +45,10 @@ class App extends Component {
     showModal = (type)=>{
         let modal = {[type]:true};
         this.setState(modal);
+    };
+
+    goToHome = ()=>{
+        history.push('/');
     };
 
     leftButtons = () => (
@@ -105,6 +110,8 @@ class App extends Component {
         return (
             <div className="headerBar">
                 <AppBar
+                    onTitleTouchTap={this.goToHome}
+                    titleStyle={{cursor: 'pointer'}}
                     showMenuIconButton={false}
                     title={<span >COURSE</span>}
                     iconStyleRight={this.style.btSingIn}

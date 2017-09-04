@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
 import LinearProgress from 'material-ui/LinearProgress';
+import Toggle from 'material-ui/Toggle';
 
 class Information extends Component {
 
@@ -18,16 +19,17 @@ class Information extends Component {
             isUpdate: false,
             makeSave:false,
             errorText: {name: '',
-                        operation: '',
+                        description: '',
                         objective: '',
                         price: '',
                         hours: ''},
             course:{_id:null,
                     name:'',
-                    operation:'',
+                    description:'',
                     objective:'',
                     price:'',
-                    hours:''}};
+                    hours:'',
+                    status:false}};
 
     }
 
@@ -82,7 +84,10 @@ class Information extends Component {
                     throw new Error('Falha de autenticação.');
                 })
                 .then(success => {
+                    this.setState({open: false});
+                    PubSub.publish('switch-to-crud',false);
                     PubSub.publish('switch-to-crud',success);
+
                 })
                 .catch(error => {this.setState({msg:error.message});});
         }
@@ -90,10 +95,11 @@ class Information extends Component {
 
     fncGetDataCourse = () => {
         let course = { name: this.name.input.value,
-                       operation: this.operation.input.value,
+                       description: this.description.input.value,
                        objective: this.objective.input.value,
                        price: this.price.input.value,
-                       hours: this.hours.input.value};
+                       hours: this.hours.input.value,
+                       status:this.state.course.status};
         return course;
     };
 
@@ -102,7 +108,7 @@ class Information extends Component {
         let course = this.fncGetDataCourse();
 
         let errorText = {name: '',
-                         operation: '',
+                         description: '',
                          objective: '',
                          price: '',
                          hours: '' };
@@ -135,6 +141,11 @@ class Information extends Component {
         return obj!==undefined && obj !==null;
     };
 
+    handleChange = () => {
+        let course = this.state.course;
+        course['status'] = !this.state.course.status;
+        this.setState(course);
+    };
 
     render()
     {
@@ -163,6 +174,12 @@ class Information extends Component {
                     contentStyle={{width: '80%', maxWidth: 'none'}}
                     open={this.state.open}>
                     {this.state.makeSave?  <LinearProgress mode="indeterminate" /> : null}
+
+                    <Toggle
+                        label="Ativo (visivel na plataforma)"
+                        defaultToggled={this.state.course.status}
+                        onToggle={this.handleChange}
+                        labelPosition="right"/>
                     <TextField
                         hintText="Nome do curso"
                         floatingLabelText="Nome"
@@ -174,15 +191,15 @@ class Information extends Component {
                         onChange={ (event, value) =>  this.setData(event, value, 'name')}
                         value= {this.state.course.name}/>
                     <TextField
-                        hintText="Informe a operação do curso"
-                        floatingLabelText="Operação"
+                        hintText="Informe a descrição do curso"
+                        floatingLabelText="Descrição"
                         type="text"
                         disabled={this.state.makeSave}
-                        errorText={this.state.errorText.operation}
+                        errorText={this.state.errorText.description}
                         fullWidth={true}
-                        ref={(input) => this.operation = input}
-                        onChange={ (event, value) =>  this.setData(event, value, 'operation')}
-                        value= {this.state.course.operation}/>
+                        ref={(input) => this.description = input}
+                        onChange={ (event, value) =>  this.setData(event, value, 'description')}
+                        value= {this.state.course.description}/>
                     <TextField
                         hintText="Informe o objetivo do curso"
                         floatingLabelText="Objetivo"

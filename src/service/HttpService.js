@@ -1,4 +1,4 @@
-const URL = "http://127.0.0.1:4212/";
+const URL = "http://127.0.0.1:4212";
 
 class HttpService {
 

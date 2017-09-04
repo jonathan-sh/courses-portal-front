@@ -93,8 +93,8 @@ class TableFind extends Component {
                           style={this.styles.tableHeader}>
                           <TableRow>
                               <TableHeaderColumn>Nome do curso</TableHeaderColumn>
-                              <TableHeaderColumn>Status do curso</TableHeaderColumn>
-                              <TableHeaderColumn>-</TableHeaderColumn>
+                              <TableHeaderColumn>Situação do curso</TableHeaderColumn>
+                              <TableHeaderColumn>Ação</TableHeaderColumn>
                           </TableRow>
                       </TableHeader>
                       <TableBody displayRowCheckbox={false}

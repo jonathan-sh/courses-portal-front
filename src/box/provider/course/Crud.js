@@ -43,8 +43,8 @@ class Crud extends Component {
                     key={step.order}
                     label={step.name}
                     fullWidth={true}
-                    backgroundColor="#0ac752"
-                    labelStyle={{color: '#0ac752'}}
+                    backgroundColor="#2dc7a2"
+                    labelStyle={{color: '#FFF'}}
                     style={{marginTop: '5px'}}>
                 </RaisedButton>
             );
@@ -65,7 +65,8 @@ class Crud extends Component {
                 <RaisedButton
                     label={"INFORMAÇÕES BÁSICAS DO CURSO - [ " + this.state.course.name + " ]"}
                     fullWidth={true}
-                    labelStyle={{color: '#0ac752'}}
+                    labelStyle={{color: '#FFF'}}
+                    backgroundColor="#2dc7a2"
                     onTouchTap={this.fncInfoCourse}
                     style={{marginTop: '20px'}}/>
 
@@ -85,7 +86,6 @@ class Crud extends Component {
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
 
                 {this.state.showInformationCourse ? (<Information course={this.state.course}/>) : null}
-
 
                 {this.state.showNewStep ? (<AddStep course={this.state.course}/>) : null}
 

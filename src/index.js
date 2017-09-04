@@ -10,7 +10,8 @@ import Dash from './box/provider/dash/Dash';
 import LoginProvider from './box/provider/login/Login';
 import LoginStudent from './box/student/login/Login';
 import ResettingPassword from './box/home/login/ResettingPassword';
-import CourseInformation from './box/home/course/Information'
+import CourseInformation from './box/home/course/Information';
+import CourseNotFound from './box/home/course/NotFound';
 
 injectTapEventPlugin(); 
 
@@ -31,6 +32,7 @@ const Main = () => (
                     <Route exact path='/login/provider' component={LoginProvider} />
                     <Route exact path='/resetting-password/:v1/:v2/:v3' component={ResettingPassword} />
                     <Route exact path='/course/:id' component={CourseInformation} />
+                    <Route exact path='/not-found/course' component={CourseNotFound} />
                     <PrivateRoute path='/provider/:way' component={Dash} />
                 </div>
             </Router>

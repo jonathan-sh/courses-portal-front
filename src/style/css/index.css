@@ -8,11 +8,18 @@ body {
     padding: 0;
 }
 
-p {
+p{
     font-family: 'Roboto';
     font-weight: 300;
     text-align: justify;
 }
+
+.pagraf{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: justify;
+}
+
 
 .subTitle{
     font-family: 'Roboto';
@@ -63,6 +70,14 @@ p {
     background-size: 100%;
     background-repeat: no-repeat;
     height:700px;
+}
+
+.course-not-found-1{
+    background-image: url("./../img/course-not-found-1.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height:900px;
+    overflow-y: hidden;
 }
 
 .headerBar{
