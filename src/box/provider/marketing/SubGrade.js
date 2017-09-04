@@ -6,25 +6,62 @@ import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import PubSub from 'pubsub-js';
 import array from '../../../service/Array';
+import _ from 'lodash';
 
 class SubGrade extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.array = new array();
         this.state =
         {
             open: true,
-            courses: JSON.parse(localStorage.getItem('courses')),
-            subGrade: {description:'', courses:[]},
+            courses: '',
+            subGrade: this.fncControlSubGrade(props.subGrade),
             errorText: {description:'', courses:''}
         };
     }
 
+    componentDidMount()
+    {
+        this.fncListCourses();
+    }
+
+    fncControlSubGrade = (subGrade) =>
+    {
+        const noData = {description: '', courses:[]};
+        const withData = subGrade;
+
+        if(subGrade === undefined)
+        {
+            return noData;
+        }
+        return withData;
+    };
+
+    fncListCourses = () =>
+    {
+        const courses = JSON.parse(localStorage.getItem('courses'));
+        if(courses !== null && courses !== undefined)
+        {
+            const components = courses.map((course) =>
+                <Checkbox
+                    key={course.id}
+                    id={course._id}
+                    label={course.name}
+                    defaultChecked={this.fncValidChecked(course._id)}
+                    onCheck={(event, attribute) => this.fncHandleCheck(event, 'courses')}
+                />
+            );
+
+            this.setState({'courses': components});
+        }
+    };
+
     fncHandleClose = () =>
     {
         PubSub.publish('show-sub-grade', false);
-        this.setState({open: false});
+        this.setState({'open': false});
     };
 
     fncHandleSave = () =>
@@ -33,7 +70,7 @@ class SubGrade extends Component {
         {
             PubSub.publish('sub-grade',this.state.subGrade);
             PubSub.publish('show-sub-grade', false);
-            this.setState({open: false});
+            this.setState({'open': false});
         }
     };
 
@@ -41,15 +78,15 @@ class SubGrade extends Component {
     {
         let subGrade = this.state.subGrade;
         subGrade[attribute] = value;
-        this.setState(subGrade);
+        this.setState({'subGrade':subGrade});
     };
 
-    fncHandleCheck = (event) =>
+    fncHandleCheck = (event, attribute) =>
     {
         let subGrade = this.state.subGrade.courses;
         let value = event.target.id;
-        subGrade = this.array.control(subGrade, value);
-        this.setState(subGrade);
+        subGrade[attribute] = this.array.control(subGrade.courses, value);
+        this.setState({'subGrade':subGrade});
     };
 
     isValidationFields = () =>
@@ -80,10 +117,17 @@ class SubGrade extends Component {
 
     };
 
-    courses = JSON.parse(localStorage.getItem('courses'));
-    course = this.courses.map((course) =>
-        <Checkbox id={course._id} key={course.id} label={course.name} onCheck={this.fncHandleCheck.bind(this)}/>
-    );
+    fncValidChecked = (value) =>
+    {
+        const courses = this.state.subGrade.courses;
+        let found = _.find(courses, (item)=> { return item === value });
+
+        if(found !== null && found !== undefined)
+        {
+            return true;
+        }
+        return false;
+    };
 
     actions = [
         <FlatButton
@@ -117,13 +161,14 @@ class SubGrade extends Component {
                     floatingLabelText="Nome da sub categoria"
                     fullWidth={true}
                     errorText={this.state.errorText.description}
+                    value={this.state.subGrade.description}
                     ref={(input) => { this.description = input; }}
                     onChange={(event, value) =>  this.setData(event, value, 'description')}
                 />
-                <h4 className="title" style={{marginBottom: '0px'}}>Cursos</h4>
+                <h3 className="title" style={{marginBottom: '0px', color:'#000'}}>Cursos</h3>
                 <h5 style={{color:'#f44335', fontFamily: 'Roboto', fontWeight: '500', marginTop:'0%'}}>{this.state.errorText.courses}</h5>
                 <div style={{overflow: 'auto', height: '200px'}}>
-                    {this.course}
+                    {this.state.courses}
                 </div>
                 <br/>
 

@@ -39,7 +39,7 @@ class Grade extends Component
         PubSub.subscribe('sub-grade', this.fncListSubGrade);
         PubSub.subscribe('show-sub-grade', this.fncControlSubGrade);
         this.fncListSubGrade();
-        this.fncListGrade();
+        this.fncListCourses();
     }
 
     isUpdate = (data) =>
@@ -73,7 +73,17 @@ class Grade extends Component
 
         if(subGrade !== undefined)
         {
-            this.state.grade.subGrades.push(subGrade);
+            let grade = this.state.grade;
+            if(this.state.indexSubGrade === undefined)
+            {
+                grade.subGrades.push(subGrade);
+            }
+            else
+            {
+                grade.subGrades[this.state.indexSubGrade] = subGrade;
+            }
+
+            this.setState({'grade': grade});
         }
 
         if (this.state.grade.subGrades !== null)
@@ -93,7 +103,7 @@ class Grade extends Component
         }
     };
 
-    fncListGrade = () =>
+    fncListCourses = () =>
     {
         const courses = JSON.parse(localStorage.getItem('courses'));
         if(courses !== null && courses !== undefined)
@@ -203,7 +213,7 @@ class Grade extends Component
     {
         this.setState({'whatSubGrade': object});
         this.setState({'indexSubGrade': position});
-        this.setState({showSubGrade: true});
+        this.setState({'showSubGrade': true});
     };
 
     setData = (event, value, attribute) =>
@@ -268,7 +278,7 @@ class Grade extends Component
                     onChange={(event, value) => this.setData(event, value, 'description')}
                     value={this.state.grade.description}
                 />
-                <h4 className="title" style={{marginBottom: '0px'}}>Cursos</h4>
+                <h3 className="title" style={{marginBottom: '0px', color:'#000'}}>Cursos</h3>
                 <h5 style={{color:'#f44335', fontFamily: 'Roboto', fontWeight: '500', marginTop:'0%'}}>{this.state.errorText.courses}</h5>
                 <div style={{overflow: 'auto', height: '100px'}}>
                     {this.state.courses}
@@ -283,7 +293,7 @@ class Grade extends Component
                     style={{float: 'right', margin: '20px 0 20px 20px'}} />
                 <br/>
 
-                {this.state.showSubGrade ? <SubGrade/>  : null}
+                {this.state.showSubGrade ? <SubGrade subGrade={this.state.whatSubGrade}/>  : null}
 
             </Dialog>
 
