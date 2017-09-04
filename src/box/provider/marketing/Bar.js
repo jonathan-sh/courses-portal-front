@@ -13,30 +13,37 @@ class Bar extends Component
         super(props);
         this.state =
         {
-            showGrade:false,
+            showGrade: false,
             provider: JSON.parse(localStorage.getItem('provider')),
-            grades:''
+            grades: '',
+            whatGrade: '',
+            index: ''
         };
     };
 
     componentDidMount(){
         PubSub.subscribe('new-grade', this.fncListGrade);
+        PubSub.subscribe('show-grade', this.fncHideGrade);
         this.fncListGrade();
     }
+
+    fncHideGrade = (topic, open) => this.setState({showGrade: open});
 
     fncListGrade = () =>
     {
         this.setState({'provider': JSON.parse(localStorage.getItem('provider'))});
 
-        if (this.state.provider.grades !== null) {
+        if (this.state.provider.grades !== null)
+        {
             let grades = this.state.provider.grades.map((grade, index) =>
                 <RaisedButton
-                    key={index += 1}
+                    key={index}
                     label={grade.description}
                     fullWidth={true}
                     backgroundColor="#2dc7a2"
                     labelStyle={{color: '#FFF'}}
                     style={{marginTop: '10px'}}
+                    onTouchTap = {(object, position) => this.fncShowGrade(grade, index)}
                 />
             );
 
@@ -44,13 +51,18 @@ class Bar extends Component
         }
     };
 
-    fncShowGrade = () => this.setState({showGrade: true});
+    fncShowGrade = (object, position) =>
+    {
+        this.setState({'whatGrade': object});
+        this.setState({'index': position});
+        this.setState({'showGrade': true});
+    };
 
     render()
     {
         return(
             <div>
-                {this.state.showGrade ? <Grade/>  : null}
+                {this.state.showGrade ? <Grade grade={this.state.whatGrade} index={this.state.index} />  : null}
                 <h3 className="title">Categorias</h3>
                 {this.state.grades}
                 <RaisedButton

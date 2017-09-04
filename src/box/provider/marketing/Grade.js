@@ -8,13 +8,14 @@ import SubGrade from './SubGrade';
 import PubSub from 'pubsub-js';
 import array from '../../../service/Array';
 import httpService from './../../../service/HttpService';
+import _ from 'lodash';
 
 class Grade extends Component
 {
 
-    constructor()
+    constructor(props)
     {
-        super();
+        super(props);
         this.httpService = new httpService();
         this.array = new array();
         this.state =
@@ -22,18 +23,45 @@ class Grade extends Component
             open: true,
             showSubGrade: false,
             provider: JSON.parse(localStorage.getItem('provider')),
-            grade: {description:'', courses:[], subGrades: []},
+            grade: this.fncControlGrade(props.grade),
+            indexGrade: props.index,
+            indexSubGrade:'',
+            whatSubGrade:'',
             subGrades:'',
-            errorText: {description:'', courses:''}
+            courses:'',
+            errorText: {description:'', courses:''},
+            isUpdate: this.isUpdate(props)
         };
-
     };
 
     componentDidMount()
     {
         PubSub.subscribe('sub-grade', this.fncListSubGrade);
         PubSub.subscribe('show-sub-grade', this.fncControlSubGrade);
+        this.fncListSubGrade();
+        this.fncListGrade();
     }
+
+    isUpdate = (data) =>
+    {
+        if(data.index !== undefined)
+        {
+            return true;
+        }
+        return false;
+    };
+
+    fncControlGrade = (grade) =>
+    {
+        const noData = {description: '', courses:[], subGrades:[]};
+        const withData = grade;
+
+        if(grade === undefined)
+        {
+            return noData;
+        }
+        return withData;
+    };
 
     fncControlSubGrade = (topic, showSubGrade) =>
     {
@@ -43,21 +71,44 @@ class Grade extends Component
     fncListSubGrade = (topic, subGrade) =>
     {
 
-        this.state.grade.subGrades.push(subGrade);
+        if(subGrade !== undefined)
+        {
+            this.state.grade.subGrades.push(subGrade);
+        }
 
         if (this.state.grade.subGrades !== null)
         {
             let subGrades = this.state.grade.subGrades.map((subGrade, index) =>
                 <RaisedButton
-                    key={index += 1}
+                    key={index}
                     label={subGrade.description}
                     fullWidth={true}
                     backgroundColor="#2dc7a2"
                     labelStyle={{color: '#FFF'}}
                     style={{marginTop: '10px'}}
+                    onTouchTap = {(object, position) => this.fncShowSubGrade(subGrade, index)}
                 />
             );
             this.setState({'subGrades':subGrades});
+        }
+    };
+
+    fncListGrade = () =>
+    {
+        const courses = JSON.parse(localStorage.getItem('courses'));
+        if(courses !== null && courses !== undefined)
+        {
+            const components = courses.map((course) =>
+                <Checkbox
+                    key={course.id}
+                    id={course._id}
+                    label={course.name}
+                    defaultChecked={this.fncValidChecked(course._id)}
+                    onCheck={(event, attribute) => this.fncHandleCheck(event, 'courses')}
+                />
+            );
+
+            this.setState({'courses': components});
         }
     };
 
@@ -92,7 +143,8 @@ class Grade extends Component
     fncHandleClose = () =>
     {
         localStorage.removeItem('sub-grade');
-        this.setState({open: false});
+        PubSub.publish('show-grade', false);
+        this.setState({'open': false});
     };
 
     makeUpdateProvider = () =>
@@ -115,7 +167,7 @@ class Grade extends Component
     responseUpdate = (response) =>
     {
         response.password = null;
-        this.setState({"provider":response});
+        this.setState({'provider':response});
         localStorage.setItem('provider', JSON.stringify(response));
         PubSub.publish('new-grade', this.state.provider);
         console.log('Success');
@@ -125,14 +177,34 @@ class Grade extends Component
     {
         if(this.isValidationFields())
         {
-            localStorage.removeItem('sub-grade');
-            this.state.provider.grades.push(this.state.grade);
-            this.makeUpdateProvider();
-            this.setState({open: false});
+            let provider = this.state.provider;
+            let grade = this.state.grade;
+
+            if(!this.state.isUpdate)
+            {
+                localStorage.removeItem('sub-grade');
+                provider.grades.push(grade);
+                this.makeUpdateProvider();
+                PubSub.publish('show-grade', false);
+                this.setState({'open': false});
+            }
+            else
+            {
+                localStorage.removeItem('sub-grade');
+                provider.grades[this.state.indexGrade] = grade;
+                this.makeUpdateProvider();
+                PubSub.publish('show-grade', false);
+                this.setState({'open': false});
+            }
         }
     };
 
-    fncShowSubGrade = () => this.setState({showSubGrade: true});
+    fncShowSubGrade = (object, position) =>
+    {
+        this.setState({'whatSubGrade': object});
+        this.setState({'indexSubGrade': position});
+        this.setState({showSubGrade: true});
+    };
 
     setData = (event, value, attribute) =>
     {
@@ -141,18 +213,25 @@ class Grade extends Component
         this.setState({'grade':grade});
     };
 
-    fncHandleCheck = (event) =>
+    fncHandleCheck = (event, attribute) =>
     {
-        let courses = this.state.grade.courses;
+        let grade = this.state.grade;
         let value = event.target.id;
-        courses = this.array.control(courses, value);
-        this.setState(courses);
+        grade[attribute] = this.array.control(grade.courses, value);
+        this.setState({'grade':grade});
     };
 
-    courses = JSON.parse(localStorage.getItem('courses'));
-    course = this.courses.map((course) =>
-        <Checkbox id={course._id} key={course.id} label={course.name} onCheck={this.fncHandleCheck.bind(this)}/>
-    );
+    fncValidChecked = (value) =>
+    {
+        const courses = this.state.grade.courses;
+        let found = _.find(courses, (item)=> { return item === value });
+
+        if(found !== null && found !== undefined)
+        {
+            return true;
+        }
+        return false;
+    };
 
     actions = [
         <FlatButton
@@ -186,11 +265,13 @@ class Grade extends Component
                     fullWidth={true}
                     errorText={this.state.errorText.description}
                     ref={(input) => { this.description = input; }}
-                    onChange={(event, value) => this.setData(event, value, 'description')}/>
+                    onChange={(event, value) => this.setData(event, value, 'description')}
+                    value={this.state.grade.description}
+                />
                 <h4 className="title" style={{marginBottom: '0px'}}>Cursos</h4>
                 <h5 style={{color:'#f44335', fontFamily: 'Roboto', fontWeight: '500', marginTop:'0%'}}>{this.state.errorText.courses}</h5>
                 <div style={{overflow: 'auto', height: '100px'}}>
-                    {this.course}
+                    {this.state.courses}
                 </div>
                 <br/>
                 {this.state.subGrades}
