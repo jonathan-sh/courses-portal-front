@@ -3,6 +3,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import httpService from '../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
+import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import PubSub from 'pubsub-js';
 import _ from 'lodash';
 
@@ -59,6 +60,13 @@ class TableFind extends Component {
                         backgroundColor="#00a1fc"
                         onTouchTap={() => this.fncEditCourse(course._id)}
                         icon={<EditIco color="#FFF"/>}
+                        labelStyle={{color: 'white'}}/>
+                    <RaisedButton
+                        label="delete"
+                        backgroundColor="#ff2930"
+                        onTouchTap={() => this.fncEditCourse(course._id)}
+                        icon={<DeleteIco color="#FFF"/>}
+                        style={{marginLeft:'3%'}}
                         labelStyle={{color: 'white'}}/>
                 </TableRowColumn>
             </TableRow>

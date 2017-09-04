@@ -43,8 +43,8 @@ class Crud extends Component {
                     key={step.order}
                     label={step.name}
                     fullWidth={true}
-                    backgroundColor="#2dc7a2"
-                    labelStyle={{color: '#FFF'}}
+                    backgroundColor="#0ac752"
+                    labelStyle={{color: '#0ac752'}}
                     style={{marginTop: '5px'}}>
                 </RaisedButton>
             );

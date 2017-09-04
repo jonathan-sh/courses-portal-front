@@ -81,7 +81,6 @@ class Course extends Component {
 
                 <br/>
 
-
                 {this.state.newCourse ? <Information/>  : null}
 
                 {this.state.showTable ? <TableFound/>  : null}

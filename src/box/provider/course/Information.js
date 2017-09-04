@@ -22,7 +22,7 @@ class Information extends Component {
                         objective: '',
                         price: '',
                         hours: ''},
-            course:{_id:'',
+            course:{_id:null,
                     name:'',
                     operation:'',
                     objective:'',
@@ -38,7 +38,6 @@ class Information extends Component {
     fncFillInformation =()=>{
         if (this.props.course !== undefined){
             this.setState({'course':this.props.course,'isUpdate':true});
-
         }
     };
 
@@ -47,7 +46,7 @@ class Information extends Component {
         this.setState({open: false});
     };
 
-    fncHandleSave = () => {
+    makeSave = () => {
         if (this.fncValidData())
         {
            this.setState({makeSave: true});
@@ -61,9 +60,31 @@ class Information extends Component {
                    throw new Error('Falha de autenticação.');
                })
                .then(success => {
-
+                   PubSub.publish('switch-to-crud', false);
+                   PubSub.publish('search-courses');
+                   this.setState({crud: true, open: false});
                })
                .catch(error => {this.setState({msg:error.message});});
+        }
+    };
+
+    makeUpdate = () => {
+        if (this.fncValidData())
+        {
+            this.setState({makeSave: true});
+
+            this.httpService.put('/course',this.state.course,localStorage.getItem('auth-token'))
+                .then(response => {
+                    if (response.status !== 501 )
+                    {
+                        return response.json();
+                    }
+                    throw new Error('Falha de autenticação.');
+                })
+                .then(success => {
+                    PubSub.publish('switch-to-crud',success);
+                })
+                .catch(error => {this.setState({msg:error.message});});
         }
     };
 
@@ -110,28 +131,34 @@ class Information extends Component {
         this.setState(course);
     };
 
-    actions = [
-        <FlatButton
-            label="Cancelar"
-            primary={true}
-            onTouchTap={this.fncHandleClose}
-        />,
-        <RaisedButton
-            label="Salvar"
-            backgroundColor="#0ac752"
-            labelStyle={{color: 'white'}}
-            onTouchTap={this.fncHandleSave}
-            style={{float: 'right', marginRight: '10px'}}/>
-        ,
-    ];
+    isValid = (obj)=>{
+        return obj!==undefined && obj !==null;
+    };
+
 
     render()
     {
+
+       let actions = [
+            <FlatButton
+                label="Cancelar"
+                primary={true}
+                onTouchTap={this.fncHandleClose}
+            />,
+            <RaisedButton
+                label={(this.isValid(this.state.course._id))?'Atualizar':'Salvar'}
+                backgroundColor="#0ac752"
+                labelStyle={{color: 'white'}}
+                onTouchTap={(this.isValid(this.state.course._id))?this.makeUpdate:this.makeSave}
+                style={{float: 'right', marginRight: '10px'}}/>
+            ,
+        ];
+
         return (
             <div>
                 <Dialog
                     title='Informações básicas do curso'
-                    actions={this.actions}
+                    actions={actions}
                     modal={true}
                     contentStyle={{width: '80%', maxWidth: 'none'}}
                     open={this.state.open}>
@@ -166,7 +193,6 @@ class Information extends Component {
                         ref={(input) => this.objective = input}
                         onChange={ (event, value) =>  this.setData(event, value, 'objective')}
                         value= {this.state.course.objective}/>
-
                     <TextField
                         hintText="Informe o preço do curso. Exemplo de mil reais (1000.00)"
                         floatingLabelText="Preço"
