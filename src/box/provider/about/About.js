@@ -14,7 +14,8 @@ class About extends Component
         {
             provider: JSON.parse(localStorage.getItem('provider')),
             classConfirmPassword: 'none',
-            errorText:{name:'', password:'', confirmPassword: ''}
+            errorText:{name:'', password:'', confirmPassword: ''},
+            passwords: {password: '', confirmPassword: ''}
         };
     };
 
@@ -46,11 +47,16 @@ class About extends Component
         this.setState({"provider":response});
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearPasswords();
+        console.log('Success');
     };
 
     clearPasswords = () =>
     {
-        this.password.setState({ value: "" });
+        let passwords = this.state.passwords;
+        passwords.password = '';
+        passwords.confirmPassword = '';
+        this.setState({'passwords': passwords});
+        this.setState({classConfirmPassword: 'none'});
         this.setState({classConfirmPassword: 'none'});
     };
 
@@ -59,12 +65,20 @@ class About extends Component
         let provider = this.state.provider;
         provider[attribute] = value;
         this.setState(provider);
-        console.log(provider);
 
-        if(attribute === 'password')
+        if(attribute === 'password' || attribute === 'confirmPassword')
         {
-            value.length >= 4 ?
-            (this.setState({classConfirmPassword: ''})) : ((this.setState({classConfirmPassword: 'none'})));
+            let passwords = this.state.passwords;
+            passwords[attribute] = value;
+            this.setState({'passwords': passwords});
+
+            this.isValidationFields();
+
+            if(attribute === 'password')
+            {
+                value.length >= 4 ?
+                (this.setState({classConfirmPassword: ''})) : ((this.setState({classConfirmPassword: 'none'})));
+            }
         }
     };
 
@@ -145,6 +159,7 @@ class About extends Component
                     errorText={this.state.errorText.password}
                     onChange={ (event, value) =>  this.setData(event, value, 'password')}
                     ref={(input) => { this.password = input; }}
+                    value={this.state.passwords.password}
                 />
                 <TextField
                     id="password1"
@@ -154,8 +169,9 @@ class About extends Component
                     fullWidth={true}
                     errorText={this.state.errorText.confirmPassword}
                     style={{display: this.state.classConfirmPassword}}
-                    onChange={ this.isValidationFields }
+                    onChange={(event, value) =>  this.setData(event, value, 'confirmPassword')}
                     ref={(input) => { this.confirmPassword = input; }}
+                    value={this.state.passwords.confirmPassword}
                 />
                 <RaisedButton
                     label="salvar"

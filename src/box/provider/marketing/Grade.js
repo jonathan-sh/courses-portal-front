@@ -9,6 +9,8 @@ import PubSub from 'pubsub-js';
 import array from '../../../service/Array';
 import httpService from './../../../service/HttpService';
 import _ from 'lodash';
+import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
+import NewIco from 'material-ui/svg-icons/content/add';
 
 class Grade extends Component
 {
@@ -70,7 +72,6 @@ class Grade extends Component
 
     fncListSubGrade = (topic, subGrade) =>
     {
-
         if(subGrade !== undefined)
         {
             let grade = this.state.grade;
@@ -89,15 +90,23 @@ class Grade extends Component
         if (this.state.grade.subGrades !== null)
         {
             let subGrades = this.state.grade.subGrades.map((subGrade, index) =>
+            <div key={index}>
                 <RaisedButton
-                    key={index}
                     label={subGrade.description}
-                    fullWidth={true}
                     backgroundColor="#2dc7a2"
                     labelStyle={{color: '#FFF'}}
-                    style={{marginTop: '10px'}}
+                    style={{marginTop: '10px',  width: '91.9%'}}
                     onTouchTap = {(object, position) => this.fncShowSubGrade(subGrade, index)}
                 />
+                <RaisedButton
+                    label="delete"
+                    backgroundColor="#ff2930"
+                    icon={<DeleteIco color="#FFF"/>}
+                    style={{marginLeft:'0.7%'}}
+                    labelStyle={{color: 'white'}}
+                    onTouchTap = {(position, attribute) => this.fncDeleteGrade(index, 'subGrades')}
+                />
+            </div>
             );
             this.setState({'subGrades':subGrades});
         }
@@ -179,7 +188,7 @@ class Grade extends Component
         response.password = null;
         this.setState({'provider':response});
         localStorage.setItem('provider', JSON.stringify(response));
-        PubSub.publish('new-grade', this.state.provider);
+        PubSub.publish('list-grade', this.state.provider);
         console.log('Success');
     };
 
@@ -243,6 +252,14 @@ class Grade extends Component
         return false;
     };
 
+    fncDeleteGrade = (index, attribute) =>
+    {
+        let grade = this.state.grade;
+        grade[attribute].splice(index, 1);
+        this.setState({'grade': grade});
+        PubSub.publish('sub-grade', grade.subGrades);
+    };
+
     actions = [
         <FlatButton
             label="Cancelar"
@@ -289,6 +306,7 @@ class Grade extends Component
                     onTouchTap={() => this.fncShowSubGrade()}
                     label="adicinar sub categoria"
                     backgroundColor="#0ac752"
+                    icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
                     style={{float: 'right', margin: '20px 0 20px 20px'}} />
                 <br/>

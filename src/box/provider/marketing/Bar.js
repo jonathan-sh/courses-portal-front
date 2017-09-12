@@ -5,15 +5,22 @@ import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Grade from './Grade';
 import PubSub from 'pubsub-js';
+import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
+import NewIco from 'material-ui/svg-icons/content/add';
+import Snackbar from 'material-ui/Snackbar';
+import httpService from './../../../service/HttpService';
 
 class Bar extends Component
 {
     constructor(props)
     {
         super(props);
+        this.httpService = new httpService();
         this.state =
         {
             showGrade: false,
+            showAction: false,
+            messageAction: 'Test is success',
             provider: JSON.parse(localStorage.getItem('provider')),
             grades: '',
             whatGrade: '',
@@ -22,7 +29,7 @@ class Bar extends Component
     };
 
     componentDidMount(){
-        PubSub.subscribe('new-grade', this.fncListGrade);
+        PubSub.subscribe('list-grade', this.fncListGrade);
         PubSub.subscribe('show-grade', this.fncHideGrade);
         this.fncListGrade();
     }
@@ -36,15 +43,23 @@ class Bar extends Component
         if (this.state.provider.grades !== null)
         {
             let grades = this.state.provider.grades.map((grade, index) =>
-                <RaisedButton
-                    key={index}
-                    label={grade.description}
-                    fullWidth={true}
-                    backgroundColor="#2dc7a2"
-                    labelStyle={{color: '#FFF'}}
-                    style={{marginTop: '10px'}}
-                    onTouchTap = {(object, position) => this.fncShowGrade(grade, index)}
-                />
+                <div key={index}>
+                    <RaisedButton
+                        label={grade.description}
+                        backgroundColor="#2dc7a2"
+                        labelStyle={{color: '#FFF'}}
+                        style={{marginTop: '10px', width: '92.1%'}}
+                        onTouchTap = {(object, position) => this.fncShowGrade(grade, index)}
+                    />
+                    <RaisedButton
+                        label="delete"
+                        backgroundColor="#ff2930"
+                        icon={<DeleteIco color="#FFF"/>}
+                        style={{marginLeft:'0.7%'}}
+                        labelStyle={{color: 'white'}}
+                        onTouchTap = {(object, position) => this.fncDeleteGrade(grade, index, 'grades')}
+                    />
+                </div>
             );
 
             this.setState({'grades': grades});
@@ -58,6 +73,44 @@ class Bar extends Component
         this.setState({'showGrade': true});
     };
 
+    makeUpdateProvider = () =>
+    {
+        this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
+            .then(response => {
+                if (response.status !== 501 )
+                {
+                    return response.json();
+                }
+                this.setState({'messageAction': 'Erro ao deletar grade.'});
+                throw new Error('Falha de autenticação.');
+            })
+            .then(success => {
+                this.responseUpdate(success);
+            })
+            .catch(error => { console.log(error);});
+    };
+
+    responseUpdate = (response) =>
+    {
+        response.password = null;
+        this.setState({'provider':response});
+        this.setState({'showAction':true});
+        localStorage.setItem('provider', JSON.stringify(response));
+        PubSub.publish('list-grade', this.state.provider);
+        console.log('Success');
+    };
+
+    fncDeleteGrade = (grade, index, attribute) =>
+    {
+        let provider = this.state.provider;
+        provider[attribute].splice(index , 1);
+        this.setState({'provider': provider});
+        this.setState({'messageAction':'Grade ' + grade.description + ' deletada com sucesso!'});
+        this.makeUpdateProvider();
+    };
+
+    handleRequestClose = () => this.setState({'showAction': false});
+
     render()
     {
         return(
@@ -69,9 +122,16 @@ class Bar extends Component
                     onTouchTap={() => this.fncShowGrade()}
                     label="adicinar categoria"
                     backgroundColor="#0ac752"
+                    icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
-                    style={{float: 'right', margin: '20px 0 20px 20px'}} />
-
+                    style={{float: 'right', margin: '20px 0 20px 20px'}}
+                />
+                <Snackbar
+                    open={this.state.showAction}
+                    message={this.state.messageAction}
+                    autoHideDuration={2000}
+                    onRequestClose={this.handleRequestClose}
+                />
             </div>
         );
     };

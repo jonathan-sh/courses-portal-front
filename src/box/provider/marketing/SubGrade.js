@@ -83,7 +83,7 @@ class SubGrade extends Component {
 
     fncHandleCheck = (event, attribute) =>
     {
-        let subGrade = this.state.subGrade.courses;
+        let subGrade = this.state.subGrade;
         let value = event.target.id;
         subGrade[attribute] = this.array.control(subGrade.courses, value);
         this.setState({'subGrade':subGrade});
