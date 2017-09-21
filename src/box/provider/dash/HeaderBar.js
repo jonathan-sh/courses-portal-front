@@ -7,23 +7,24 @@ import PubSub from 'pubsub-js';
 
 class HeaderBar extends Component
 {
-    logOut = () =>
+    constructor()
     {
-       localStorage.removeItem('auth-token');
-       localStorage.removeItem('provider');
-       localStorage.removeItem('courses');
-       history.push('/login/provider');
-    };
-
-    constructor() {
         super();
         this.state = {label:''};
         PubSub.subscribe('header-label', this.fncChangeHeaderLabel);
-    }
+    };
 
-
-    fncChangeHeaderLabel = (key, label)=> {
+    fncChangeHeaderLabel = (key, label)=>
+    {
         this.setState({'label':label});
+    };
+
+    logOut = () =>
+    {
+        localStorage.removeItem('auth-token');
+        localStorage.removeItem('provider');
+        localStorage.removeItem('courses');
+        history.push('/login/provider');
     };
 
     render()

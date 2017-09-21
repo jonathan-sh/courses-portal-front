@@ -20,7 +20,7 @@ class SubGrade extends Component {
             subGrade: this.fncControlSubGrade(props.subGrade),
             errorText: {description:'', courses:''}
         };
-    }
+    };
 
     componentDidMount()
     {

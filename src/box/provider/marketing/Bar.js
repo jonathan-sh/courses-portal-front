@@ -28,11 +28,12 @@ class Bar extends Component
         };
     };
 
-    componentDidMount(){
+    componentDidMount()
+    {
         PubSub.subscribe('list-grade', this.fncListGrade);
         PubSub.subscribe('show-grade', this.fncHideGrade);
         this.fncListGrade();
-    }
+    };
 
     fncHideGrade = (topic, open) => this.setState({showGrade: open});
 
@@ -100,12 +101,12 @@ class Bar extends Component
         console.log('Success');
     };
 
-    fncDeleteGrade = (grade, index, attribute) =>
+    fncDeleteGrade = (object, position, attribute) =>
     {
         let provider = this.state.provider;
-        provider[attribute].splice(index , 1);
+        provider[attribute].splice(position , 1);
         this.setState({'provider': provider});
-        this.setState({'messageAction':'Grade ' + grade.description + ' deletada com sucesso!'});
+        this.setState({'messageAction':'Grade ' + object.description + ' deletada com sucesso!'});
         this.makeUpdateProvider();
     };
 

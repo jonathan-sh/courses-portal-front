@@ -17,14 +17,11 @@ class About extends Component
             errorText:{name:'', password:'', confirmPassword: ''},
             passwords: {password: '', confirmPassword: ''}
         };
-    };
 
-    componentWillMount()
-    {
         PubSub.publish('header-label','Sobre');
     };
 
-    updateProvider = () =>
+    makeUpdateProvider = () =>
     {
         this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
@@ -44,7 +41,7 @@ class About extends Component
     responseUpdate = (response) =>
     {
         response.password = null;
-        this.setState({"provider":response});
+        this.setState({'provider':response});
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearPasswords();
         console.log('Success');
@@ -56,7 +53,6 @@ class About extends Component
         passwords.password = '';
         passwords.confirmPassword = '';
         this.setState({'passwords': passwords});
-        this.setState({classConfirmPassword: 'none'});
         this.setState({classConfirmPassword: 'none'});
     };
 
@@ -120,11 +116,11 @@ class About extends Component
 
     };
 
-    fncMakeUpdateProvider = () =>
+    fncHandleSave = () =>
     {
         if(this.isValidationFields())
         {
-            this.updateProvider();
+            this.makeUpdateProvider();
         }
     };
 
@@ -178,7 +174,7 @@ class About extends Component
                     backgroundColor="#0ac752"
                     labelStyle={{color: 'white'}}
                     keyboardFocused={true}
-                    onTouchTap={this.fncMakeUpdateProvider}
+                    onTouchTap={this.fncHandleSave}
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
 
                 <br/>

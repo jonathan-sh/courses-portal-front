@@ -116,3 +116,10 @@ p{
     color: #fff;
     padding: 1%;
 }
+
+.course-list-public{
+    background-image: url("./../img/course-list-public.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height:400px;
+}

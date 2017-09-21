@@ -12,6 +12,7 @@ import LoginStudent from './box/student/login/Login';
 import ResettingPassword from './box/home/login/ResettingPassword';
 import CourseInformation from './box/home/course/Information';
 import CourseNotFound from './box/home/course/NotFound';
+import CourseList from './box/home/course/ListCourses';
 
 injectTapEventPlugin(); 
 
@@ -33,6 +34,7 @@ const Main = () => (
                     <Route exact path='/resetting-password/:v1/:v2/:v3' component={ResettingPassword} />
                     <Route exact path='/course/:id' component={CourseInformation} />
                     <Route exact path='/not-found/course' component={CourseNotFound} />
+                    <Route exact path='/courses' component={CourseList} />
                     <PrivateRoute path='/provider/:way' component={Dash} />
                 </div>
             </Router>

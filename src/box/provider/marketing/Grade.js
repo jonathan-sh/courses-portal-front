@@ -14,7 +14,6 @@ import NewIco from 'material-ui/svg-icons/content/add';
 
 class Grade extends Component
 {
-
     constructor(props)
     {
         super(props);
@@ -42,7 +41,7 @@ class Grade extends Component
         PubSub.subscribe('show-sub-grade', this.fncControlSubGrade);
         this.fncListSubGrade();
         this.fncListCourses();
-    }
+    };
 
     isUpdate = (data) =>
     {
