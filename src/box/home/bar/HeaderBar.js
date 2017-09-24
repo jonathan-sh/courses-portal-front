@@ -8,7 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import Download from 'material-ui/svg-icons/file/file-download';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import AppsIcon from 'material-ui-icons/Apps';
 import SingIn from './../sign-in/SingIn';
 import LoginStudent from './../login/LoginStudent';
 import LoginProvider from './../login/LoginProvider';
@@ -55,7 +55,7 @@ class App extends Component {
         <div  style={this.style.btSingIn}>
 
             <IconMenu
-                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                iconButtonElement={<IconButton><AppsIcon /></IconButton>}
                 anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
             >

@@ -1,3 +1,4 @@
+/* Starting input search */
 .has-float-label {
     display: block;
     position: relative;
@@ -72,3 +73,18 @@
     font-weight: 200;
     top: 3px;
 }
+
+/* End input search */
+
+::-webkit-scrollbar{width:0;height:0;}
+::-webkit-scrollbar-button{width:0;height:0;}
+
+.horizontal-scroll
+{
+    display: -webkit-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 2% 2% 0 2%;
+    padding-bottom: 2px;
+}
+
