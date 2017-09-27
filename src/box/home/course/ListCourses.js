@@ -19,24 +19,23 @@ class ListPublic extends Component
         super();
         this.state =
         {
-            cardComponent: ''
-
+            cardComponent: '',
         };
     };
 
     componentDidMount()
     {
-        this.createComponent();
+        this.createCardComponent();
     };
 
-    createComponent = () =>
+    createCardComponent = () =>
     {
         const text = 'Aqui vai fica o objetivo do curso ou descrição, fica a combinar. O que se adequar melhor fica, essa é layout basico de visão de curso.';
-        const card = {name: 'Course', description: text, value:25};
-        let list = [card, card, card, card, card, card, card, card, card, card];
+        const card2 = {name: 'Front-end', description: text, value:30};
+        let listCard2 = [card2, card2, card2, card2, card2, card2, card2, card2, card2, card2];
 
-        let cards = list.map((card, index) =>
-            <Card id={index} key={index} className="beaba" style={{width: '18.37%', marginRight: '2%'}}>
+        let cards = listCard2.map((card, index) =>
+            <Card id={card.name+index} key={index} style={{width: '18.35%', marginRight: '2%'}}>
                 <CardMedia>
                     <img src={srcImage} alt=''/>
                 </CardMedia>
@@ -68,26 +67,30 @@ class ListPublic extends Component
                             tooltip='Buscar'>
                             <IconSearch color='#FFF' style={{paddingTop: '5px'}} />
                         </IconButton>
-
                     </div>
                 </div>
-                <div className="horizontal-scroll">
-                    {this.state.cardComponent}
+                <div>
+                    <h2 className='title-box'>Front-end ...</h2>
+                    <div className='component-category'>
+                        <IconButton
+                            style={{background: 'transparent', width: 64, height: 64, padding: 8, float:'left'}}
+                            iconStyle={{width: 48, height: 48}}
+                            tooltip='Voltar'
+                            href="#Front-end0">
+                            <ArrowLeft color='#00bcd4'/>
+                        </IconButton>
+                        <div className="horizontal-scroll">
+                            {this.state.cardComponent}
+                        </div>
+                        <IconButton
+                            style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
+                            iconStyle={{width: 48, height: 48}}
+                            tooltip='Ir'
+                            href="#Front-end9">
+                            <ArrowRight color='#00bcd4'/>
+                        </IconButton>
+                    </div>
                 </div>
-                <IconButton
-                    style={{marginLeft:'2%', background: 'transparent', width: 96, height: 96, padding: 24}}
-                    iconStyle={{width: 48, height: 48}}
-                    tooltip='Voltar'
-                    href="#0">
-                    <ArrowLeft color='#00bcd4'/>
-                </IconButton>
-                <IconButton
-                    style={{marginRight:'2%', float: 'right', background: 'transparent', width: 96, height: 96, padding: 24}}
-                    iconStyle={{width: 48, height: 48}}
-                    tooltip='Ir'
-                    href="#9">
-                    <ArrowRight color='#00bcd4'/>
-                </IconButton>
             </div>
         );
     }
