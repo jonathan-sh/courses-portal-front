@@ -59,12 +59,24 @@ class App extends Component {
                    <MenuItem
                        rightIcon={<ArrowDropRight />}
                        value={grade.description}
-                       primaryText={grade.description} />
-
+                       primaryText={grade.description}
+                       menuItems={(grade.courses.length>0)? this.buildMenu(grade.courses) : null} />
                </di>
             );
             this.setState({'menu': menu});
         }
+    };
+
+    buildMenu = (list) =>{
+        let item = list.map((item, index) =>
+            <di key={index}>
+                <MenuItem
+                    value={item.description}
+                    primaryText={item.description} />
+
+            </di>
+        );
+        return item;
     };
 
     leftButtons = () => (
