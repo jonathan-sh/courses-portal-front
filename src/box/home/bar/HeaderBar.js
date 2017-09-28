@@ -72,7 +72,7 @@ class App extends Component {
             <di key={index}>
                 <MenuItem
                     value={item.description}
-                    primaryText={item.description} />
+                    primaryText={item.name} />
 
             </di>
         );
