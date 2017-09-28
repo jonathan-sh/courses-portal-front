@@ -154,7 +154,7 @@ class Steps extends Component {
                     actions={actions}
                     modal={true}
                     contentStyle={{width: '80%', maxWidth: 'none'}}
-                    open={this.state.showNewStep}
+                    open={true}
                 >
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon/>}>
                         <Step>

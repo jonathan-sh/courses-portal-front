@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
 import history from '../../../service/router/History';
+import httpService from '../../../service/HttpService';
 
 export default class LoginStudent extends Component {
 
@@ -13,7 +14,30 @@ export default class LoginStudent extends Component {
     constructor(props) {
         super(props);
         this.state = {open: true};
+        this.httpService = new httpService();
     }
+
+    makeLogin = (event) => {
+        event.preventDefault();
+        this.httpService.post('/login', this.makeDataForLogin())
+            .then(response => {
+                if (response.status !== 501 )
+                {
+                    return response.json();
+                }
+                throw new Error('Usuário ou senha incorreto!');
+            })
+            .then(success => {
+                console.log(success);
+            })
+            .catch(error => {this.setState({msg:error.message});});
+    };
+
+    makeDataForLogin= () => {
+        return {email:this.email.input.value,
+                password:this.password.input.value,
+                entity:'student'}
+    };
 
     handleClose = (value) => {
         this.setState({open: false});
@@ -35,7 +59,8 @@ export default class LoginStudent extends Component {
                 onClick={() => this.handleClose(true)}
             />,
             <RaisedButton label="Fazer login"
-                          primary={true}  />,
+                          primary={true}
+                          onClick={this.makeLogin.bind(this)}/>,
         ];
 
 
