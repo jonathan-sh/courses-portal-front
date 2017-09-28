@@ -29,10 +29,8 @@ class Analytical extends Component {
                 }
             })
             .then(success => {
-                console.log(success);
                 this.setState({series: success});
                 this.setChart();
-                console.log(this.state);
             })
             .catch(error => {
                 alert('nopp');
