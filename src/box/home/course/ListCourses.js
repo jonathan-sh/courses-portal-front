@@ -17,19 +17,12 @@ class ListPublic extends Component
     constructor()
     {
         super();
-        const text = 'Aqui vai fica o objetivo do curso ou descrição, fica a combinar. O que se adequar melhor fica, essa é layout basico de visão de curso.';
-        const card1 = {name: 'Front-end', description: text, value:30};
-        const card2 = {name: 'Back-end', description: text, value:50};
-        const listCard1 = [card1, card1, card1, card1, card1, card1, card1, card1, card1, card1];
-        const listCard2 = [card2, card2, card2, card2, card2, card2, card2, card2, card2, card2, card2, card2, card2, card2, card2];
-        const grade = [{description: 'Front-end', courses:listCard1}, {description: 'Back-end', courses:listCard2}];
 
         this.state =
         {
             boxComponent: '',
-            grade: grade
+            grade: JSON.parse(localStorage.getItem('grade'))
         };
-        console.log(grade)
     };
 
     componentDidMount()
@@ -41,27 +34,27 @@ class ListPublic extends Component
     {
         const grade = this.state.grade;
 
-        let boxes = grade.map((box, index) =>
+        let boxes = grade.map((grade, index) =>
             <div key={index}>
-                <h2 className='title-box'>{box.description} ...</h2>
+                <h2 className='title-box'>{grade.description} ...</h2>
                 <div className='component-category'>
                     <IconButton
                         style={{background: 'transparent', width: 64, height: 64, padding: 8, float:'left'}}
                         iconStyle={{width: 48, height: 48}}
                         tooltip='Voltar'
-                        href={'#' + box.description + '0'}>
+                        href={'#' + grade.description + '0'}>
                         <ArrowLeft color='#00bcd4'/>
                     </IconButton>
                     <div className="horizontal-scroll">
-                        {
-                            this.createCardComponent(box.courses)
-                        }
+                    {
+                        this.createCardComponent(grade.courses)
+                    }
                     </div>
                     <IconButton
                         style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
                         iconStyle={{width: 48, height: 48}}
                         tooltip='Ir'
-                        href={'#' + box.description + '9'}>
+                        href={'#' + grade.description + '9'}>
                         <ArrowRight color='#00bcd4'/>
                     </IconButton>
                 </div>
@@ -78,13 +71,13 @@ class ListPublic extends Component
                 <CardMedia>
                     <img src={srcImage} alt=''/>
                 </CardMedia>
-                <CardTitle style={{paddingBottom: '0%'}} titleStyle={{fontSize: '20px'}} title={card.name + " " + index}/>
+                <CardTitle style={{paddingBottom: '0%'}} titleStyle={{fontSize: '20px'}} title={card.name}/>
                 <CardText>
-                    {card.description}
+                    {card.objective}
                 </CardText>
                 <Divider />
                 <CardActions style={{textAlign:'right'}}>
-                    <h2 style={{color:'green', fontSize:'20px', padding:'3%', fontWeight: '500', margin:'0%'}}>{card.value + index} R$</h2>
+                    <h2 style={{color:'green', fontSize:'20px', padding:'3%', fontWeight: '500', margin:'0%'}}>{card.price} R$</h2>
                 </CardActions>
             </Card>
         );
