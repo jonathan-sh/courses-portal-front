@@ -4,11 +4,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
-import Download from 'material-ui/svg-icons/file/file-download';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import AppsIcon from 'material-ui-icons/Apps';
 import SingIn from './../sign-in/SingIn';
 import LoginStudent from './../login/LoginStudent';
 import LoginProvider from './../login/LoginProvider';
@@ -23,15 +20,17 @@ class App extends Component {
         this.state = {showModalLoginStudent:false,
             showModalSingIn:false,
             showModalForgotPassword:false,
-            showModalLoginProvider:false};
+            showModalLoginProvider:false,
+            menu:[]};
     }
 
     componentDidMount(){
         PubSub.subscribe('close-home-model', this.closeAll);
+        this.buildCourseMenu();
     }
 
-    style={btSingIn:{marginTop: "0px"},
-        btLogin:{color:"#fff"},
+    style={btSingIn:{marginTop: "12x"},
+        btLabel:{color:"#fff", marginTop:"12px"},
         menu:{display: 'inline-block',margin: '16px 32px 16px 0',}
     };
 
@@ -51,54 +50,45 @@ class App extends Component {
         history.push('/');
     };
 
+    buildCourseMenu = () =>{
+        let grades = JSON.parse(localStorage.getItem('grade'));
+        if (grades!==undefined && grades!==null)
+        {
+            let menu = grades.map((grade, index) =>
+               <di key={index}>
+                   <MenuItem
+                       rightIcon={<ArrowDropRight />}
+                       value={grade.description}
+                       primaryText={grade.description} />
+
+               </di>
+            );
+            this.setState({'menu': menu});
+        }
+    };
+
     leftButtons = () => (
         <div  style={this.style.btSingIn}>
 
             <IconMenu
-                iconButtonElement={<IconButton><AppsIcon /></IconButton>}
+                iconButtonElement={<FlatButton style={this.style.btLabel} label="Coursos" />}
                 anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            >
-                <MenuItem
-                    primaryText="Copy & Paste"
-                    rightIcon={<ArrowDropRight />}
-                    menuItems={[
-                        <MenuItem primaryText="Cut" />,
-                        <MenuItem primaryText="Copy" />,
-                        <Divider />,
-                        <MenuItem primaryText="Paste" />,
-                    ]}
-                />
-
-                <MenuItem
-                    primaryText="Case Tools"
-                    rightIcon={<ArrowDropRight />}
-                    menuItems={[
-                        <MenuItem primaryText="UPPERCASE" />,
-                        <MenuItem primaryText="lowercase" />,
-                        <MenuItem primaryText="CamelCase" />,
-                        <MenuItem primaryText="Propercase" />,
-                    ]}
-                />
-                <Divider />
-                <MenuItem primaryText="Download" leftIcon={<Download />} />
-                <Divider />
-                <MenuItem value="Del" primaryText="Delete" />
-
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}>
+                {this.state.menu}
             </IconMenu>
 
 
 
-            <RaisedButton  style={this.style.btSingIn}
+            <RaisedButton  style={this.style.btLabel}
                            label="CRIAR UMA CONTA"
                            secondary={true}
                            onClick={()=>this.showModal('showModalSingIn')}/>
             <FlatButton rippleColor="#fff"
-                        style={this.style.btLogin}
+                        style={this.style.btLabel}
                         label="Estudante" secondary={false}
                         onClick={()=>this.showModal('showModalLoginStudent')}/>
             <FlatButton rippleColor="#fff"
-                        style={this.style.btLogin}
+                        style={this.style.btLabel}
                         label="Empresa" secondary={false}
                         onClick={()=>this.showModal('showModalLoginProvider')}/>
         </div>
