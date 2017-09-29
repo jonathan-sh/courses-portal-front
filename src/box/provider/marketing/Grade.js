@@ -89,12 +89,12 @@ class Grade extends Component
         if (this.state.grade.subGrades !== null)
         {
             let subGrades = this.state.grade.subGrades.map((subGrade, index) =>
-            <div key={index}>
+            <div key={index} style={{textAlign: 'center'}}>
                 <RaisedButton
                     label={subGrade.description}
                     backgroundColor="#2dc7a2"
                     labelStyle={{color: '#FFF'}}
-                    style={{marginTop: '10px',  width: '91.9%'}}
+                    style={{marginTop: '10px',  width: '87%'}}
                     onTouchTap = {(object, position) => this.fncShowSubGrade(subGrade, index)}
                 />
                 <RaisedButton

@@ -49,7 +49,7 @@ class Bar extends Component
                         label={grade.description}
                         backgroundColor="#2dc7a2"
                         labelStyle={{color: '#FFF'}}
-                        style={{marginTop: '10px', width: '92.1%'}}
+                        style={{marginTop: '10px', width: '87.85%'}}
                         onTouchTap = {(object, position) => this.fncShowGrade(grade, index)}
                     />
                     <RaisedButton
@@ -125,7 +125,7 @@ class Bar extends Component
                     backgroundColor="#0ac752"
                     icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
-                    style={{float: 'right', margin: '20px 0 20px 20px'}}
+                    style={{float: 'right', margin: '20px 5px 20px 20px'}}
                 />
                 <Snackbar
                     open={this.state.showAction}

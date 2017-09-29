@@ -46,13 +46,13 @@ class Body extends Component
         if(provider.topics !== null)
         {
             let topics = provider.topics.map((topic, index) =>
-                <div key={index}>
+                <div key={index} style={{textAlign: 'center'}}>
                     <RaisedButton
                         label={topic.header}
                         backgroundColor="#2dc7a2"
                         disabled={this.state.btn}
                         labelStyle={{color: '#FFF'}}
-                        style={{marginTop: '10px', width: '92.1%'}}
+                        style={{marginTop: '10px', width: '87%'}}
                         onTouchTap= {(object, position) => this.switchAction(topic, index)}
                     />
                     <RaisedButton
