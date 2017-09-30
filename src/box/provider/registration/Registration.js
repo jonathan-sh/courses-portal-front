@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import PubSub from 'pubsub-js';
+import Table from './TableRegistration';
 
 class Registration extends Component {
 
@@ -10,7 +11,7 @@ class Registration extends Component {
     render() {
         return (
             <div>
-
+                <Table/>
             </div>
         )
     }

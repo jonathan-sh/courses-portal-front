@@ -4,7 +4,7 @@ import NewIco from 'material-ui/svg-icons/content/add';
 import Information from './Information';
 import AddStep from './AddStep';
 import PubSub from 'pubsub-js';
-import Step from './Step';
+// import Step from './Step';
 
 class Crud extends Component {
 
@@ -60,7 +60,7 @@ class Crud extends Component {
     render() {
         return (
             <div>
-                <Step/>
+                {/*<Step/>*/}
                 <br/>
                 <br/>
                 <span className="subTopic">Informações:</span>
