@@ -7,11 +7,11 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 import Divider from 'material-ui/Divider';
 import '../../../style/css/listCourse.css'
 import IconButton from 'material-ui/IconButton';
-import IconSearch from 'material-ui/svg-icons/action/search';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import srcImage from '../../../style/img/course-not-found-2.jpg';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
 class ListPublic extends Component
 {
@@ -64,12 +64,11 @@ class ListPublic extends Component
                         <ArrowRight color='#00bcd4'/>
                     </IconButton>
                 </div>
-                <Divider style={{
-                    width: '80.5%',
+                <Divider style={{width: '80.5%',
                     marginLeft: '9.8%',
-                    marginTop: '1.5%',
-                    backgroundColor: 'rgba(224, 224, 224, 0.5)'
-                }}/>
+                    marginTop: '2%',
+                    backgroundColor: 'rgba(224, 224, 224, 0.5)'}}
+                />
             </div>
         });
         
@@ -88,7 +87,7 @@ class ListPublic extends Component
                 </CardMedia>
                 <CardTitle style={{paddingBottom: '0%'}} titleStyle={{fontSize: '20px', fontWeight: '300'}} title={card.name}/>
                 <CardText>
-                    {card.objective}
+                    {card.description}
                 </CardText>
                 <Divider />
                 <CardActions style={{textAlign:'right'}}>
@@ -146,19 +145,17 @@ class ListPublic extends Component
     {
         return (
             <div>
-                <div className="course-list-public">
+                <div>
                     <HeaderBar/>
-                    <div className='has-float-label search-input' >
-                        <input style={{width: '85%', margin: '0%'}} id='search' type='text' placeholder='O que você vai aprender hoje?'/>
-                        <label style={{color: '#00bcd4', paddingLeft: '3px', top: '3px'}} htmlFor='search'>Buscar cursos</label>
-                        <IconButton
-                            style={{margin:'0%', padding: '0%', width: '15%', minWidth: '0px', float: 'right', height: '35px', background: '#00bcd4'}}
-                            tooltip='Buscar'>
-                            <IconSearch color='#FFF' style={{paddingTop: '5px'}} />
-                        </IconButton>
-                    </div>
+                    <TextField
+                        hintText="O que você vai estudar ?"
+                        floatingLabelText="Buscar cursos"
+                        style={{marginTop: '2.7%', marginLeft: '7%', width: '86%', position: 'fixed', zIndex: '8', background:'#fff'}}
+                    />
                 </div>
-                {this.state.boxComponent}
+                <div style={{top: '125px', position: 'absolute'}}>
+                    {this.state.boxComponent}
+                </div>
             </div>
         );
     }

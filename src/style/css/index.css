@@ -84,15 +84,30 @@ p{
     position: fixed;
     width: 100%;
     z-index: 9;
+    top: 0;
 }
 
 .about{
-    padding: 0% 7% 5% 7%;
     background: #ffffff;
     font-family: 'Roboto';
     font-weight: 300;
-    text-align: center;
+    text-align: justify;
     font-size: 18px;
+}
+
+.boxAbout
+{
+    width: 50%;
+    margin: 0 20px 10px 25%;
+    display: grid;
+}
+
+.boxTopics
+{
+    text-align: center;
+    display: grid;
+    justify-content: center;
+    align-items: center;
 }
 
 .home-plans{
@@ -115,12 +130,4 @@ p{
     background: #00bcd4;
     color: #fff;
     padding: 1%;
-}
-
-.course-list-public{
-    background-image: url("./../img/course-list-public.jpg");
-    background-size: 100%;
-    background-repeat: no-repeat;
-    height:400px;
-    margin-bottom: 1%;
 }

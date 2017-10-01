@@ -1,81 +1,3 @@
-/* Starting input search */
-.has-float-label {
-    display: block;
-    position: relative;
-}
-.has-float-label label, .has-float-label > span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    cursor: text;
-    font-size: 75%;
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s;
-}
-.has-float-label input {
-    font-size: inherit;
-    padding-top: 1em;
-    margin-bottom: 2px;
-    border: 0;
-    border-radius: 0;
-}
-.has-float-label input::-webkit-input-placeholder {
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s;
-}
-.has-float-label input::-moz-placeholder {
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s;
-}
-.has-float-label input:-ms-input-placeholder {
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s;
-}
-.has-float-label input::placeholder {
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s;
-}
-.has-float-label input:placeholder-shown:not(:focus)::-webkit-input-placeholder {
-    opacity: 0;
-}
-.has-float-label input:placeholder-shown:not(:focus)::-moz-placeholder {
-    opacity: 0;
-}
-.has-float-label input:placeholder-shown:not(:focus):-ms-input-placeholder {
-    opacity: 0;
-}
-.has-float-label input:placeholder-shown:not(:focus)::placeholder {
-    opacity: 0;
-}
-.has-float-label input:placeholder-shown:not(:focus) + * {
-    font-size: 150%;
-    opacity: .5;
-    top: .25em;
-}
-.has-float-label input:focus {
-    outline: none;
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
-.search-input
-{
-    position: absolute;
-    margin-top: 200px;
-    margin-left: 12.5%;
-    width: 300px;
-    border: 1px solid #00bcd4;
-    font-family: 'Roboto';
-    font-weight: 200;
-    top: 3px;
-}
-
-/* End input search */
-
 ::-webkit-scrollbar{width:0;height:0;}
 ::-webkit-scrollbar-button{width:0;height:0;}
 
@@ -84,8 +6,8 @@
     font-family: 'Roboto';
     font-weight: 300;
     margin-left: 10%;
-    margin-bottom: 0;
     margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .component-category
