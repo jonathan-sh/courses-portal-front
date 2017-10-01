@@ -53,8 +53,8 @@ class App extends Component
         const topics = this.state.topics;
 
         let component = topics.map((topic, index) =>
-            <div key={index}>
-                <h2 className="title">{topic.header}</h2>
+            <div key={index} className='boxAbout'>
+                <h2 className="title" style={{color: '#00bcd4', fontWeight: '500'}}>{topic.header}</h2>
                 <div className="about">{topic.description}</div>
             </div>
         );
@@ -70,7 +70,9 @@ class App extends Component
                     <HeaderBar/>
                     <span className="subTitle">{this.state.welcome}</span>
                 </div>
-                {this.state.topicsComponent}
+                <div className='boxTopics'>
+                    {this.state.topicsComponent}
+                </div>
                 <div className="home-plans">
                     <span className="plainTitle">Planos</span>
                     <div  style={{width:'50%', textAlign:'center', float:'left'}}>
