@@ -35,7 +35,7 @@ class Bar extends Component
         this.fncListGrade();
     };
 
-    fncHideGrade = (topic, open) => this.setState({showGrade: open});
+    fncHideGrade = (topic, open) => this.setState({'showGrade': open});
 
     fncListGrade = () =>
     {

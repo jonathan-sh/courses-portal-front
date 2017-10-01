@@ -72,6 +72,7 @@ class Body extends Component
 
     switchAction = (object, position) =>
     {
+        this.clearFields();
         const label = 'Editar tópico';
         const icon = <EditIco color="#FFF"/>;
 
@@ -183,8 +184,13 @@ class Body extends Component
         const label = 'Adicionar tópico';
         const topic = {header: '', description: ''};
         const icon = <NewIco color="#FFF"/>;
+        let errors =
+        {
+            header:'',
+            description:'',
+        };
 
-        this.setState({'topic': topic, 'labelButton': label, 'update':false, 'iconButton': icon, 'indexTopic': null});
+        this.setState({'topic': topic, 'labelButton': label, 'update':false, 'iconButton': icon, 'indexTopic': null, 'errorsText': errors});
         this.fncListTopic();
     };
 
