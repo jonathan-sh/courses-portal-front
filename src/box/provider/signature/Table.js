@@ -73,7 +73,7 @@ class TableSignature extends Component {
                 }
             })
             .then(success => {
-                this.setState({signatures: success})
+                this.setState({signatures: success});
                 this.fncMakeRows(this.state.signatures);
             })
             .catch(error => {
