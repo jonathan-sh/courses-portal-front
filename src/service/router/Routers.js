@@ -1,5 +1,6 @@
 import AboutProvider from './../../box/provider/about/About';
-import MarketingProvider from './../../box/provider/marketing/Marketing';
+import CustomizationProvider from '../../box/provider/customization/Customization';
+import MarketingProvider from '../../box/provider/marketing/Marketing';
 import CourseProvider from './../../box/provider/course/Course';
 import RegistrationProvider from '../../box/provider/signature/Signature';
 import AnalyticalProvider from './../../box/provider/analytical/Analytical';
@@ -10,6 +11,7 @@ const DashRoute =
     dash:
     [
         { uri: "about", item: AboutProvider },
+        { uri: "customization", item: CustomizationProvider },
         { uri: "marketing", item: MarketingProvider },
         { uri: "course", item: CourseProvider },
         { uri: "signature", item: RegistrationProvider },

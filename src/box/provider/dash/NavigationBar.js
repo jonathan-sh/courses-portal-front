@@ -4,7 +4,8 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import AboutIco from 'material-ui/svg-icons/action/perm-identity';
-import Marketing from 'material-ui/svg-icons/action/dashboard';
+import MarketingIco from 'material-ui/svg-icons/action/dashboard';
+import CustomizationIco from 'material-ui/svg-icons/editor/mode-edit';
 import CourseIco from 'material-ui/svg-icons/social/school';
 import RegisterIco from 'material-ui/svg-icons/editor/format-align-justify';
 import FinancialIco from 'material-ui/svg-icons/editor/attach-money';
@@ -28,13 +29,22 @@ class NavigationBar extends Component
                         />
                     </Link>
                     <Divider />
-                    <Link to={'/provider/marketing'} className={"link-routes"}>
+                    <Link to={'/provider/customization'} className={"link-routes"}>
                         <MenuItem
-                            primaryText="Marketing"
-                            leftIcon={<Marketing/>}
+                            primaryText="Personalização"
+                            leftIcon={<CustomizationIco/>}
                         />
                     </Link>
                     <Divider />
+
+                    <Link to={'/provider/marketing'} className={"link-routes"}>
+                        <MenuItem
+                            primaryText="Marketing"
+                            leftIcon={<MarketingIco/>}
+                        />
+                    </Link>
+                    <Divider />
+
                     <Link to={'/provider/course'} className={"link-routes"}>
                         <MenuItem
                             primaryText="Curso"
