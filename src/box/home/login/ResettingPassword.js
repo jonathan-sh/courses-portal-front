@@ -27,7 +27,6 @@ export default class ResettingPassword extends Component {
                       password:''
             };
         this.url = '/forgot-password/'+props.match.params.v2+'/'+props.match.params.v3;
-        console.log(this.url);
     };
 
     makeUpdate = (event) => {

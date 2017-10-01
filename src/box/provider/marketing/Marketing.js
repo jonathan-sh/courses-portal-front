@@ -49,9 +49,9 @@ class Marketing extends Component {
                     inkBarStyle={this.styles.tabs}
                     onChange={this.handleChange}
                     value={this.state.slideIndex} >
-                    <Tab style={this.styles.tab} label="Barra" value={0} />
-                    <Tab style={this.styles.tab} label="Sobre" value={1} />
-                    <Tab style={this.styles.tab} label="Roda-pé" value={2} />
+                    <Tab style={this.styles.tab} label="Categorias" value={0} />
+                    <Tab style={this.styles.tab} label="Descritivos" value={1} />
+                    <Tab style={this.styles.tab} label="Home face" value={2} />
                 </Tabs>
                 <SwipeableViews
                     index={this.state.slideIndex}

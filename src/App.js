@@ -43,7 +43,6 @@ class App extends Component
                 throw new Error('Falha ao carregar dados da plataforma!');
             })
             .then(success => {
-                console.log(success);
                 this.setItemsLocalStorage(success);
             })
             .catch(error => {console.log(error)});

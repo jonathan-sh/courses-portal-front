@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import TableFound from './Table';
-import FindIco from 'material-ui/svg-icons/action/search';
-import TextField from 'material-ui/TextField';
 import NewIco from 'material-ui/svg-icons/content/add';
 import BackIco from 'material-ui/svg-icons/content/reply-all';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -21,22 +19,19 @@ class Course extends Component {
         PubSub.subscribe('switch-to-crud', this.fncInCrud);
     }
 
-    styles = {
-        inputTextCourse: {width: '72%'},
-        btnCourse: {width: '12%', marginLeft: '2%'}
-    };
+    styles = {btnCourse: {width: '100%'} };
 
     fncNewCourse = () => {
         PubSub.publish('header-label','Criando curso');
         this.setState({newCourse: true});
     };
 
-    fncFindCourse = () => alert('find');
-
     fncInCrud = (key, course) => {
         if (course !== undefined && course !==false)
         {
-            this.setState({isCrud: true, showTable: false, 'course':course});
+            this.setState({'course': course});
+            this.setState({'isCrud': true});
+            this.setState({'showTable': false});
         }
         else
         {
@@ -45,41 +40,29 @@ class Course extends Component {
 
     };
 
-    fncBackToFind = () => this.setState({isCrud: false, newCourse: false, showTable: true});
+    fncBackToFind = () => {
+        this.setState({'isCrud': false});
+        this.setState({'newCourse': false});
+        this.setState({'showTable': true});
+    };
 
     fncCheck = () => {return this.state.newCourse || this.state.isCrud};
 
     render() {
         return (
             <div>
-                {/*header found*/}
-                <span className="display-block">
-                    <TextField
-                        hintText="pesquisar curso"
-                        floatingLabelText="Pesquisar"
-                        type="text"
-                        disabled={this.fncCheck()}
-                        fullWidth={false}
-                        style={this.styles.inputTextCourse}
-                        ref={(input) => this.search = input}/>
+
+                <br/>
+
                     <RaisedButton
-                        label="buscar"
-                        backgroundColor="#ff7500"
-                        icon={<FindIco color="#FFF"/>}
-                        onTouchTap={this.fncFindCourse}
-                        disabled={this.fncCheck()}
-                        style={this.styles.btnCourse}
-                        labelStyle={{color: 'white'}}/>
-                    <RaisedButton
-                        label={(this.fncCheck())? 'voltar' : 'novo'}
+                        label={(this.fncCheck())? 'voltar a lista de cursos' : 'adicionar um curso novo'}
                         backgroundColor={this.fncCheck()? '#ff7500' : '#0ac752'}
                         icon={this.fncCheck()? <BackIco color='#FFF'/> : <NewIco color='#FFF'/>}
                         onTouchTap={(this.fncCheck())? this.fncBackToFind : this.fncNewCourse }
                         style={this.styles.btnCourse}
-                        labelStyle={{color: 'white'}}/>
-                </span>
+                        labelStyle={{color: 'white'}}
+                    />
 
-                <br/>
 
                 {this.state.newCourse ? <Information/>  : null}
 

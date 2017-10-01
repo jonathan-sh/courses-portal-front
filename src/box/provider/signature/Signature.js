@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import PubSub from 'pubsub-js';
-import Table from './TableRegistration';
+import Table from './Table';
 
-class Registration extends Component {
+class Signature extends Component {
 
     componentDidMount(){
         PubSub.publish('header-label',"Matriculas")
@@ -17,4 +17,4 @@ class Registration extends Component {
     }
 }
 
-export default Registration;
+export default Signature;

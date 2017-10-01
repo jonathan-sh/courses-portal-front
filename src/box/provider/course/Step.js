@@ -6,6 +6,7 @@ import Dialog from 'material-ui/Dialog';
 import Question from './Question';
 import Prove from './Prove';
 import MaterialAdd from './Material';
+import PubSub from 'pubsub-js';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -16,10 +17,13 @@ class Steps extends Component {
         this.state = {showStep: true,
                       showQuestion: false,
                       stepIndex: 0,
-                      steps:[]};
+                      open:true};
     }
 
-    fncCanStep = () => this.setState({showNewStep: false});
+    fncCanStep = () => {
+        PubSub.publish('close-edit-step');
+        this.setState({open: false});
+    };
     fncShowQuestion = () => this.setState({showQuestion: true});
     fncShowProve = () => this.setState({showProve: true});
     fncHandleNext = () => {
@@ -154,7 +158,7 @@ class Steps extends Component {
                     actions={actions}
                     modal={true}
                     contentStyle={{width: '80%', maxWidth: 'none'}}
-                    open={true}
+                    open={this.state.open}
                 >
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon/>}>
                         <Step>

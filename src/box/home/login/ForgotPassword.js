@@ -33,7 +33,6 @@ export default class ForgotPassword extends Component {
 
             })
             .then(success => {
-                console.log(success);
                 this.setState({title:'Solicitação aceita',
                                getResponse:true,
                                responseMsg:'Por favor verifique sua caixa de email.'});

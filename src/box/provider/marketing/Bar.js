@@ -49,14 +49,14 @@ class Bar extends Component
                         label={grade.description}
                         backgroundColor="#2dc7a2"
                         labelStyle={{color: '#FFF'}}
-                        style={{marginTop: '10px', width: '87.85%'}}
+                        style={{marginTop: '10px', width: '80%'}}
                         onTouchTap = {(object, position) => this.fncShowGrade(grade, index)}
                     />
                     <RaisedButton
                         label="delete"
                         backgroundColor="#ff2930"
                         icon={<DeleteIco color="#FFF"/>}
-                        style={{marginLeft:'0.7%'}}
+                        style={{marginLeft:'1%',width: '19%'}}
                         labelStyle={{color: 'white'}}
                         onTouchTap = {(object, position) => this.fncDeleteGrade(grade, index, 'grades')}
                     />
@@ -98,7 +98,6 @@ class Bar extends Component
         this.setState({'showAction':true});
         localStorage.setItem('provider', JSON.stringify(response));
         PubSub.publish('list-grade', this.state.provider);
-        console.log('Success');
     };
 
     fncDeleteGrade = (object, position, attribute) =>
@@ -117,7 +116,6 @@ class Bar extends Component
         return(
             <div>
                 {this.state.showGrade ? <Grade grade={this.state.whatGrade} index={this.state.index} />  : null}
-                <h3 className="title">Categorias</h3>
                 {this.state.grades}
                 <RaisedButton
                     onTouchTap={() => this.fncShowGrade()}
@@ -125,7 +123,7 @@ class Bar extends Component
                     backgroundColor="#0ac752"
                     icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
-                    style={{float: 'right', margin: '20px 5px 20px 20px'}}
+                    style={{float: 'right',width: '19%', marginTop:'20px'}}
                 />
                 <Snackbar
                     open={this.state.showAction}

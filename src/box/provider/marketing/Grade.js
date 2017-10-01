@@ -188,7 +188,6 @@ class Grade extends Component
         this.setState({'provider':response});
         localStorage.setItem('provider', JSON.stringify(response));
         PubSub.publish('list-grade', this.state.provider);
-        console.log('Success');
     };
 
     fncHandleSave = () =>

@@ -52,14 +52,14 @@ class Body extends Component
                         backgroundColor="#2dc7a2"
                         disabled={this.state.btn}
                         labelStyle={{color: '#FFF'}}
-                        style={{marginTop: '10px', width: '87%'}}
+                        style={{marginTop: '10px', width: '80%'}}
                         onTouchTap= {(object, position) => this.switchAction(topic, index)}
                     />
                     <RaisedButton
                         label="delete"
                         backgroundColor="#ff2930"
                         icon={<DeleteIco color="#FFF"/>}
-                        style={{marginLeft:'0.7%'}}
+                        style={{marginLeft:'1%',width:'19%'}}
                         labelStyle={{color: 'white'}}
                         onTouchTap={(object, position, attribute) => this.fncHandleDelete(topic, index, 'topics')}
                     />
@@ -130,7 +130,6 @@ class Body extends Component
         this.setState({'showAction':true});
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearFields();
-        console.log('Success');
     };
 
     setData = (event, value, attribute) =>
@@ -222,7 +221,7 @@ class Body extends Component
                     backgroundColor="#0ac752"
                     icon={this.state.iconButton}
                     labelStyle={{color: 'white'}}
-                    style={{float: 'right', margin: '20px 0 20px 10px'}}
+                    style={{float: 'right',  margin: '20px 0 20px 10px', width:'19%'}}
                     onTouchTap={(event, attribute, position) => this.fncHandleSave(event, 'topics', this.state.indexTopic)}
                 />
                 <FlatButton

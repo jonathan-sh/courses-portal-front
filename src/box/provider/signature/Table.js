@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 
 
-class TableRegistration extends Component {
+class TableSignature extends Component {
 
 
     constructor() {
@@ -35,9 +35,13 @@ class TableRegistration extends Component {
     };
 
     fncFilterRows = () => {
-       let filter = this.search.input.value;
-       let result = _.filter(this.state.signatures, (o) => { return o.name.includes(filter); });
-       this.fncMakeRows(result);
+        let filter = this.search.input.value;
+        filter = filter.toUpperCase();
+        let result = _.filter(this.state.signatures, (o) => {
+            let name = o.name.toUpperCase();
+            return name.includes(filter);
+        });
+        this.fncMakeRows(result);
     };
 
 
@@ -49,7 +53,9 @@ class TableRegistration extends Component {
                 }
             })
             .then(success => {
-                let signatures = _.remove(this.state.signatures, (o)=>{return o._id !== success._id})
+                let signatures = _.remove(this.state.signatures, (o) => {
+                    return o._id !== success._id
+                })
                 signatures.push(success);
                 this.setState({signatures: signatures})
                 this.fncMakeRows(this.state.signatures);
@@ -78,7 +84,7 @@ class TableRegistration extends Component {
 
     fncMakeRows = (signatures) => {
 
-        signatures = _.sortBy(signatures, ['name','email']);
+        signatures = _.sortBy(signatures, ['name', 'email']);
 
         let rows = signatures.map((student) =>
             <TableRow key={student._id}>
@@ -140,4 +146,4 @@ class TableRegistration extends Component {
     }
 }
 
-export default TableRegistration;
+export default TableSignature;

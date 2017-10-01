@@ -4,7 +4,7 @@ import NewIco from 'material-ui/svg-icons/content/add';
 import Information from './Information';
 import AddStep from './AddStep';
 import PubSub from 'pubsub-js';
-// import Step from './Step';
+import Step from './Step';
 
 class Crud extends Component {
 
@@ -12,6 +12,8 @@ class Crud extends Component {
         super(pros);
         this.state = {showInformationCourse: false,
                       showNewStep: false,
+                      showEditStep: false,
+                      step:[],
                       course: (this.props.course !== undefined)? this.props.course : []};
         this.steps = [];
         this.mapSteps();
@@ -20,12 +22,17 @@ class Crud extends Component {
     componentDidMount() {
         PubSub.publish('header-label', 'Editando curso');
         PubSub.subscribe('close-new-step', this.closeNewStep);
+        PubSub.subscribe('close-edit-step', this.closeEditStep);
         PubSub.subscribe('crud-get-course', this.getCourse);
 
     }
 
     closeNewStep = () => {
         this.setState({showNewStep: false});
+    };
+
+    closeEditStep = () => {
+        this.setState({showEditStep: false});
     };
 
     getCourse = (key, course) => {
@@ -35,8 +42,12 @@ class Crud extends Component {
         }
     };
 
+    fncEditSep = (step) => {
+        this.setState({'step': step});
+        this.setState({showEditStep: true});
+    };
+
     mapSteps = () => {
-        console.log(this.state);
         if (this.state.course.steps !== undefined && this.state.course.steps !== null)
         {
             this.steps = this.state.course.steps.map((step) =>
@@ -45,12 +56,12 @@ class Crud extends Component {
                     label={step.name}
                     fullWidth={true}
                     backgroundColor="#2dc7a2"
+                    onTouchTap={() =>this.fncEditSep(step)}
                     labelStyle={{color: '#FFF'}}
                     style={{marginTop: '5px'}}>
                 </RaisedButton>
             );
         }
-        console.log(this.steps);
     };
 
     fncInfoCourse = () => this.setState({showInformationCourse: true});
@@ -60,7 +71,6 @@ class Crud extends Component {
     render() {
         return (
             <div>
-                {/*<Step/>*/}
                 <br/>
                 <br/>
                 <span className="subTopic">Informações:</span>
@@ -91,6 +101,7 @@ class Crud extends Component {
 
                 {this.state.showNewStep ? (<AddStep course={this.state.course}/>) : null}
 
+                {this.state.showEditStep ? <Step step={this.state.step}/>  : null}
             </div>
         );
     }

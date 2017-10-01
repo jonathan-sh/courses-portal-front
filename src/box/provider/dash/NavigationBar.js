@@ -42,9 +42,9 @@ class NavigationBar extends Component
                         />
                     </Link>
                     <Divider />
-                    <Link to={'/provider/registration'} className={"link-routes"}>
+                    <Link to={'/provider/signature'} className={"link-routes"}>
                         <MenuItem
-                            primaryText="Matricula"
+                            primaryText="Assinatura"
                             leftIcon={<RegisterIco  />}
                         />
                     </Link>
