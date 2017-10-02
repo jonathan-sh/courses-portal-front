@@ -19,11 +19,11 @@ export default class LoginStudent extends Component {
 
     setItemsLocalStorage = (objects) =>
     {
-        console.log(objects);
         localStorage.setItem('auth-token', objects.token);
         localStorage.setItem('student', JSON.stringify(objects.entity));
         localStorage.setItem('entity', JSON.stringify(this.createEntity(objects.entity)));
         PubSub.publish('logged');
+        history.push('/courses');
     };
 
     createEntity = (object) =>
@@ -55,7 +55,7 @@ export default class LoginStudent extends Component {
     };
 
     handleClose = (value) => {
-        this.setState({open: false});
+        this.setState({'open': false});
         PubSub.publish('close-home-model', value);
         history.push('/');
     };

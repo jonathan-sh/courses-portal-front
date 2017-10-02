@@ -22,7 +22,7 @@ export default class LoginProvider extends Component {
         localStorage.setItem('auth-token', objects.token);
         localStorage.setItem('provider', JSON.stringify(objects.entity.provider));
         localStorage.setItem('courses', JSON.stringify(objects.entity.courses));
-        localStorage.setItem('entity', JSON.stringify(this.createEntity(objects.entity)));
+        localStorage.setItem('entity', JSON.stringify(this.createEntity(objects.entity.provider)));
         PubSub.publish('logged');
     };
 
@@ -47,7 +47,7 @@ export default class LoginProvider extends Component {
                 this.setItemsLocalStorage(success);
                 history.push('/provider/about', success);
             })
-            .catch(error => {this.setState({msg:error.message});});
+            .catch(error => {this.setState({'msg':error.message});});
     };
 
     makeDataForLogin= () => {
@@ -58,7 +58,7 @@ export default class LoginProvider extends Component {
 
 
     handleClose = (value) => {
-        this.setState({open: false});
+        this.setState({'open': false});
         PubSub.publish('close-home-model', value);
         history.push('/');
     };

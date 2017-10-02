@@ -11,6 +11,7 @@ import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import srcImage from '../../../style/img/course-not-found-2.jpg';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
 class ListPublic extends Component
@@ -23,8 +24,15 @@ class ListPublic extends Component
         {
             boxComponent: '',
             grade: JSON.parse(localStorage.getItem('grade')),
+            student: JSON.parse(localStorage.getItem('student')),
             componentMove: []
         };
+    };
+
+    style =
+    {
+        canAccess:'#0ac752',
+        canNotAccess:'#ff4081'
     };
 
     componentDidMount()
@@ -37,43 +45,45 @@ class ListPublic extends Component
         const grade = this.state.grade;
         let componentMove = {};
 
-        let boxes = grade.map((grade, index) =>
+        if(grade !== null && grade !== undefined)
         {
-            componentMove[grade.description] = {firstItem: 0, lastItem: 5};
+            let boxes = grade.map((grade, index) =>
+            {
+                componentMove[grade.description] = {firstItem: 0, lastItem: 5};
 
-            return <div key={index}>
-                <h2 className='title-box'>Cursos em {grade.description} ...</h2>
-                <div className='component-category'>
-                    <IconButton
-                        style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
-                        iconStyle={{width: 48, height: 48}}
-                        tooltip='Voltar'
-                        onClick={(event, object, action) => this.actionMove(event, grade, 'back')}>
-                        <ArrowLeft color='#00bcd4'/>
-                    </IconButton>
-                    <div className="horizontal-scroll">
-                    {
-                        this.createCardComponent(grade)
-                    }
+                return <div key={index}>
+                    <h2 className='title-box'>Cursos em {grade.description} ...</h2>
+                    <div className='component-category'>
+                        <IconButton
+                            style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
+                            iconStyle={{width: 48, height: 48}}
+                            tooltip='Voltar'
+                            onClick={(event, object, action) => this.actionMove(event, grade, 'back')}>
+                            <ArrowLeft color='#00bcd4'/>
+                        </IconButton>
+                        <div className="horizontal-scroll">
+                            {
+                                this.createCardComponent(grade)
+                            }
+                        </div>
+                        <IconButton
+                            style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
+                            iconStyle={{width: 48, height: 48}}
+                            tooltip='Ir'
+                            onClick={(event, object, action) => this.actionMove(event, grade, 'go')}>
+                            <ArrowRight color='#00bcd4'/>
+                        </IconButton>
                     </div>
-                    <IconButton
-                        style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
-                        iconStyle={{width: 48, height: 48}}
-                        tooltip='Ir'
-                        onClick={(event, object, action) => this.actionMove(event, grade, 'go')}>
-                        <ArrowRight color='#00bcd4'/>
-                    </IconButton>
+                    <Divider style={{width: '80.5%',
+                        marginLeft: '9.8%',
+                        marginTop: '2%',
+                        backgroundColor: 'rgba(224, 224, 224, 0.5)'}}
+                    />
                 </div>
-                <Divider style={{width: '80.5%',
-                    marginLeft: '9.8%',
-                    marginTop: '2%',
-                    backgroundColor: 'rgba(224, 224, 224, 0.5)'}}
-                />
-            </div>
-        });
-        
-        console.log(grade);
-        this.setState({'boxComponent': boxes, 'componentMove': componentMove});
+            });
+
+            this.setState({'boxComponent': boxes, 'componentMove': componentMove});
+        }
     };
 
     createCardComponent = (grade) =>
@@ -91,13 +101,37 @@ class ListPublic extends Component
                 </CardText>
                 <Divider />
                 <CardActions style={{textAlign:'right'}}>
-                    <FlatButton
-                        label="Acessar curso"
-                        primary={true}
-                    />
+                    {this.verifyAccess()}
                 </CardActions>
             </Card>
         );
+    };
+
+    verifyAccess = () =>
+    {
+        if(this.state.student !== null && this.state.student !== undefined)
+        {
+            if(this.state.student.signature)
+            {
+                return <RaisedButton
+                            label="Acessar curso"
+                            backgroundColor={this.style.canAccess}
+                            labelStyle={{color: 'white'}}
+                        />;
+            }
+
+            return <RaisedButton
+                label="Acessar curso"
+                backgroundColor={this.style.canNotAccess}
+                labelStyle={{color: 'white'}}
+            />;
+        }
+
+        return <RaisedButton
+                    label="Acessar curso"
+                    backgroundColor={this.style.canNotAccess}
+                    labelStyle={{color: 'white'}}
+                />;
     };
 
     actionMove = (event, grade, action) =>

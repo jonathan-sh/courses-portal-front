@@ -41,7 +41,6 @@ class App extends Component {
     loadEntity = () =>
     {
         this.setState({'entity': JSON.parse(localStorage.getItem('entity'))});
-        console.log(this.state.entity);
     };
 
     style={btSingIn:{marginTop: "12x"},
@@ -148,9 +147,20 @@ class App extends Component {
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             style={{marginRight: '5px'}}>
-            <MenuItem primaryText="Sair" />
+            <MenuItem
+                primaryText="Sair"
+                onTouchTap={() => this.logoff()}
+            />
         </IconMenu>
     );
+
+    logoff = () =>
+    {
+        localStorage.removeItem('entity');
+        localStorage.removeItem('student');
+        localStorage.removeItem('auth-token');
+        history.push('/login/student');
+    };
 
     render() {
         return (
