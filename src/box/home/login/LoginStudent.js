@@ -17,6 +17,21 @@ export default class LoginStudent extends Component {
         this.httpService = new httpService();
     }
 
+    setItemsLocalStorage = (objects) =>
+    {
+        console.log(objects);
+        localStorage.setItem('auth-token', objects.token);
+        localStorage.setItem('student', JSON.stringify(objects.entity));
+        localStorage.setItem('entity', JSON.stringify(this.createEntity(objects.entity)));
+        PubSub.publish('logged');
+    };
+
+    createEntity = (object) =>
+    {
+        const entity = {id: object._id, name: object.name, entity: 'student'};
+        return entity;
+    };
+
     makeLogin = (event) => {
         event.preventDefault();
         this.httpService.post('/login', this.makeDataForLogin())
@@ -28,7 +43,7 @@ export default class LoginStudent extends Component {
                 throw new Error('Usuário ou senha incorreto!');
             })
             .then(success => {
-                console.log(success);
+                this.setItemsLocalStorage(success);
             })
             .catch(error => {this.setState({msg:error.message});});
     };

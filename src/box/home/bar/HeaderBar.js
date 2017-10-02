@@ -11,33 +11,47 @@ import LoginProvider from './../login/LoginProvider';
 import ForgotPassword from './../login/ForgotPassword';
 import PubSub from 'pubsub-js';
 import history from '../../../service/router/History';
+import Avatar from 'material-ui/Avatar';
+import srcImage from '../../../style/img/course-not-found-2.jpg';
 
 class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {showModalLoginStudent:false,
+        this.state =
+        {
+            showModalLoginStudent:false,
             showModalSingIn:false,
             showModalForgotPassword:false,
             showModalLoginProvider:false,
-            menu:[]};
+            menu:[],
+            entity: JSON.parse(localStorage.getItem('entity'))
+        };
     }
 
     componentDidMount(){
         PubSub.subscribe('close-home-model', this.closeAll);
+        PubSub.subscribe('logged', this.loadEntity);
         this.buildCourseMenu();
     }
 
+    loadEntity = () =>
+    {
+        this.setState({'entity': JSON.parse(localStorage.getItem('entity'))});
+        console.log(this.state.entity);
+    };
+
     style={btSingIn:{marginTop: "12x"},
         btLabel:{color:"#fff", marginTop:"12px"},
-        menu:{display: 'inline-block',margin: '16px 32px 16px 0',}
+        menu:{display: 'inline-block',margin: '16px 32px 16px 0',
+        btnLogged:{padding: '5px'}}
     };
 
     closeAll = (key, value) =>{
-        this.setState({showModalLoginStudent:false,
-            showModalSingIn:false,
-            showModalForgotPassword:value,
-            showModalLoginProvider:false});
+        this.setState({'showModalLoginStudent':false,
+            'showModalSingIn':false,
+            'showModalForgotPassword':value,
+            'showModalLoginProvider':false});
     };
 
     showModal = (type)=>{
@@ -54,13 +68,13 @@ class App extends Component {
         if (grades!==undefined && grades!==null)
         {
             let menu = grades.map((grade, index) =>
-               <di key={index}>
+               <div key={index}>
                    <MenuItem
                        rightIcon={<ArrowDropRight />}
                        value={grade.description}
                        primaryText={grade.description}
                        menuItems={(grade.courses.length>0)? this.buildMenu(grade.courses) : null} />
-               </di>
+               </div>
             );
             this.setState({'menu': menu});
         }
@@ -68,12 +82,12 @@ class App extends Component {
 
     buildMenu = (list) =>{
         let item = list.map((item, index) =>
-            <di key={index}>
+            <div key={index}>
                 <MenuItem
                     value={item.description}
                     primaryText={item.name} />
 
-            </di>
+            </div>
         );
         return item;
     };
@@ -82,14 +96,24 @@ class App extends Component {
         <div  style={this.style.btSingIn}>
 
             <IconMenu
-                iconButtonElement={<FlatButton style={this.style.btLabel} label="Coursos" />}
+                iconButtonElement={<FlatButton style={this.style.btLabel} label="Cursos" />}
                 anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}>
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                style={{marginRight: '5px'}}>
                 {this.state.menu}
             </IconMenu>
 
+            {
+                (this.state.entity === null) ?
+                    (this.notLogged()) : (this.logged())
+            }
 
+        </div>
+    );
 
+    notLogged = () =>
+    (
+        <custom>
             <RaisedButton  style={this.style.btLabel}
                            label="CRIAR UMA CONTA"
                            secondary={true}
@@ -102,10 +126,27 @@ class App extends Component {
                         style={this.style.btLabel}
                         label="Empresa" secondary={false}
                         onClick={()=>this.showModal('showModalLoginProvider')}/>
-        </div>
+        </custom>
     );
 
-
+    logged = () =>
+    (
+        <IconMenu
+            iconButtonElement=
+                {
+                    <FlatButton
+                        labelPosition="before"
+                        style={this.style.btLabel}
+                        label={'Olá, ' + this.state.entity.name}
+                        icon={<Avatar src={srcImage} size={30}/>}
+                    />
+                }
+            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            style={{marginRight: '5px'}}>
+            <MenuItem primaryText="Sair" />
+        </IconMenu>
+    );
 
     render() {
         return (

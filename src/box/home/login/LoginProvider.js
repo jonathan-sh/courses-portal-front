@@ -22,6 +22,14 @@ export default class LoginProvider extends Component {
         localStorage.setItem('auth-token', objects.token);
         localStorage.setItem('provider', JSON.stringify(objects.entity.provider));
         localStorage.setItem('courses', JSON.stringify(objects.entity.courses));
+        localStorage.setItem('entity', JSON.stringify(this.createEntity(objects.entity)));
+        PubSub.publish('logged');
+    };
+
+    createEntity = (object) =>
+    {
+        const entity = {id: object._id, name: object.name, entity: 'provider'};
+        return entity;
     };
 
     makeLogin = (event) => {
