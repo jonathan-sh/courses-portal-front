@@ -28,6 +28,8 @@ class App extends Component {
             menu:[],
             entity: JSON.parse(localStorage.getItem('entity'))
         };
+        this.URl = 'http://localhost:3000';
+
     }
 
     componentDidMount(){
@@ -86,7 +88,7 @@ class App extends Component {
             <div key={index}>
                 <MenuItem
                     value={item.description}
-                    onTouchTap={() => {history.push('/course/'+item._id)}}
+                        onTouchTap={() => {window.open('/course/'+item._id, '_self')}}
                     primaryText={item.name} />
 
             </div>
