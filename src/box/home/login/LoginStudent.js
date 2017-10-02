@@ -23,6 +23,7 @@ export default class LoginStudent extends Component {
         localStorage.setItem('student', JSON.stringify(objects.entity));
         localStorage.setItem('entity', JSON.stringify(this.createEntity(objects.entity)));
         PubSub.publish('logged');
+        this.setState({'open': false});
         history.push('/courses');
     };
 

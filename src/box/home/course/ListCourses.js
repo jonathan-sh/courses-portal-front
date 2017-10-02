@@ -10,9 +10,9 @@ import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import srcImage from '../../../style/img/course-not-found-2.jpg';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import PubSub from 'pubsub-js';
 
 class ListPublic extends Component
 {

@@ -106,6 +106,11 @@ class App extends Component {
                 {this.state.menu}
             </IconMenu>
 
+            <FlatButton rippleColor="#fff"
+                        label="Todos os cursos"
+                        style={{marginRight: '5px', color:"#fff", marginTop:"12px"}}
+                        onClick={()=> {history.push('/courses');}}/>
+
             {
                 (this.state.entity === null) ?
                     (this.notLogged()) : (this.logged())
