@@ -7,6 +7,7 @@ import Question from './Question';
 import Prove from './Prove';
 import MaterialAdd from './Material';
 import PubSub from 'pubsub-js';
+import TextField from 'material-ui/TextField';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -14,10 +15,15 @@ import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 class Steps extends Component {
     constructor(props) {
         super(props);
-        this.state = {showStep: true,
-                      showQuestion: false,
-                      stepIndex: 0,
-                      open:true};
+        console.log(props);
+        this.state = {
+             showStep: true,
+             showQuestion: false,
+             stepIndex: 0,
+             open: true,
+             step: {name: props.step.name, description: props.step.description},
+             errorText: {name: '', description: ''}
+        };
     }
 
     fncCanStep = () => {
@@ -29,7 +35,7 @@ class Steps extends Component {
     fncHandleNext = () => {
         const {stepIndex} = this.state;
 
-        if (stepIndex < 2) {
+        if (stepIndex < 3) {
             this.setState({stepIndex: stepIndex + 1});
         }
     };
@@ -80,7 +86,31 @@ class Steps extends Component {
 
     getStepContent(stepIndex) {
         switch (stepIndex) {
+
             case 0:
+                return (
+                    <div>
+                        <TextField
+                            hintText="Nome"
+                            floatingLabelText="Nome"
+                            fullWidth={true}
+                            errorText={this.state.errorText.name}
+                            ref={(input) => this.name = input}
+                            onChange={(event, value) => this.setData(event, value, 'name')}
+                            value={this.state.step.name}/>
+
+                        <TextField
+                            hintText="Descrição"
+                            floatingLabelText="Descrição"
+                            fullWidth={true}
+                            errorText={this.state.errorText.description}
+                            ref={(input) => this.description = input}
+                            onChange={(event, value) => this.setData(event, value, 'description')}
+                            value={this.state.step.description}/>
+
+                    </div>
+                );
+            case 1:
                 return (
                     <div>
                         <div style={{overflow: 'auto', height: '200px'}}>
@@ -92,7 +122,7 @@ class Steps extends Component {
                     </div>
                 );
 
-            case 1:
+            case 2:
                 return (
                     <div>
                         {this.state.showQuestion? (<Question/>):null}
@@ -110,7 +140,7 @@ class Steps extends Component {
                     </div>
                 );
 
-            case 2:
+            case 3:
                 return (
                    <div>
                        {this.state.showProve? (<Prove/>):null}
@@ -144,9 +174,9 @@ class Steps extends Component {
             <RaisedButton
                 backgroundColor="#0ac752"
                 labelStyle={{color: 'white'}}
-                label={stepIndex === 2 ? 'Concluir' : 'Proximo'}
+                label={stepIndex === 3 ? 'Concluir' : 'Proximo'}
                 primary={true}
-                onTouchTap={this.fncHandleNext}
+                onTouchTap={stepIndex === 3 ? this.fncCanStep : this.fncHandleNext}
                 style={{float: 'right', marginRight: '10px'}}/>
             ,
         ];
@@ -161,6 +191,9 @@ class Steps extends Component {
                     open={this.state.open}
                 >
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon/>}>
+                        <Step>
+                            <StepLabel>Informações básicas</StepLabel>
+                        </Step>
                         <Step>
                             <StepLabel>Conteúdo didático</StepLabel>
                         </Step>

@@ -64,7 +64,7 @@ class TableFind extends Component {
                     <RaisedButton
                         label="delete"
                         backgroundColor="#ff2930"
-                        onTouchTap={() => this.fncEditCourse(course)}
+                        onTouchTap={() => this.fncDeleteCourse(course)}
                         icon={<DeleteIco color="#FFF"/>}
                         style={{marginLeft: '3%'}}
                         labelStyle={{color: 'white'}}/>
@@ -76,8 +76,11 @@ class TableFind extends Component {
     };
 
     fncEditCourse = (course) => {
-
         PubSub.publish('switch-to-crud', course);
+    };
+
+    fncDeleteCourse = (course) => {
+       alert('Delete curse ' + course.name);
     };
 
     fncFilterRows = () => {

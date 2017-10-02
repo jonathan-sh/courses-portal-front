@@ -9,6 +9,9 @@ import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import httpService from '../../../service/HttpService';
+import LinearProgress from 'material-ui/LinearProgress';
+import Snackbar from 'material-ui/Snackbar';
+
 
 
 class SendEmail extends Component {
@@ -18,11 +21,13 @@ class SendEmail extends Component {
         this.state = {
             stepIndex: 0, open: true, email: {subject: "", html: "", text: "", recipients: []},
             makeSend: false,
-            errorText:{subject: "", text: "", html: "", recipients: ""},
-            signatures:[],
-            rows:[],
-            keyRowsSelected:[]
+            errorText: {subject: "", text: "", html: "", recipients: ""},
+            signatures: [],
+            rows: [],
+            sending:false,
+            response:false,
         };
+        this.keyRowsSelected = [];
     }
 
     componentDidMount() {
@@ -46,15 +51,16 @@ class SendEmail extends Component {
     };
 
     fncSendEmail = (data) => {
-        this.httpService.post('/provider/send-email',data,localStorage.getItem('auth-token'))
+        this.setState({sending: true});
+        this.httpService.post('/provider/send-email', data, localStorage.getItem('auth-token'))
             .then(response => {
                 if (response.status === 200) {
                     return response.json();
                 }
             })
             .then(success => {
-                this.setState({signatures: success});
-                this.fncMakeRows(this.state.signatures);
+                this.setState({sending: false});
+                this.setState({response: success});
             })
             .catch(error => {
                 this.setState({msg: error.message});
@@ -73,10 +79,12 @@ class SendEmail extends Component {
     };
 
     fncValidAndSendEmail = () => {
-        let email= {subject: this.state.email.subject,
-                    html: this.state.email.html,
-                    text: this.state.email.text,
-                    recipients: this.state.keyRowsSelected};
+        let email = {
+            subject: this.state.email.subject,
+            html: this.state.email.html,
+            text: this.state.email.text,
+            recipients: this.keyRowsSelected
+        };
         this.fncSendEmail(email);
 
     };
@@ -86,9 +94,11 @@ class SendEmail extends Component {
         let status = true;
 
         let errorText = {subject: "", text: "", recipients: ""};
-        let email = {'subject':this.state.email.subject,
-                        'text':this.state.email.text,
-                        'html':this.state.email.html};
+        let email = {
+            'subject': this.state.email.subject,
+            'text': this.state.email.text,
+            'html': this.state.email.html
+        };
 
         this.setState({'errorText': errorText});
 
@@ -99,13 +109,14 @@ class SendEmail extends Component {
             }
         });
 
-        if (stepIndex < 1 && status)
-        {
+        if (stepIndex < 1 && status) {
             this.setState({stepIndex: stepIndex + 1});
         }
     };
 
-    fncValidValue = (value) => { return value !== undefined && value !== ""};
+    fncValidValue = (value) => {
+        return value !== undefined && value !== ""
+    };
 
     fncHandlePrev = () => {
         const {stepIndex} = this.state;
@@ -130,7 +141,7 @@ class SendEmail extends Component {
         signatures = _.sortBy(signatures, ['name', 'email']);
 
         let rows = signatures.map((student) =>
-            <TableRow key={student._id} selected={this.isSelectedRow(student._id)} >
+            <TableRow key={student._id} selected={this.isSelectedRow(student.email)}>
                 <TableRowColumn>{student.name}</TableRowColumn>
                 <TableRowColumn>{student.email}</TableRowColumn>
                 <TableRowColumn>{student.signature ? 'ativa' : 'desativa'}</TableRowColumn>
@@ -142,74 +153,60 @@ class SendEmail extends Component {
 
     rowSelected = (item) => {
         let rows = this.state.rows;
-        if (item === 'all')
-        {
-            _.forEach(rows, (item) =>
-            {
-                let result = _.filter(this.state.signatures, (o) => {return o._id===item.key});
-                if(result.length>0)
-                {
-                    this.addRowSelected(result[0].email);
+        this.keyRowsSelected = [];
+        if (item === 'all') {
+            _.forEach(rows, (item) => {
+                let result = _.filter(this.state.signatures, (o) => {
+                    return o._id === item.key
+                });
+                if (result.length > 0) {
+                    this.keyRowsSelected.push(result[0].email);
                 }
 
             });
         }
 
-        if (item !== 'all' && item !== 'none')
-        {
-            _.forEach(item, (value) =>
-            {
+        if (item !== 'all' && item !== 'none') {
+            _.forEach(item, (value) => {
 
-                let result = _.filter(this.state.signatures, (o) => {return o._id===rows[value].key});
-                if(result.length>0)
-                {
-                    this.addRowSelected(result[0].email);
+                let result = _.filter(this.state.signatures, (o) => {
+                    return o._id === rows[value].key
+                });
+                if (result.length > 0) {
+                    this.keyRowsSelected.push(result[0].email);
                 }
             });
 
         }
 
-        // let remakeRow = [];
-        // _.forEach(rows, (item) =>
-        // {
-        //     let result = _.filter(this.state.signatures, (o) => {return o._id===item.key});
-        //     if (result.length>0 && result[0].name !== undefined)
-        //     {
-        //         remakeRow.push(result[0])
-        //     }
-        // });
-        //
-        // if (remakeRow.length >0)
-        // {
-        //     this.fncMakeRows(remakeRow);
-        // }
+        let remakeRow = [];
+        _.forEach(rows, (item) => {
+            let result = _.filter(this.state.signatures, (o) => {
+                return o._id === item.key
+            });
+            if (result.length > 0 && result[0].name !== undefined) {
+                remakeRow.push(result[0])
+            }
+        });
+
+        if (remakeRow.length > 0) {
+            this.fncMakeRows(remakeRow);
+        }
 
     };
 
-    addRowSelected = (id) =>{
-        let keyRowsSelected = this.state.keyRowsSelected;
-
-        let result = _.filter(keyRowsSelected, (o) => {return o===id});
-
-        if (result.length>0)
-        {
-            keyRowsSelected.shift(id);
-        }
-        else
-        {
-            keyRowsSelected.push(id);
-        }
-        this.setState({'keyRowsSelected': keyRowsSelected});
-    };
 
     isSelectedRow = (id) => {
-        let result = _.filter(this.state.keyRowsSelected, (o) => {return o===id});
+        let result = _.filter(this.keyRowsSelected, (o) => {
+            return o === id
+        });
         return result.length > 0;
     };
 
     styles = {
         tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
         tableBody: {cursor: 'pointer'},
+        toggle:{ maxWidth: 250, marginTop:'20px'}
     };
 
     getStepContent(stepIndex) {
@@ -259,24 +256,24 @@ class SendEmail extends Component {
 
                         <span className="display-block">
                              <TextField
-                                    hintText="informe o nome do aluno"
-                                    floatingLabelText="Pesquisar assinatura"
-                                    type="text"
-                                    errorText={this.state.errorText.recipients}
-                                    fullWidth={true}
-                                    onChange={() => this.fncFilterRows()}
-                                    ref={(input) => this.search = input}/>
+                                 hintText="informe o nome do aluno"
+                                 floatingLabelText="Pesquisar assinatura"
+                                 type="text"
+                                 errorText={this.state.errorText.recipients}
+                                 fullWidth={true}
+                                 onChange={() => this.fncFilterRows()}
+                                 ref={(input) => this.search = input}/>
                         </span>
-
                         <Table
+                            height={'300px'}
                             fixedHeader={true}
                             selectable={true}
                             multiSelectable={true}
-                            onRowSelection={this.rowSelected}>
+                            onRowSelection={(item) => this.rowSelected(item)}>
                             <TableHeader
                                 style={this.styles.tableHeader}
                                 displaySelectAll={true}
-                                adjustForCheckbox={false}
+                                adjustForCheckbox={true}
                                 enableSelectAll={true}>
 
                                 <TableRow>
@@ -292,8 +289,6 @@ class SendEmail extends Component {
                                 {this.state.rows}
                             </TableBody>
                         </Table>
-
-                        <span className={'title'}>{this.state.keyRowsSelected.length} destinatarios selecionados.</span>
                     </div>
                 );
 
@@ -325,12 +320,17 @@ class SendEmail extends Component {
             <div>
                 <Dialog
                     title="Enviando email"
+                    autoScrollBodyContent={true}
                     actions={actions}
                     modal={true}
-                    contentStyle={{width: '80%', maxWidth: 'none'}}
-                    bodyStyle={{minHeight:'350px',maxHeight:'350px'}}
+                    style={{margin:'0',minHeight: '450px', maxHeight: '450px'}}
+                    titleStyle={{padding:'30px', marginTop:'-40px'}}
+                    contentStyle={{width: '80%', maxWidth: 'none',minHeight: '450px', maxHeight: '450px'}}
+                    bodyStyle={{minHeight: '400px', maxHeight: '400px'}}
                     open={this.state.open}
                 >
+                    {this.state.sending ?<LinearProgress mode="indeterminate" />  : null}
+
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon/>}>
                         <Step>
                             <StepLabel>Informações básicas</StepLabel>
@@ -341,6 +341,12 @@ class SendEmail extends Component {
                         </Step>
                     </Stepper>
                     {this.getStepContent(stepIndex)}
+                    <Snackbar
+                        open={this.state.response}
+                        message="Emails diparados com sucesso."
+                        autoHideDuration={5000}
+                        onRequestClose={this.fncCanStep}
+                    />
                 </Dialog>
             </div>
         );
