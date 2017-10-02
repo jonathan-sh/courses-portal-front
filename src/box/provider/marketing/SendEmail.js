@@ -10,14 +10,18 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import httpService from '../../../service/HttpService';
 
+
 class SendEmail extends Component {
     constructor(props) {
         super(props);
         this.httpService = new httpService();
         this.state = {
-            stepIndex: 0, open: true, email: {subject: "", html: "", text: "", destinations: []},
+            stepIndex: 0, open: true, email: {subject: "", html: "", text: "", recipients: []},
             makeSend: false,
-            signatures:[]
+            errorText:{subject: "", text: "", html: "", recipients: ""},
+            signatures:[],
+            rows:[],
+            keyRowsSelected:[]
         };
     }
 
@@ -27,6 +31,22 @@ class SendEmail extends Component {
 
     fncFillStudents = () => {
         this.httpService.get('/student/signature', localStorage.getItem('auth-token'))
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(success => {
+                this.setState({signatures: success});
+                this.fncMakeRows(this.state.signatures);
+            })
+            .catch(error => {
+                this.setState({msg: error.message});
+            });
+    };
+
+    fncSendEmail = (data) => {
+        this.httpService.post('/provider/send-email',data,localStorage.getItem('auth-token'))
             .then(response => {
                 if (response.status === 200) {
                     return response.json();
@@ -52,17 +72,40 @@ class SendEmail extends Component {
         this.setState(email);
     };
 
-    fncSendEmail = () => {
-        alert("Enviando...");
+    fncValidAndSendEmail = () => {
+        let email= {subject: this.state.email.subject,
+                    html: this.state.email.html,
+                    text: this.state.email.text,
+                    recipients: this.state.keyRowsSelected};
+        this.fncSendEmail(email);
+
     };
 
     fncHandleNext = () => {
         const {stepIndex} = this.state;
+        let status = true;
 
-        if (stepIndex < 1) {
+        let errorText = {subject: "", text: "", recipients: ""};
+        let email = {'subject':this.state.email.subject,
+                        'text':this.state.email.text,
+                        'html':this.state.email.html};
+
+        this.setState({'errorText': errorText});
+
+        _.forEach(email, (value, key) => {
+            if (!this.fncValidValue(value)) {
+                status = false;
+                errorText[key] = 'Informe este campo';
+            }
+        });
+
+        if (stepIndex < 1 && status)
+        {
             this.setState({stepIndex: stepIndex + 1});
         }
     };
+
+    fncValidValue = (value) => { return value !== undefined && value !== ""};
 
     fncHandlePrev = () => {
         const {stepIndex} = this.state;
@@ -87,7 +130,7 @@ class SendEmail extends Component {
         signatures = _.sortBy(signatures, ['name', 'email']);
 
         let rows = signatures.map((student) =>
-            <TableRow key={student._id}>
+            <TableRow key={student._id} selected={this.isSelectedRow(student._id)} >
                 <TableRowColumn>{student.name}</TableRowColumn>
                 <TableRowColumn>{student.email}</TableRowColumn>
                 <TableRowColumn>{student.signature ? 'ativa' : 'desativa'}</TableRowColumn>
@@ -98,7 +141,70 @@ class SendEmail extends Component {
     };
 
     rowSelected = (item) => {
-        console.log(item);
+        let rows = this.state.rows;
+        if (item === 'all')
+        {
+            _.forEach(rows, (item) =>
+            {
+                let result = _.filter(this.state.signatures, (o) => {return o._id===item.key});
+                if(result.length>0)
+                {
+                    this.addRowSelected(result[0].email);
+                }
+
+            });
+        }
+
+        if (item !== 'all' && item !== 'none')
+        {
+            _.forEach(item, (value) =>
+            {
+
+                let result = _.filter(this.state.signatures, (o) => {return o._id===rows[value].key});
+                if(result.length>0)
+                {
+                    this.addRowSelected(result[0].email);
+                }
+            });
+
+        }
+
+        // let remakeRow = [];
+        // _.forEach(rows, (item) =>
+        // {
+        //     let result = _.filter(this.state.signatures, (o) => {return o._id===item.key});
+        //     if (result.length>0 && result[0].name !== undefined)
+        //     {
+        //         remakeRow.push(result[0])
+        //     }
+        // });
+        //
+        // if (remakeRow.length >0)
+        // {
+        //     this.fncMakeRows(remakeRow);
+        // }
+
+    };
+
+    addRowSelected = (id) =>{
+        let keyRowsSelected = this.state.keyRowsSelected;
+
+        let result = _.filter(keyRowsSelected, (o) => {return o===id});
+
+        if (result.length>0)
+        {
+            keyRowsSelected.shift(id);
+        }
+        else
+        {
+            keyRowsSelected.push(id);
+        }
+        this.setState({'keyRowsSelected': keyRowsSelected});
+    };
+
+    isSelectedRow = (id) => {
+        let result = _.filter(this.state.keyRowsSelected, (o) => {return o===id});
+        return result.length > 0;
     };
 
     styles = {
@@ -116,6 +222,7 @@ class SendEmail extends Component {
                             floatingLabelText="Assundo"
                             type="text"
                             disabled={this.state.makeSend}
+                            errorText={this.state.errorText.subject}
                             fullWidth={true}
                             ref={(input) => this.subject = input}
                             onChange={(event, value) => this.fncSetData(event, value, 'subject')}
@@ -125,6 +232,7 @@ class SendEmail extends Component {
                             floatingLabelText="Texto"
                             type="text"
                             disabled={this.state.makeSend}
+                            errorText={this.state.errorText.text}
                             fullWidth={true}
                             multiLine={true}
                             ref={(input) => this.text = input}
@@ -135,6 +243,7 @@ class SendEmail extends Component {
                             floatingLabelText="HTML"
                             type="text"
                             disabled={this.state.makeSend}
+                            errorText={this.state.errorText.html}
                             fullWidth={true}
                             multiLine={true}
                             ref={(input) => this.html = input}
@@ -153,6 +262,7 @@ class SendEmail extends Component {
                                     hintText="informe o nome do aluno"
                                     floatingLabelText="Pesquisar assinatura"
                                     type="text"
+                                    errorText={this.state.errorText.recipients}
                                     fullWidth={true}
                                     onChange={() => this.fncFilterRows()}
                                     ref={(input) => this.search = input}/>
@@ -162,12 +272,13 @@ class SendEmail extends Component {
                             fixedHeader={true}
                             selectable={true}
                             multiSelectable={true}
-                            onRowSelection={(item) => this.rowSelected(item)}>
+                            onRowSelection={this.rowSelected}>
                             <TableHeader
                                 style={this.styles.tableHeader}
                                 displaySelectAll={true}
-                                adjustForCheckbox={true}
+                                adjustForCheckbox={false}
                                 enableSelectAll={true}>
+
                                 <TableRow>
                                     <TableHeaderColumn>Nome do aluno</TableHeaderColumn>
                                     <TableHeaderColumn>Email do aluno</TableHeaderColumn>
@@ -176,10 +287,13 @@ class SendEmail extends Component {
                             </TableHeader>
                             <TableBody displayRowCheckbox={true}
                                        showRowHover={true}
+                                       deselectOnClickaway={false}
                                        style={this.styles.tableBody}>
                                 {this.state.rows}
                             </TableBody>
                         </Table>
+
+                        <span className={'title'}>{this.state.keyRowsSelected.length} destinatarios selecionados.</span>
                     </div>
                 );
 
@@ -202,7 +316,7 @@ class SendEmail extends Component {
                 labelStyle={{color: 'white'}}
                 label={stepIndex === 1 ? 'Enviar' : 'Proximo'}
                 primary={true}
-                onTouchTap={stepIndex === 1 ? this.fncSendEmail : this.fncHandleNext}
+                onTouchTap={stepIndex === 1 ? this.fncValidAndSendEmail : this.fncHandleNext}
                 style={{float: 'right', marginRight: '10px'}}/>
             ,
         ];
@@ -214,7 +328,7 @@ class SendEmail extends Component {
                     actions={actions}
                     modal={true}
                     contentStyle={{width: '80%', maxWidth: 'none'}}
-                    bodyStyle={{minHeight:'450px',maxHeight:'450px'}}
+                    bodyStyle={{minHeight:'350px',maxHeight:'350px'}}
                     open={this.state.open}
                 >
                     <Stepper activeStep={stepIndex} connector={<ArrowForwardIcon/>}>
@@ -231,6 +345,8 @@ class SendEmail extends Component {
             </div>
         );
     }
+
+
 }
 
 

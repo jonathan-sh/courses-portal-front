@@ -14,6 +14,7 @@ import history from '../../../service/router/History';
 import Avatar from 'material-ui/Avatar';
 import srcImage from '../../../style/img/course-not-found-2.jpg';
 
+
 class App extends Component {
 
     constructor(props) {
@@ -85,6 +86,7 @@ class App extends Component {
             <div key={index}>
                 <MenuItem
                     value={item.description}
+                    onTouchTap={() => {history.push('/course/'+item._id)}}
                     primaryText={item.name} />
 
             </div>
