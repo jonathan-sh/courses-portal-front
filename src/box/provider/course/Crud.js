@@ -5,6 +5,7 @@ import Information from './Information';
 import AddStep from './AddStep';
 import PubSub from 'pubsub-js';
 import Step from './Step';
+import _ from 'lodash';
 
 class Crud extends Component {
 
@@ -52,7 +53,8 @@ class Crud extends Component {
     mapSteps = () => {
         if (this.state.course.steps !== undefined && this.state.course.steps !== null)
         {
-            this.steps = this.state.course.steps.map((step) =>
+            let st = _.sortBy(this.state.course.steps, ['order']);
+            this.steps = st.map((step) =>
                 <RaisedButton
                     key={step.order}
                     label={step.name}
