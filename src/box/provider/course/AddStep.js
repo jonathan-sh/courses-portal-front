@@ -8,8 +8,8 @@ import PubSub from 'pubsub-js';
 import httpService from '../../../service/HttpService';
 
 class Material extends Component {
-    constructor(pros) {
-        super(pros);
+    constructor(props) {
+        super(props);
         this.httpService = new httpService();
         this.state = {
             open: true,
@@ -58,7 +58,7 @@ class Material extends Component {
     fncGetDataStep = () => {
         let course = {
             '_id': this.state.course._id,
-            'steps': [{'name': this.state.step.name, 'description': this.state.step.name}]
+            'steps': [{'name': this.state.step.name, 'description': this.state.step.description}]
         };
         return course;
     };
@@ -89,7 +89,6 @@ class Material extends Component {
         this.setState({'errorText': errorText});
 
         return status;
-
     };
 
 

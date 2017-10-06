@@ -184,10 +184,10 @@ class ListPublic extends Component
                     <TextField
                         hintText="O que você vai estudar ?"
                         floatingLabelText="Buscar cursos"
-                        style={{marginTop: '2.7%', marginLeft: '7%', width: '86%', position: 'fixed', zIndex: '8', background:'#fff'}}
+                        style={{marginTop: '50px', marginLeft: '5%', width: '90%', position: 'fixed', zIndex: '8', background:'#fff'}}
                     />
                 </div>
-                <div style={{top: '125px', position: 'absolute'}}>
+                <div style={{top: '125px', position: 'absolute', width: '100%'}}>
                     {this.state.boxComponent}
                 </div>
             </div>

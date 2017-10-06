@@ -8,8 +8,8 @@ import Step from './Step';
 
 class Crud extends Component {
 
-    constructor(pros) {
-        super(pros);
+    constructor(props) {
+        super(props);
         this.state = {showInformationCourse: false,
                       showNewStep: false,
                       showEditStep: false,
@@ -17,6 +17,7 @@ class Crud extends Component {
                       course: (this.props.course !== undefined)? this.props.course : []};
         this.steps = [];
         this.mapSteps();
+        console.log(this.state);
     }
 
     componentDidMount() {
@@ -43,6 +44,7 @@ class Crud extends Component {
     };
 
     fncEditSep = (step) => {
+        step._id = this.state.course._id;
         this.setState({'step': step});
         this.setState({showEditStep: true});
     };

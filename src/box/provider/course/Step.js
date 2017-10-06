@@ -8,6 +8,7 @@ import Prove from './Prove';
 import MaterialAdd from './Material';
 import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
+import httpService from '../../../service/HttpService';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -16,22 +17,60 @@ class Steps extends Component {
     constructor(props) {
         super(props);
         console.log(props);
+        this.httpService = new httpService();
         this.state = {
              showStep: true,
              showQuestion: false,
              stepIndex: 0,
              open: true,
-             step: {name: props.step.name, description: props.step.description},
+             step: {_id: props.step._id, order: props.step.order, name: props.step.name, description: props.step.description},
              errorText: {name: '', description: ''}
         };
     }
 
-    fncCanStep = () => {
+    fncHandleSave = () => {
+        this.fncGetDataStep();
+
+        if (this.fncValidData())
+        {
+            this.httpService.put('/course', this.fncGetDataStep(), localStorage.getItem('auth-token'))
+                .then(response => {
+                    if (response.status !== 501) {
+                        return response.json();
+                    }
+                    throw new Error('Falha de autenticação.');
+                })
+                .then(success => {
+                    PubSub.publish('crud-get-course',success);
+                    this.handleClose();
+                })
+                .catch(error => {
+                    this.setState({msg: error.message});
+                });
+        }
+
         PubSub.publish('close-edit-step');
         this.setState({open: false});
     };
+
+    fncGetDataStep = () => {
+        let course = {
+            '_id': this.state.step._id,
+            'steps': [{'order': this.state.step.order, 'name': this.state.step.name, 'description': this.state.step.description}]
+        };
+        console.log(course);
+        return course;
+    };
+
+    fncCanStep = () =>
+    {
+        PubSub.publish('close-edit-step');
+        this.setState({open: false});
+    };
+
     fncShowQuestion = () => this.setState({showQuestion: true});
     fncShowProve = () => this.setState({showProve: true});
+
     fncHandleNext = () => {
         const {stepIndex} = this.state;
 
@@ -39,6 +78,7 @@ class Steps extends Component {
             this.setState({stepIndex: stepIndex + 1});
         }
     };
+
     fncHandlePrev = () => {
         const {stepIndex} = this.state;
 
@@ -83,6 +123,34 @@ class Steps extends Component {
             style={{marginTop: '5px'}}>
         </RaisedButton>
     );
+
+    fncValidData = () => {
+        let status = true;
+
+        let errorText = {name: '', description: ''};
+
+        this.setState({'errorText': errorText});
+
+        if (this.name === undefined || this.state.step.name === '') {
+            errorText.name = 'Informe um nome';
+            status = false;
+        }
+        if (this.description === undefined || this.state.step.description === '') {
+            errorText.description = 'Informe uma descrição';
+            status = false;
+        }
+
+        this.setState({'errorText': errorText});
+
+        return status;
+    };
+
+    setData = (event, value, attribute) =>
+    {
+        let step = this.state.step;
+        step[attribute] = value;
+        this.setState({'step':step});
+    };
 
     getStepContent(stepIndex) {
         switch (stepIndex) {
@@ -176,7 +244,7 @@ class Steps extends Component {
                 labelStyle={{color: 'white'}}
                 label={stepIndex === 3 ? 'Concluir' : 'Proximo'}
                 primary={true}
-                onTouchTap={stepIndex === 3 ? this.fncCanStep : this.fncHandleNext}
+                onTouchTap={stepIndex === 3 ? this.fncHandleSave : this.fncHandleNext}
                 style={{float: 'right', marginRight: '10px'}}/>
             ,
         ];
