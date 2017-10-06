@@ -1,0 +1,133 @@
+.link-routes
+{
+    text-decoration: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+p{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: justify;
+}
+
+.pagraf{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: justify;
+}
+
+
+.subTitle{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: center;
+    position: absolute;
+    margin: auto;
+    margin-top: 20%;
+    left: 0;
+    right: 0;
+    padding: 2%;
+    font-size: 40px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    z-index: 0;
+}
+
+.plainTitle{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: center;
+    margin: auto;
+    padding-top: 4%;
+    left: 0;
+    right: 0;
+    display: inherit;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+.title{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: center;
+}
+
+.subTopic{
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: left;
+    width: 100%;
+    display: inline-flex;
+}
+
+
+.home{
+    background-image: url("./../img/home-background.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height:700px;
+}
+
+.course-not-found-1{
+    background-image: url("./../img/course-not-found-1.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height:900px;
+    overflow-y: hidden;
+}
+
+.headerBar{
+    position: fixed;
+    width: 100%;
+    z-index: 9;
+    top: 0;
+}
+
+.about{
+    background: #ffffff;
+    font-family: 'Roboto';
+    font-weight: 300;
+    text-align: justify;
+    font-size: 18px;
+}
+
+.boxAbout
+{
+    width: 70%;
+    margin: 0 20px 10px 15%;
+    display: grid;
+}
+
+.boxTopics
+{
+    text-align: center;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-plans{
+    background-image: url("./../img/home-plans.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height:700px;
+    text-align: center;
+}
+.curse-home{
+    background-image: url("./../img/learning.jpg");
+    background-size: 100%;
+    text-align: center;
+}
+
+.headerInfoCurse{
+    font-family: 'Roboto';
+    text-align: left;
+    font-weight: 400;
+    background: #00bcd4;
+    color: #fff;
+    padding: 1%;
+}

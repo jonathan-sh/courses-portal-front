@@ -1,0 +1,31 @@
+::-webkit-scrollbar{width:0;height:0;}
+::-webkit-scrollbar-button{width:0;height:0;}
+
+.title-box
+{
+    font-family: 'Roboto';
+    font-weight: 300;
+    margin-left: 10%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.component-category
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.horizontal-scroll
+{
+    display: -webkit-box;
+    overflow-x: auto;
+    float: left;
+    width: 80%;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    padding-left: 2px
+}
+
