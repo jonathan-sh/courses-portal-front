@@ -3,28 +3,36 @@
  */
 import React, {Component} from "react";
 import HeaderBar from './../bar/HeaderBar';
-import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import Divider from 'material-ui/Divider';
 import '../../../style/css/listCourse.css'
-import IconButton from 'material-ui/IconButton';
-import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
-import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import srcImage from '../../../style/img/course-not-found-2.jpg';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import SearchCourse from './../course/components/SearchCourse'
+import CardCourse from './../course/components/CardCourse';
+import array from './../../../service/Array';
+
+/* Exemple card course
+
+    <CardCourse
+        image={srcImage}
+        access={this.verifyAccess()}
+        grade={this.state.grade}
+    />
+
+ */
 
 class ListPublic extends Component
 {
     constructor()
     {
         super();
-
+        this.array = new array();
         this.state =
         {
             boxComponent: '',
             grade: JSON.parse(localStorage.getItem('grade')),
             student: JSON.parse(localStorage.getItem('student')),
-            componentMove: []
+            isFilter: false
         };
     };
 
@@ -32,78 +40,6 @@ class ListPublic extends Component
     {
         canAccess:'#0ac752',
         canNotAccess:'#ff4081'
-    };
-
-    componentDidMount()
-    {
-        this.createBoxComponent();
-    };
-
-    createBoxComponent = () =>
-    {
-        const grade = this.state.grade;
-        let componentMove = {};
-
-        if(grade !== null && grade !== undefined)
-        {
-            let boxes = grade.map((grade, index) =>
-            {
-                componentMove[grade.description] = {firstItem: 0, lastItem: 5};
-
-                return <div key={index}>
-                    <h2 className='title-box'>Cursos em {grade.description} ...</h2>
-                    <div className='component-category'>
-                        <IconButton
-                            style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
-                            iconStyle={{width: 48, height: 48}}
-                            tooltip='Voltar'
-                            onClick={(event, object, action) => this.actionMove(event, grade, 'back')}>
-                            <ArrowLeft color='#00bcd4'/>
-                        </IconButton>
-                        <div className="horizontal-scroll">
-                            {
-                                this.createCardComponent(grade)
-                            }
-                        </div>
-                        <IconButton
-                            style={{background: 'transparent', width: 64, height: 64, padding: 8, float: 'left'}}
-                            iconStyle={{width: 48, height: 48}}
-                            tooltip='Ir'
-                            onClick={(event, object, action) => this.actionMove(event, grade, 'go')}>
-                            <ArrowRight color='#00bcd4'/>
-                        </IconButton>
-                    </div>
-                    <Divider style={{width: '80.5%',
-                        marginLeft: '9.8%',
-                        marginTop: '2%',
-                        backgroundColor: 'rgba(224, 224, 224, 0.5)'}}
-                    />
-                </div>
-            });
-
-            this.setState({'boxComponent': boxes, 'componentMove': componentMove});
-        }
-    };
-
-    createCardComponent = (grade) =>
-    {
-        let courses = grade.courses;
-
-        return courses.map((card, index) =>
-            <Card id={grade.description+index} key={index} style={{width: '18.35%', marginRight: '2%'}}>
-                <CardMedia>
-                    <img src={srcImage} alt=''/>
-                </CardMedia>
-                <CardTitle style={{paddingBottom: '0%'}} titleStyle={{fontSize: '20px', fontWeight: '300'}} title={card.name}/>
-                <CardText>
-                    {card.description}
-                </CardText>
-                <Divider />
-                <CardActions style={{textAlign:'right'}}>
-                    {this.verifyAccess()}
-                </CardActions>
-            </Card>
-        );
     };
 
     verifyAccess = () =>
@@ -133,45 +69,19 @@ class ListPublic extends Component
                 />;
     };
 
-    actionMove = (event, grade, action) =>
+    fncFilterCourses = () =>
     {
-        const id = '#' + grade.description;
-        let box = this.state.componentMove;
-        let move = this.state.componentMove[grade.description];
-        const step = 5;
-
-        if(action === 'go')
+        let filter = this.search.input.value;
+        filter = filter.toUpperCase();
+        console.log(filter);
+        if(filter !== null && filter !== undefined && filter !== "")
         {
-            if(grade.courses.length < move.lastItem + step)
-            {
-                move.firstItem = grade.courses.length - step -1;
-                move.lastItem = grade.courses.length - 1;
-            }
-            else
-            {
-                move.firstItem += step;
-                move.lastItem += step;
-            }
-            window.location = id + move.lastItem;
+            this.setState({'isFilter': true});
         }
         else
         {
-            if(move.firstItem - step < 0)
-            {
-                move.firstItem = 0;
-                move.lastItem = 5;
-            }
-            else
-            {
-                move.firstItem -= step;
-                move.lastItem -= step;
-            }
-
-            window.location = id + move.firstItem;
+            this.setState({'isFilter': false});
         }
-
-        box[move] = move;
-        this.setState({'componentMove': box});
     };
 
     render()
@@ -183,11 +93,27 @@ class ListPublic extends Component
                     <TextField
                         hintText="O que você vai estudar ?"
                         floatingLabelText="Buscar cursos"
-                        style={{marginTop: '50px', marginLeft: '5%', width: '90%', position: 'fixed', zIndex: '8', background:'#fff'}}
+                        className='input-search'
+                        style={{width: '90%',  position: 'fixed', backgroundColor: '#fff'}}
+                        onChange={()=> this.fncFilterCourses()}
+                        ref={(input) => this.search = input}/>
                     />
                 </div>
-                <div style={{top: '125px', position: 'absolute', width: '100%'}}>
-                    {this.state.boxComponent}
+                <div className='group-components'>
+                {
+                    this.state.isFilter ?
+                        <SearchCourse
+                            grade={this.state.grade}
+                            access={this.verifyAccess()}
+                            image={srcImage}
+                        />
+                        :
+                        <CardCourse
+                            image={srcImage}
+                            access={this.verifyAccess()}
+                            grade={this.state.grade}
+                        />
+                }
                 </div>
             </div>
         );
