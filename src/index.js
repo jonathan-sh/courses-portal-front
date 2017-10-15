@@ -21,7 +21,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         localStorage.getItem('auth-token') !== null ?
         (<Component {...props}/>) : (<Redirect to={{pathname: '/login/provider'}}/>)
     )}/>
-)
+);
 
 const Main = () => (
     <MuiThemeProvider>

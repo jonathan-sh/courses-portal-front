@@ -10,18 +10,9 @@ import TextField from 'material-ui/TextField';
 import SearchCourse from './../course/components/SearchCourse'
 import CardCourse from './../course/components/CardCourse';
 import array from './../../../service/Array';
+import PubSub from 'pubsub-js';
 
-/* Exemple card course
-
-    <CardCourse
-        image={srcImage}
-        access={this.verifyAccess()}
-        grade={this.state.grade}
-    />
-
- */
-
-class ListPublic extends Component
+class ListCourses extends Component
 {
     constructor()
     {
@@ -32,7 +23,7 @@ class ListPublic extends Component
             boxComponent: '',
             grade: JSON.parse(localStorage.getItem('grade')),
             student: JSON.parse(localStorage.getItem('student')),
-            isFilter: false
+            isFilter: false,
         };
     };
 
@@ -73,10 +64,10 @@ class ListPublic extends Component
     {
         let filter = this.search.input.value;
         filter = filter.toUpperCase();
-        console.log(filter);
         if(filter !== null && filter !== undefined && filter !== "")
         {
             this.setState({'isFilter': true});
+            PubSub.publish('refresh-filter', filter);
         }
         else
         {
@@ -96,7 +87,7 @@ class ListPublic extends Component
                         className='input-search'
                         style={{width: '90%',  position: 'fixed', backgroundColor: '#fff'}}
                         onChange={()=> this.fncFilterCourses()}
-                        ref={(input) => this.search = input}/>
+                        ref={(input) => this.search = input}
                     />
                 </div>
                 <div className='group-components'>
@@ -106,6 +97,7 @@ class ListPublic extends Component
                             grade={this.state.grade}
                             access={this.verifyAccess()}
                             image={srcImage}
+                            filter={this.search.input.value.toUpperCase()}
                         />
                         :
                         <CardCourse
@@ -120,4 +112,4 @@ class ListPublic extends Component
     }
 }
 
-export default ListPublic;
+export default ListCourses;
