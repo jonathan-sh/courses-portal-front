@@ -167,7 +167,7 @@ class Question extends Component {
                              label="[A]"/>
 
                         <TextField
-                            hintText="descreva a alternatica A"
+                            hintText="descreva a alternativa A"
                             floatingLabelText="Alternativa A"
                             type="text"
                             style={this.styles.inputText}
@@ -188,7 +188,7 @@ class Question extends Component {
                         label="[B]"
                     />
                     <TextField
-                        hintText="descreva a alternatica B"
+                        hintText="descreva a alternativa B"
                         floatingLabelText="Alternativa B"
                         type="text"
                         style={this.styles.inputText}
@@ -207,7 +207,7 @@ class Question extends Component {
                         label="[C]"
                     />
                     <TextField
-                        hintText="descreva a alternatica C"
+                        hintText="descreva a alternativa C"
                         floatingLabelText="Alternativa C"
                         type="text"
                         style={this.styles.inputText}
@@ -225,7 +225,7 @@ class Question extends Component {
                         label="[D]"
                     />
                     <TextField
-                        hintText="descreva a alternatica D"
+                        hintText="descreva a alternativa D"
                         floatingLabelText="Alternativa D"
                         type="text"
                         style={this.styles.inputText}
@@ -243,7 +243,7 @@ class Question extends Component {
                         label="[E]"
                     />
                     <TextField
-                        hintText="descreva a alternatica E"
+                        hintText="descreva a alternativa E"
                         floatingLabelText="Alternativa E"
                         type="text"
                         style={this.styles.inputText}
