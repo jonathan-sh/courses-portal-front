@@ -1,0 +1,62 @@
+::-webkit-scrollbar{width:0;height:0;}
+::-webkit-scrollbar-button{width:0;height:0;}
+
+.title-box
+{
+    font-family: 'Roboto';
+    font-weight: 300;
+    margin-left: 10%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.component-category
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.horizontal-scroll
+{
+    display: -webkit-box;
+    overflow-x: auto;
+    float: left;
+    width: 80%;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    padding-left: 2px
+}
+
+.group-components
+{
+    top: 125px;
+    position: absolute;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.box-search
+{
+    display: block;
+}
+
+.input-search
+{
+    margin-top: 50px;
+    margin-left: 5%;
+    z-index: 8;
+}
+
+.card-search
+{
+    margin-left: 15%;
+    max-width: 70%;
+    min-width: 70%;
+    width: 70%;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
+    margin-top: 2%;
+}
+

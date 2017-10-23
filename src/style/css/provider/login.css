@@ -1,0 +1,48 @@
+.div-dad 
+{ 
+    display: table;
+    margin-left: 20%;
+    margin-top: 5%;
+    width: 60%; 
+}
+
+.div-info {
+    text-align: justify;
+    margin-right: 50%;
+}
+
+.div-login 
+{
+    float: right;
+    width: 45%; 
+    padding: 3%; 
+}
+
+.button
+{
+    margin: 2%;
+    width: 45%;
+}
+
+.font
+{
+    margin: 0;
+    margin-top: 1%; 
+    text-align: center;
+    font-family: 'Roboto';
+}
+
+.div-action
+{
+    margin-top: 4%;
+}
+
+.forgot-password
+{
+    margin-top: 5%;
+    color: #ff7500;
+}
+
+.display-block{
+    display:block;
+}
