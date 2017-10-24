@@ -4,24 +4,23 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
+import NewIco from 'material-ui/svg-icons/content/add';
 
 class Prove extends Component {
     constructor() {
         super();
-        this.state = {
-            open: true,};
+        this.state = {open: false};
 
     }
+
+    fncHandleOpen = () => this.setState({open: true});
 
     fncHandleClose = () => this.setState({open: false});
 
     fncHandleSave = () => this.setState({open: false});
 
-    questions = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
-    question = this.questions.map((question) =>
-        <Checkbox
-
-            key={question} label={"Descrição da pergunda "+ question}/>
+    questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    question = this.questions.map((question) =>  <Checkbox key={question} label={"Descrição da pergunda " + question}/>
     );
 
     actions = [
@@ -40,28 +39,38 @@ class Prove extends Component {
 
     render() {
         return (
-            <Dialog
-                title="Adicionando prova"
-                autoScrollBodyContent={true}
-                actions={this.actions}
-                modal={true}
-                style={{margin:'0'}}
-                titleStyle={{padding:'15px'}}
-                contentStyle={{width: '80%', maxWidth: 'none', marginTop:'-40px'}}
-                open={this.state.open}>
-                <p>Você ainda pode seleconar [ X ] questoes: </p>
+            <div>
+                <RaisedButton
+                    label="prove"
+                    backgroundColor="#0ac752"
+                    icon={<NewIco color="#FFF"/>}
+                    labelStyle={{color: 'white'}}
+                    keyboardFocused={true}
+                    onTouchTap={this.fncHandleOpen}
+                    style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+                <Dialog
+                    title="Adicionando prova"
+                    autoScrollBodyContent={true}
+                    actions={this.actions}
+                    modal={true}
+                    style={{margin: '0'}}
+                    titleStyle={{padding: '15px'}}
+                    contentStyle={{width: '80%', maxWidth: 'none', marginTop: '-40px'}}
+                    open={this.state.open}>
+                    <p>Você ainda pode seleconar [ X ] questoes: </p>
 
-                <div style={{overflow: 'auto', height: '200px'}}>
-                    {this.question}
-               </div>
-                <br/>
-                <Toggle
-                    label="Usar perguntas aleatorias"
-                    defaultToggled={false}
-                    style={{width:'0%'}}
-                />
+                    <div style={{overflow: 'auto', height: '200px'}}>
+                        {this.question}
+                    </div>
+                    <br/>
+                    <Toggle
+                        label="Usar perguntas aleatorias"
+                        defaultToggled={false}
+                        style={{width: '0%'}}
+                    />
 
-            </Dialog>
+                </Dialog>
+            </div>
 
         );
     }

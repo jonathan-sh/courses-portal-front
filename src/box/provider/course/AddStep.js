@@ -6,13 +6,14 @@ import TextField from 'material-ui/TextField';
 import LinearProgress from 'material-ui/LinearProgress';
 import PubSub from 'pubsub-js';
 import httpService from '../../../service/HttpService';
+import NewIco from 'material-ui/svg-icons/content/add';
 
 class Material extends Component {
     constructor(props) {
         super(props);
         this.httpService = new httpService();
         this.state = {
-            open: true,
+            open: false,
             step: {name: '', description: ''},
             errorText: {name: '', description: ''}
         };
@@ -29,10 +30,9 @@ class Material extends Component {
         }
     };
 
-    handleClose = () => {
-        PubSub.publish('close-new-step', true);
-        this.setState({open: false});
-    };
+    fncHandleOpen = () => this.setState({open: true});
+
+    fncHandleClose = () => { this.setState({open: false});};
 
     fncHandleSave = () => {
         this.fncGetDataStep();
@@ -47,7 +47,7 @@ class Material extends Component {
                 })
                 .then(success => {
                     PubSub.publish('crud-get-course',success);
-                    this.handleClose();
+                    this.fncHandleClose();
                 })
                 .catch(error => {
                     this.setState({msg: error.message});
@@ -97,7 +97,7 @@ class Material extends Component {
             <FlatButton
                 label="Cancelar"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.fncHandleClose}
             />,
             <RaisedButton label="Salvar etapa"
                           primary={true}
@@ -106,6 +106,14 @@ class Material extends Component {
 
         return (
             <div>
+                <RaisedButton
+                    label="etapa"
+                    backgroundColor="#0ac752"
+                    icon={<NewIco color="#FFF"/>}
+                    labelStyle={{color: 'white'}}
+                    keyboardFocused={true}
+                    onTouchTap={this.fncHandleOpen}
+                    style={{float: 'right', margin: '20px 0 20px 20px', width:'10%'}}/>
                 <Dialog
                     title="Adicionando etapa"
                     actions={actions}

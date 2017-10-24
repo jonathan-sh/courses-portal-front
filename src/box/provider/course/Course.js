@@ -3,15 +3,15 @@ import TableFound from './Table';
 import NewIco from 'material-ui/svg-icons/content/add';
 import BackIco from 'material-ui/svg-icons/content/reply-all';
 import RaisedButton from 'material-ui/RaisedButton';
-import Information from './Information';
 import PubSub from 'pubsub-js';
 import Crud from "./Crud";
 
 class Course extends Component {
 
-    constructor() {
+    constructor()
+    {
         super();
-        this.state = {isCrud: false, newCourse: false, showTable:true, course:''};
+        this.state = {isCrud: false};
     }
 
     componentDidMount(){
@@ -19,12 +19,9 @@ class Course extends Component {
         PubSub.subscribe('switch-to-crud', this.fncInCrud);
     }
 
-    styles = {btnCourse: {width: '100%'} };
+    fncGoToCrud = () => this.setState({'isCrud': true});
 
-    fncNewCourse = () => {
-        PubSub.publish('header-label','Criando curso');
-        this.setState({newCourse: true});
-    };
+    fncGoToFind = () => this.setState({'isCrud': false});
 
     fncInCrud = (key, course) => {
         if (course !== undefined && course !==false)
@@ -35,16 +32,12 @@ class Course extends Component {
         }
         else
         {
-            this.fncBackToFind();
+            this.fncGoToFind();
         }
 
     };
 
-    fncBackToFind = () => {
-        this.setState({'isCrud': false});
-        this.setState({'newCourse': false});
-        this.setState({'showTable': true});
-    };
+
 
     fncCheck = () => {return this.state.newCourse || this.state.isCrud};
 
@@ -58,18 +51,12 @@ class Course extends Component {
                         label={(this.fncCheck())? 'voltar a lista de cursos' : 'adicionar um curso novo'}
                         backgroundColor={this.fncCheck()? '#ff7500' : '#0ac752'}
                         icon={this.fncCheck()? <BackIco color='#FFF'/> : <NewIco color='#FFF'/>}
-                        onTouchTap={(this.fncCheck())? this.fncBackToFind : this.fncNewCourse }
-                        style={this.styles.btnCourse}
+                        onTouchTap={(this.fncCheck())? this.fncGoToFind : this.fncGoToCrud }
+                        fullWidth={true}
                         labelStyle={{color: 'white'}}
                     />
 
-
-                {this.state.newCourse ? <Information/>  : null}
-
-                {this.state.showTable ? <TableFound/>  : null}
-
-                {this.state.isCrud ? <Crud course={this.state.course} />  : null}
-
+                {this.state.isCrud ? <Crud course={false}/>  : <TableFound/>}
 
             </div>
         )

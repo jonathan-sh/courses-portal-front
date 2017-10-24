@@ -1,11 +1,10 @@
 import React, {Component} from "react";
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import NewIco from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
-import Question from './Question';
-import Prove from './Prove';
-import MaterialAdd from './Material';
+import AddQuestion from './Question';
+import AddProve from './Prove';
+import AddMaterial from './Material';
 import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
 import httpService from '../../../service/HttpService';
@@ -20,7 +19,6 @@ class Steps extends Component {
         this.httpService = new httpService();
         this.state = {
              showStep: true,
-             showQuestion: false,
              stepIndex: 0,
              open: true,
              step: {_id: props.step._id, order: props.step.order, name: props.step.name, description: props.step.description},
@@ -28,7 +26,8 @@ class Steps extends Component {
         };
     }
 
-    fncHandleSave = () => {
+    fncHandleSave = () =>
+    {
         this.fncGetDataStep();
 
         if (this.fncValidData())
@@ -42,7 +41,7 @@ class Steps extends Component {
                 })
                 .then(success => {
                     PubSub.publish('crud-get-course',success);
-                    this.handleClose();
+                    this.fncHandleClose();
                 })
                 .catch(error => {
                     this.setState({msg: error.message});
@@ -53,12 +52,12 @@ class Steps extends Component {
         this.setState({open: false});
     };
 
-    fncGetDataStep = () => {
+    fncGetDataStep = () =>
+    {
         let course = {
             '_id': this.state.step._id,
             'steps': [{'order': this.state.step.order, 'name': this.state.step.name, 'description': this.state.step.description}]
         };
-        console.log(course);
         return course;
     };
 
@@ -68,10 +67,8 @@ class Steps extends Component {
         this.setState({open: false});
     };
 
-    fncShowQuestion = () => this.setState({showQuestion: true});
-    fncShowProve = () => this.setState({showProve: true});
-
-    fncHandleNext = () => {
+    fncHandleNext = () =>
+    {
         const {stepIndex} = this.state;
 
         if (stepIndex < 3) {
@@ -79,7 +76,8 @@ class Steps extends Component {
         }
     };
 
-    fncHandlePrev = () => {
+    fncHandlePrev = () =>
+    {
         const {stepIndex} = this.state;
 
         if (stepIndex > 0) {
@@ -124,7 +122,8 @@ class Steps extends Component {
         </RaisedButton>
     );
 
-    fncValidData = () => {
+    fncValidData = () =>
+    {
         let status = true;
 
         let errorText = {name: '', description: ''};
@@ -184,45 +183,27 @@ class Steps extends Component {
                         <div style={{overflow: 'auto', height: '200px'}}>
                             {this.material}
                         </div>
-
-                        <MaterialAdd/>
-
+                        <AddMaterial/>
                     </div>
                 );
 
             case 2:
                 return (
                     <div>
-                        {this.state.showQuestion? (<Question/>):null}
                         <div style={{overflow: 'auto', height: '200px'}}>
                             {this.question}
                         </div>
-                        <RaisedButton
-                            label="questão"
-                            backgroundColor="#0ac752"
-                            icon={<NewIco color="#FFF"/>}
-                            labelStyle={{color: 'white'}}
-                            keyboardFocused={true}
-                            onTouchTap={this.fncShowQuestion}
-                            style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+                        <AddQuestion/>
                     </div>
                 );
 
             case 3:
                 return (
                    <div>
-                       {this.state.showProve? (<Prove/>):null}
                        <div style={{overflow: 'auto', height: '200px'}}>
                            {this.prove}
                        </div>
-                       <RaisedButton
-                           label="prova"
-                           backgroundColor="#0ac752"
-                           icon={<NewIco color="#FFF"/>}
-                           labelStyle={{color: 'white'}}
-                           keyboardFocused={true}
-                           onTouchTap={this.fncShowProve}
-                           style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+                       <AddProve/>
                    </div>
                 );
             default:
