@@ -1,46 +1,32 @@
 import React, {Component} from "react";
 import RaisedButton from 'material-ui/RaisedButton';
-import NewIco from 'material-ui/svg-icons/content/add';
 import Information from './Information';
 import AddStep from './AddStep';
-import PubSub from 'pubsub-js';
 import Step from './Step';
+import PubSub from 'pubsub-js';
+import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import _ from 'lodash';
 
 class Crud extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {showInformationCourse: false,
-                      showNewStep: false,
-                      showEditStep: false,
-                      step:[],
-                      course: (this.props.course !== undefined)? this.props.course : []};
+        this.state = {course: (props.course)? props.course : []};
         this.steps = [];
-        this.mapSteps();
-        console.log(this.state);
+        this.fncMapSteps();
+
     }
 
-    componentDidMount() {
+    componentWillMount() {
         PubSub.publish('header-label', 'Editando curso');
-        PubSub.subscribe('close-new-step', this.closeNewStep);
-        PubSub.subscribe('close-edit-step', this.closeEditStep);
         PubSub.subscribe('crud-get-course', this.getCourse);
-
+        this.fncMapSteps();
     }
-
-    closeNewStep = () => {
-        this.setState({showNewStep: false});
-    };
-
-    closeEditStep = () => {
-        this.setState({showEditStep: false});
-    };
 
     getCourse = (key, course) => {
         if (course !== undefined) {
             this.setState({'course': course});
-            this.mapSteps();
+            this.fncMapSteps();
         }
     };
 
@@ -50,62 +36,54 @@ class Crud extends Component {
         this.setState({showEditStep: true});
     };
 
-    mapSteps = () => {
-        if (this.state.course.steps !== undefined && this.state.course.steps !== null)
+    fncMapSteps = () => {
+        if (this.state.course.steps)
         {
             let st = _.sortBy(this.state.course.steps, ['order']);
             this.steps = st.map((step) =>
-                <RaisedButton
-                    key={step.order}
-                    label={step.name}
-                    fullWidth={true}
-                    backgroundColor="#2dc7a2"
-                    onTouchTap={() =>this.fncEditSep(step)}
-                    labelStyle={{color: '#FFF'}}
-                    style={{marginTop: '5px'}}>
-                </RaisedButton>
+                <div key={step.order}>
+                    <RaisedButton
+                        label={step.name}
+                        backgroundColor="#2dc7a2"
+                        onTouchTap={() =>this.fncEditSep(step)}
+                        labelStyle={{color: '#FFF'}}
+                        style={{marginTop: '5px',width:'89%'}}>
+                    </RaisedButton>
+                    <RaisedButton
+                        label={"delete"}
+                        backgroundColor="#ff2930"
+                        labelStyle={{color: '#FFF'}}
+                        style={{marginLeft: '1%',width:'10%'}}
+                        icon={<DeleteIco color="#FFF"/>}>
+                    </RaisedButton>
+                </div>
+
             );
         }
     };
 
-    fncInfoCourse = () => this.setState({showInformationCourse: true});
-
-    fncNewStep = () => this.setState({showNewStep: true});
 
     render() {
         return (
             <div>
-                <br/>
-                <br/>
-                <span className="subTopic">Informações:</span>
-                <RaisedButton
-                    label={"INFORMAÇÕES BÁSICAS DO CURSO - [ " + this.state.course.name + " ]"}
-                    fullWidth={true}
-                    labelStyle={{color: '#FFF'}}
-                    backgroundColor="#2dc7a2"
-                    onTouchTap={this.fncInfoCourse}
-                    style={{marginTop: '20px'}}/>
+                {
+                    (this.state.course.length>0) ?
+                        <div>
+                            <br/>
+                            <br/>
+                            <span className="subTopic">Informações:</span>
+                            <Information course={this.state.course}/>
+                            <br/>
+                            <br/>
+                            <span className="subTopic">Etapas: </span>
+                            {this.steps}
+                            <AddStep course={this.state.course}/>
+                            {this.state.showEditStep ? <Step step={this.state.step}/>  : null}
+                        </div>
+                    :
+                        <Information course={false}/>
+                }
 
-                <br/>
-                <br/>
-                <span className="subTopic">Etapas: </span>
-
-                {this.steps}
-
-                <RaisedButton
-                    label="etapa"
-                    backgroundColor="#0ac752"
-                    icon={<NewIco color="#FFF"/>}
-                    labelStyle={{color: 'white'}}
-                    keyboardFocused={true}
-                    onTouchTap={this.fncNewStep}
-                    style={{float: 'right', margin: '20px 0 20px 20px'}}/>
-
-                {this.state.showInformationCourse ? (<Information course={this.state.course}/>) : null}
-
-                {this.state.showNewStep ? (<AddStep course={this.state.course}/>) : null}
-
-                {this.state.showEditStep ? <Step step={this.state.step}/>  : null}
             </div>
         );
     }

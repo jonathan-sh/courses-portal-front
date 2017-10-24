@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import ActionFavorite from 'material-ui/svg-icons/action/check-circle';
 import AddImage from 'material-ui/svg-icons/image/add-a-photo';
+import NewIco from 'material-ui/svg-icons/content/add';
 import ActionFavoriteBorder from 'material-ui/svg-icons/toggle/radio-button-unchecked';
 import _ from 'lodash';
 
@@ -14,15 +15,17 @@ class Question extends Component {
     constructor() {
         super();
         this.state = {
-            open: true,
+            open: false,
             checked: {A: false, B: false, C: false, D: false, E: false},
             correct: '',
-            errorText: { statement: '',
-                         A: '',
-                         B: '',
-                         C: '',
-                         D: '',
-                         E: ''}
+            errorText: {
+                statement: '',
+                A: '',
+                B: '',
+                C: '',
+                D: '',
+                E: ''
+            }
 
         };
     }
@@ -30,11 +33,14 @@ class Question extends Component {
     styles = {
         inputText: {width: '94%', float: 'right'},
         icon: {width: '5%', float: 'left', paddingTop: '3.2%'},
-        btAddImage:{'display':'block'}
+        btAddImage: {'display': 'block'}
 
     };
 
     fncHandleClose = () => this.setState({open: false});
+
+    fncHandleOpen = () => this.setState({open: true});
+
 
     fncHandleSave = () => {
         if (this.fncValidQuestion()) {
@@ -127,29 +133,38 @@ class Question extends Component {
 
     render() {
         return (
-            <Dialog
-                title="Adicionando questão"
-                autoScrollBodyContent={true}
-                actions={this.actions}
-                modal={true}
-                style={{margin:'0'}}
-                titleStyle={{padding:'15px'}}
-                bodyStyle={{minHeight: '480px'}}
-                contentStyle={{width: '90%', maxWidth: 'none', marginTop:'-50px'}}
-                open={this.state.open}>
+            <div>
+                <RaisedButton
+                    label="question"
+                    backgroundColor="#0ac752"
+                    icon={<NewIco color="#FFF"/>}
+                    labelStyle={{color: 'white'}}
+                    keyboardFocused={true}
+                    onTouchTap={this.fncHandleOpen}
+                    style={{float: 'right', margin: '20px 0 20px 20px'}}/>
+                <Dialog
+                    title="Adicionando questão"
+                    autoScrollBodyContent={true}
+                    actions={this.actions}
+                    modal={true}
+                    style={{margin: '0'}}
+                    titleStyle={{padding: '15px'}}
+                    bodyStyle={{minHeight: '480px'}}
+                    contentStyle={{width: '90%', maxWidth: 'none', marginTop: '-50px'}}
+                    open={this.state.open}>
 
-                <TextField
-                    hintText="Informe o enunciado"
-                    multiLine={true}
-                    rows={1}
-                    rowsMax={5}
-                    errorText={this.state.errorText.statement}
-                    floatingLabelText="Enunciado"
-                    type="text"
-                    fullWidth={true}
-                    ref={(input) => this.statement = input}/>
+                    <TextField
+                        hintText="Informe o enunciado"
+                        multiLine={true}
+                        rows={1}
+                        rowsMax={5}
+                        errorText={this.state.errorText.statement}
+                        floatingLabelText="Enunciado"
+                        type="text"
+                        fullWidth={true}
+                        ref={(input) => this.statement = input}/>
 
-                <span style={this.styles.btAddImage}>
+                    <span style={this.styles.btAddImage}>
                     <RaisedButton
                         label="adicionar image"
                         backgroundColor="rgb(77, 156, 138)"
@@ -157,14 +172,14 @@ class Question extends Component {
                         labelStyle={{color: 'white'}}/>
                 </span>
 
-                <span className="display-block height-80">
+                    <span className="display-block height-80">
                         <Checkbox
-                             checked={this.state.checked.A}
-                             style={this.styles.icon}
-                             onCheck={() => this.fncSelected('A')}
-                             checkedIcon={<ActionFavorite/>}
-                             uncheckedIcon={<ActionFavoriteBorder/>}
-                             label="[A]"/>
+                            checked={this.state.checked.A}
+                            style={this.styles.icon}
+                            onCheck={() => this.fncSelected('A')}
+                            checkedIcon={<ActionFavorite/>}
+                            uncheckedIcon={<ActionFavoriteBorder/>}
+                            label="[A]"/>
 
                         <TextField
                             hintText="descreva a alternativa A"
@@ -178,7 +193,7 @@ class Question extends Component {
                 </span>
 
 
-                <span className="display-block height-80">
+                    <span className="display-block height-80">
                     <Checkbox
                         checked={this.state.checked.B}
                         style={this.styles.icon}
@@ -197,7 +212,7 @@ class Question extends Component {
                         ref={(input) => this.alternativeB = input}/>
                 </span>
 
-                <span className="display-block height-80">
+                    <span className="display-block height-80">
                     <Checkbox
                         checked={this.state.checked.C}
                         style={this.styles.icon}
@@ -215,7 +230,7 @@ class Question extends Component {
                         fullWidth={true}
                         ref={(input) => this.alternativeC = input}/>
                 </span>
-                <span className="display-block height-80">
+                    <span className="display-block height-80">
                     <Checkbox
                         checked={this.state.checked.D}
                         style={this.styles.icon}
@@ -233,7 +248,7 @@ class Question extends Component {
                         fullWidth={true}
                         ref={(input) => this.alternativeD = input}/>
                 </span>
-                <span className="display-block height-80">
+                    <span className="display-block height-80">
                     <Checkbox
                         checked={this.state.checked.E}
                         style={this.styles.icon}
@@ -252,7 +267,8 @@ class Question extends Component {
                         ref={(input) => this.alternativeE = input}/>
                 </span>
 
-            </Dialog>
+                </Dialog>
+            </div>
 
         );
     }

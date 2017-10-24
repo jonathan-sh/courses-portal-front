@@ -14,8 +14,8 @@ import Toggle from 'material-ui/Toggle';
 class Material extends Component {
     constructor(pros) {
         super(pros);
-        this.state = {
-            course:[],
+        this.state =
+        {
             open: false, makeSave: false, material: {
                 order: '',
                 name: '',
@@ -27,50 +27,13 @@ class Material extends Component {
         };
     };
 
-    componentWillMount(){
-        this.fncFillCourse();
-    }
 
-    fncFillCourse =()=>{
-        if (this.props.course !== undefined){
-            this.setState({'course':this.props.course});
-        }
-    };
+    fncHandleOpen = () => this.setState({open: true});
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
+    fncHandleClose = () => this.setState({open: false});
 
-    handleClose = () => {
-        this.setState({open: false});
-    };
-
-    fncHandleSave = () => {
-
-        if (this.fncValidData()) {
-            this.setState({makeSave: true});
-
-            this.httpService.put('/course', this.fncGetDataMaterial(), localStorage.getItem('auth-token'))
-                .then(response => {
-                    if (response.status !== 501) {
-                        return response.json();
-                    }
-                    throw new Error('Falha de autenticação.');
-                })
-                .then(success => {
-
-                })
-                .catch(error => {
-                    this.setState({msg: error.message});
-                });
-        }
-    };
-
-    fncGetDataMaterial = () => {
-        return false;
-    };
-
-    handleChange = () => {
+    fncHandleChange = () =>
+    {
         let material = this.state.material;
         material['download'] = !this.state.material.download;
         this.setState(material);
@@ -87,7 +50,7 @@ class Material extends Component {
             <FlatButton
                 label="Cancelar"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.fncHandleClose}
             />,
             <FlatButton
                 label="Salvar"
@@ -105,7 +68,7 @@ class Material extends Component {
                     icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
                     keyboardFocused={true}
-                    onTouchTap={this.handleOpen}
+                    onTouchTap={this.fncHandleOpen}
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
                 <Dialog
                     title="Adicionando material"
@@ -130,7 +93,7 @@ class Material extends Component {
                     <Toggle
                         label="Passivel de download?"
                         defaultToggled={this.state.material.download}
-                        onToggle={this.handleChange}
+                        onToggle={this.fncHandleChange}
                         labelPosition="right"
                         style={{margin: 20}}
                     />

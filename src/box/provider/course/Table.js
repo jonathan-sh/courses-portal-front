@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 import httpService from '../../../service/HttpService';
+import GetResponseYesNo from '../../../component/GetResponseYesNo';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
@@ -55,19 +56,23 @@ class TableFind extends Component {
                 <TableRowColumn>{course.name}</TableRowColumn>
                 <TableRowColumn>{course.status ? 'ativo' : 'inativo'}</TableRowColumn>
                 <TableRowColumn>
-                    <RaisedButton
-                        label="editar"
-                        backgroundColor="#00a1fc"
-                        onTouchTap={() => this.fncEditCourse(course)}
-                        icon={<EditIco color="#FFF"/>}
-                        labelStyle={{color: 'white'}}/>
-                    <RaisedButton
-                        label="delete"
-                        backgroundColor="#ff2930"
-                        onTouchTap={() => this.fncDeleteCourse(course)}
-                        icon={<DeleteIco color="#FFF"/>}
-                        style={{marginLeft: '3%'}}
-                        labelStyle={{color: 'white'}}/>
+                   <span style={{display: 'inline-flex'}}>
+                        <RaisedButton
+                            label="editar"
+                            backgroundColor="#00a1fc"
+                            onTouchTap={() => this.fncEditCourse(course)}
+                            icon={<EditIco color="#FFF"/>}
+                            labelStyle={{color: 'white'}}/>
+                        <GetResponseYesNo
+                            fncIfYesOnTouchTap={() => this.fncDeleteCourse(course)}
+                            title={"Antenção, deletando curso"}
+                            question={"Você realmente deseja deletar o curso [ "+course.name +" ] ?"}
+                            btnLabel="delete"
+                            btnBackgroundColor="#ff2930"
+                            btnIcon={<DeleteIco color="#FFF"/>}
+                            btnStyle={{marginLeft: '5%'}}
+                            btnLabelStyle={{color: 'white'}}/>
+                       </span>
                 </TableRowColumn>
             </TableRow>
         );
@@ -80,16 +85,16 @@ class TableFind extends Component {
     };
 
     fncDeleteCourse = (course) => {
-       alert('Delete curse ' + course.name);
+        alert('Delete curse ' + course.name);
     };
 
     fncFilterRows = () => {
         let filter = this.search.input.value;
         filter = filter.toUpperCase();
         let result = _.filter(this.state.courses, (o) => {
-                              let name = o.name.toUpperCase();
-                              return name.includes(filter);
-                             });
+            let name = o.name.toUpperCase();
+            return name.includes(filter);
+        });
         this.fncMakeRows(result);
     };
 
@@ -102,7 +107,7 @@ class TableFind extends Component {
                     hintText="informe o nome do curso   "
                     floatingLabelText="Pesquisar curso"
                     type="text"
-                    onChange={()=>this.fncFilterRows()}
+                    onChange={() => this.fncFilterRows()}
                     fullWidth={true}
                     ref={(input) => this.search = input}/>
 
