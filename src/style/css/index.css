@@ -108,6 +108,7 @@ p{
     display: grid;
     justify-content: center;
     align-items: center;
+    padding-bottom: 30px;
 }
 
 .home-plans{

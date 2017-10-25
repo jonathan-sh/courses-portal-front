@@ -7,7 +7,6 @@ import Grade from './Grade';
 import PubSub from 'pubsub-js';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import NewIco from 'material-ui/svg-icons/content/add';
-import Snackbar from 'material-ui/Snackbar';
 import httpService from './../../../service/HttpService';
 
 class Bar extends Component
@@ -19,8 +18,6 @@ class Bar extends Component
         this.state =
         {
             showGrade: false,
-            showAction: false,
-            messageAction: 'Test is success',
             provider: JSON.parse(localStorage.getItem('provider')),
             grades: '',
             whatGrade: '',
@@ -35,7 +32,14 @@ class Bar extends Component
         this.fncListGrade();
     };
 
-    fncHideGrade = (topic, open) => this.setState({'showGrade': open});
+    fncHideGrade = (topic, object) =>
+    {
+        this.setState({'showGrade': object.showGrade});
+        if(object.message !== null && object.message !== undefined)
+        {
+            PubSub.publish('show-message', object.message);
+        }
+    };
 
     fncListGrade = () =>
     {
@@ -82,7 +86,7 @@ class Bar extends Component
                 {
                     return response.json();
                 }
-                this.setState({'messageAction': 'Erro ao deletar grade.'});
+                PubSub.publish('show-message', 'Erro ao tentar deletar a grade');
                 throw new Error('Falha de autenticação.');
             })
             .then(success => {
@@ -95,9 +99,9 @@ class Bar extends Component
     {
         response.password = null;
         this.setState({'provider':response});
-        this.setState({'showAction':true});
         localStorage.setItem('provider', JSON.stringify(response));
         PubSub.publish('list-grade', this.state.provider);
+
     };
 
     fncDeleteGrade = (object, position, attribute) =>
@@ -105,11 +109,9 @@ class Bar extends Component
         let provider = this.state.provider;
         provider[attribute].splice(position , 1);
         this.setState({'provider': provider});
-        this.setState({'messageAction':'Grade ' + object.description + ' deletada com sucesso!'});
+        PubSub.publish('show-message', 'Grade ' + object.description + ' deletada com sucesso!');
         this.makeUpdateProvider();
     };
-
-    handleRequestClose = () => this.setState({'showAction': false});
 
     render()
     {
@@ -124,12 +126,6 @@ class Bar extends Component
                     icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
                     style={{float: 'right',width: '19%', marginTop:'20px'}}
-                />
-                <Snackbar
-                    open={this.state.showAction}
-                    message={this.state.messageAction}
-                    autoHideDuration={2000}
-                    onRequestClose={this.handleRequestClose}
                 />
             </div>
         );

@@ -8,7 +8,7 @@ class Array
 
         if(found !== null && found !== undefined)
         {
-            array = _.remove(array, (v)=> {return v === value});
+            array = _.pull(array, value);
         }
         else
         {

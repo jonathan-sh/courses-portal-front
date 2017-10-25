@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import httpService from './../../../service/HttpService';
-
+import PubSub from 'pubsub-js';
 
 class Footer extends Component
 {
@@ -39,7 +39,7 @@ class Footer extends Component
                     }
                 })
                 .then(success => {
-                    console.log(success);
+                    PubSub.publish('show-message', 'Home face alterada com sucesso!');
                 })
                 .catch(error => {
                     this.setState({msg: error.message});

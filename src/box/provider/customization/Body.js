@@ -9,7 +9,7 @@ import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import EditIco from 'material-ui/svg-icons/content/create';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import Snackbar from 'material-ui/Snackbar';
+import PubSub from 'pubsub-js';
 
 class Body extends Component
 {
@@ -27,9 +27,7 @@ class Body extends Component
             labelButton: 'Adicionar tópico',
             iconButton: <NewIco color="#FFF"/>,
             btn: false,
-            indexTopic: null,
-            showAction: false,
-            messageAction: 'Test is success',
+            indexTopic: null
         };
     }
 
@@ -83,7 +81,7 @@ class Body extends Component
     isValidationFields = () =>
     {
         const errorHeader = 'Informe o título';
-        const errorDescription = 'Informe o conteúdo';
+        const errorDescription = 'Informe o conteúdo, esse campo exige pelomenos 330 caracteres para melhor aparição na home';
         let errors =
             {
                 header:'',
@@ -95,7 +93,7 @@ class Body extends Component
         this.header.input.value === '' ?
             (errors.header = errorHeader) : (errors.header = '');
 
-        this.description.props.value === '' ?
+        this.description.props.value === '' || this.description.props.value.length < 330 ?
             (errors.description = errorDescription) : (errors.description = '');
 
         this.setState({'errorsText': errors});
@@ -108,7 +106,7 @@ class Body extends Component
 
     };
 
-    makeUpdateProvider = () =>
+    makeUpdateProvider = (message) =>
     {
         this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
@@ -119,16 +117,16 @@ class Body extends Component
                 throw new Error('Falha de autenticação.');
             })
             .then(success => {
-                this.responseUpdate(success);
+                this.responseUpdate(success, message);
             })
             .catch(error => { console.log(error);});
     };
 
-    responseUpdate = (response) =>
+    responseUpdate = (response, message) =>
     {
         response.password = null;
         this.setState({'provider':response});
-        this.setState({'showAction':true});
+        PubSub.publish('show-message', message);
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearFields();
     };
@@ -146,6 +144,7 @@ class Body extends Component
         {
             let provider = this.state.provider;
             const topic = this.state.topic;
+            let message = '';
 
             if(!this.state.update && position === null)
             {
@@ -154,27 +153,28 @@ class Body extends Component
                     provider[attribute] = [];
                 }
                 provider[attribute].push(topic);
-                this.setState({'messageAction': 'Tópico ' + topic.header + ' adicionado com sucesso!'});
+                message = 'Tópico ' + topic.header + ' adicionado com sucesso!';
                 this.setState({'provider': provider});
-                this.makeUpdateProvider();
+                this.makeUpdateProvider(message);
             }
             else
             {
                 provider[attribute][position] = topic;
-                this.setState({'messageAction': 'Tópico ' + topic.header + ' alterado com sucesso!'});
+                message = 'Tópico ' + topic.header + ' alterado com sucesso!';
                 this.setState({'provider': provider});
-                this.makeUpdateProvider();
+                this.makeUpdateProvider(message);
             }
         }
     };
 
     fncHandleDelete = (object, position, attribute) =>
     {
+        let message = 'Tópico ' + object.header + ' deletada com sucesso!';
+
         let provider = this.state.provider;
         provider[attribute].splice(position , 1);
-        this.setState({'messageAction':'Tópico ' + object.header + ' deletada com sucesso!'});
         this.setState({'provider': provider});
-        this.makeUpdateProvider();
+        this.makeUpdateProvider(message);
     };
 
     fncHandleCancel = () => this.clearFields();
@@ -193,8 +193,6 @@ class Body extends Component
         this.setState({'topic': topic, 'labelButton': label, 'update':false, 'iconButton': icon, 'indexTopic': null, 'errorsText': errors});
         this.fncListTopic();
     };
-
-    handleEvent = () => this.setState({'showAction': false});
 
     render()
     {
@@ -237,12 +235,6 @@ class Body extends Component
                     style={{float: 'right', margin: '20px 0 20px 20px'}}
                 />
                 {this.state.topics}
-                <Snackbar
-                    open={this.state.showAction}
-                    message={this.state.messageAction}
-                    autoHideDuration={2000}
-                    onRequestClose={this.handleEvent}
-                />
             </div>
         );
     };

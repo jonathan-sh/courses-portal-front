@@ -30,7 +30,7 @@ class Grade extends Component
             whatSubGrade:'',
             subGrades:'',
             courses:'',
-            errorText: {description:'', courses:''},
+            errorText: {description:''},
             isUpdate: this.isUpdate(props)
         };
     };
@@ -133,24 +133,19 @@ class Grade extends Component
     isValidationFields = () =>
     {
         const errorDescription = 'Informe a descrição';
-        const errorCourses = 'Informe pelo menos um curso';
         let errors =
-            {
-                description:'',
-                courses:'',
-            };
+        {
+            description:''
+        };
 
         this.setState({'errorText':errors});
 
         this.description.input.value === '' ?
             (errors.description = errorDescription) : (errors.description = '');
 
-        this.state.grade.courses.length === 0 ?
-            (errors.courses = errorCourses) : (errors.courses = '');
-
         this.setState({'errorsText': errors});
 
-        if(errors.description === '' && errors.courses === '')
+        if(errors.description === '')
         {
             return true;
         }
@@ -161,7 +156,7 @@ class Grade extends Component
     fncHandleClose = () =>
     {
         localStorage.removeItem('sub-grade');
-        PubSub.publish('show-grade', false);
+        PubSub.publish('show-grade', {showGrade: false, message: null});
         this.setState({'open': false});
     };
 
@@ -202,7 +197,7 @@ class Grade extends Component
                 localStorage.removeItem('sub-grade');
                 provider.grades.push(grade);
                 this.makeUpdateProvider();
-                PubSub.publish('show-grade', false);
+                PubSub.publish('show-grade', {'showGrade': false, 'message': 'Grade ' + grade.description + ' adicionada com sucesso!'});
                 this.setState({'open': false});
             }
             else
@@ -210,7 +205,7 @@ class Grade extends Component
                 localStorage.removeItem('sub-grade');
                 provider.grades[this.state.indexGrade] = grade;
                 this.makeUpdateProvider();
-                PubSub.publish('show-grade', false);
+                PubSub.publish('show-grade', {'showGrade': false, 'message': 'Grade ' + grade.description + ' alterada com sucesso!'});
                 this.setState({'open': false});
             }
         }
@@ -294,7 +289,6 @@ class Grade extends Component
                     value={this.state.grade.description}
                 />
                 <h3 className="title" style={{marginBottom: '0px', color:'#000'}}>Cursos</h3>
-                <h5 style={{color:'#f44335', fontFamily: 'Roboto', fontWeight: '500', marginTop:'0%'}}>{this.state.errorText.courses}</h5>
                 <div style={{overflow: 'auto', height: '100px'}}>
                     {this.state.courses}
                 </div>

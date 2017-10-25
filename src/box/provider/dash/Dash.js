@@ -3,8 +3,9 @@ import HeaderBar from './HeaderBar';
 import NavigationBar from './NavigationBar';
 import './../../../style/css/provider/provider.css';
 import Routers from './../../../service/router/Routers';
+import ActionMessage from '../../../component/ActionMessage';
 
-const Dash = (props) => 
+const Dash = (props) =>
 {
     const dash = Routers.get(props.match.params.way);
 
@@ -20,9 +21,10 @@ const Dash = (props) =>
             <div className="content-child center padding-left-200">
                 <dash.item />
             </div>
+            <ActionMessage/>
         </div>
     );
-}
+};
 
 export default Dash;
 
