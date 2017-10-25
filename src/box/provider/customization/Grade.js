@@ -160,7 +160,7 @@ class Grade extends Component
         this.setState({'open': false});
     };
 
-    makeUpdateProvider = () =>
+    makeUpdateProvider = (message) =>
     {
         this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
@@ -170,19 +170,19 @@ class Grade extends Component
                 }
                 throw new Error('Falha de autenticação.');
             })
-            .then(success => {
-                this.responseUpdate(success);
-            })
-            .catch(error => { console.log(error);});
+            .then(success => {this.responseUpdate(success, message);})
+            .catch(error => {PubSub.publish('show-message', error);});
 
     };
 
-    responseUpdate = (response) =>
+    responseUpdate = (response, message) =>
     {
         response.password = null;
         this.setState({'provider':response});
         localStorage.setItem('provider', JSON.stringify(response));
+        PubSub.publish('show-grade', {'showGrade': false, 'message': message});
         PubSub.publish('list-grade', this.state.provider);
+        this.setState({'open': false});
     };
 
     fncHandleSave = () =>
@@ -191,22 +191,21 @@ class Grade extends Component
         {
             let provider = this.state.provider;
             let grade = this.state.grade;
+            let message = '';
 
             if(!this.state.isUpdate)
             {
                 localStorage.removeItem('sub-grade');
+                message = 'Grade ' + grade.description + ' adicionada com sucesso!';
                 provider.grades.push(grade);
-                this.makeUpdateProvider();
-                PubSub.publish('show-grade', {'showGrade': false, 'message': 'Grade ' + grade.description + ' adicionada com sucesso!'});
-                this.setState({'open': false});
+                this.makeUpdateProvider(message);
             }
             else
             {
                 localStorage.removeItem('sub-grade');
+                message = 'Grade ' + grade.description + ' alterada com sucesso!';
                 provider.grades[this.state.indexGrade] = grade;
-                this.makeUpdateProvider();
-                PubSub.publish('show-grade', {'showGrade': false, 'message': 'Grade ' + grade.description + ' alterada com sucesso!'});
-                this.setState({'open': false});
+                this.makeUpdateProvider(message);
             }
         }
     };

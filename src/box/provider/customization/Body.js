@@ -116,10 +116,8 @@ class Body extends Component
                 }
                 throw new Error('Falha de autenticação.');
             })
-            .then(success => {
-                this.responseUpdate(success, message);
-            })
-            .catch(error => { console.log(error);});
+            .then(success => {this.responseUpdate(success, message);})
+            .catch(error => { PubSub.publish('show-message', error);});
     };
 
     responseUpdate = (response, message) =>

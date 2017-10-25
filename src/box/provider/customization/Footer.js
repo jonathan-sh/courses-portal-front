@@ -38,12 +38,8 @@ class Footer extends Component
                         return response.json();
                     }
                 })
-                .then(success => {
-                    PubSub.publish('show-message', 'Home face alterada com sucesso!');
-                })
-                .catch(error => {
-                    this.setState({msg: error.message});
-                });
+                .then(success => {PubSub.publish('show-message', 'Home face alterada com sucesso!');})
+                .catch(error => {PubSub.publish('show-message', error);});
         }
     };
 

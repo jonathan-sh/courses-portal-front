@@ -78,7 +78,7 @@ class Bar extends Component
         this.setState({'showGrade': true});
     };
 
-    makeUpdateProvider = () =>
+    makeUpdateProvider = (message) =>
     {
         this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
@@ -86,21 +86,19 @@ class Bar extends Component
                 {
                     return response.json();
                 }
-                PubSub.publish('show-message', 'Erro ao tentar deletar a grade');
                 throw new Error('Falha de autenticação.');
             })
-            .then(success => {
-                this.responseUpdate(success);
-            })
-            .catch(error => { console.log(error);});
+            .then(success => {this.responseUpdate(success, message);})
+            .catch(error => {PubSub.publish('show-message', error);});
     };
 
-    responseUpdate = (response) =>
+    responseUpdate = (response, message) =>
     {
         response.password = null;
         this.setState({'provider':response});
         localStorage.setItem('provider', JSON.stringify(response));
         PubSub.publish('list-grade', this.state.provider);
+        PubSub.publish('show-message', message);
 
     };
 
@@ -109,8 +107,8 @@ class Bar extends Component
         let provider = this.state.provider;
         provider[attribute].splice(position , 1);
         this.setState({'provider': provider});
-        PubSub.publish('show-message', 'Grade ' + object.description + ' deletada com sucesso!');
-        this.makeUpdateProvider();
+        const message =  'Grade ' + object.description + ' deletada com sucesso!';
+        this.makeUpdateProvider(message);
     };
 
     render()
