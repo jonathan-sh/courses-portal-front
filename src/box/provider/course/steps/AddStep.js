@@ -4,14 +4,14 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import LinearProgress from 'material-ui/LinearProgress';
-import PubSub from 'pubsub-js';
-import httpService from '../../../service/HttpService';
+import CourseRepository from '../../../../repository/CourseRepository';
 import NewIco from 'material-ui/svg-icons/content/add';
+import PubSub from 'pubsub-js';
 
 class Material extends Component {
     constructor(props) {
         super(props);
-        this.httpService = new httpService();
+        this.courseRepository = new CourseRepository();
         this.state = {
             open: false,
             step: {name: '', description: ''},
@@ -23,14 +23,29 @@ class Material extends Component {
         this.fncFillInformation();
     }
 
-    fncFillInformation = () => {
-        if (this.props.course !== undefined) {
-            this.setState({'course': this.props.course});
+    fncFillInformation = () =>
+    {
+        if (this.props.course !== undefined)
+        {
 
+            this.setState({'course': this.props.course});
+            this.cleanData();
         }
     };
 
-    fncHandleOpen = () => this.setState({open: true});
+    cleanData = ()=>
+    {
+        let step = {name: '', description: ''};
+        let errorTex = {name: '', description: ''};
+        this.setState({'step': step});
+        this.setState({'errorTex': errorTex});
+    };
+
+    fncHandleOpen = () =>
+    {
+        this.cleanData();
+        this.setState({open: true});
+    };
 
     fncHandleClose = () => { this.setState({open: false});};
 
@@ -38,24 +53,23 @@ class Material extends Component {
         this.fncGetDataStep();
         if (this.fncValidData()) {
             this.setState({makeSave: true});
-            this.httpService.put('/course', this.fncGetDataStep(), localStorage.getItem('auth-token'))
-                .then(response => {
-                    if (response.status !== 501) {
-                        return response.json();
-                    }
-                    throw new Error('Falha de autenticação.');
-                })
-                .then(success => {
-                    PubSub.publish('crud-get-course',success);
+            this.courseRepository.update(this.fncGetDataStep())
+                .then(success =>
+                {
+                    PubSub.publish('reload-course' , success);
+                    this.setState({makeSave: false});
                     this.fncHandleClose();
                 })
-                .catch(error => {
-                    this.setState({msg: error.message});
+                .catch(error =>
+                {
+                    console.log(error);
                 });
+
         }
     };
 
-    fncGetDataStep = () => {
+    fncGetDataStep = () =>
+    {
         let course = {
             '_id': this.state.course._id,
             'steps': [{'name': this.state.step.name, 'description': this.state.step.description}]

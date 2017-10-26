@@ -7,7 +7,7 @@ import AddProve from './Prove';
 import AddMaterial from './Material';
 import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
-import httpService from '../../../service/HttpService';
+import CourseRepository from '../../../../repository/CourseRepository';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
@@ -15,46 +15,40 @@ import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 class Steps extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
-        this.httpService = new httpService();
+        this.courseRepository = new CourseRepository();
         this.state = {
              showStep: true,
              stepIndex: 0,
-             open: true,
+             open: false,
              step: {_id: props.step._id, order: props.step.order, name: props.step.name, description: props.step.description},
-             errorText: {name: '', description: ''}
+             errorText: {name: '', description: ''},
+             course:''
         };
     }
 
-    fncHandleSave = () =>
+    fncMakeSave = () =>
     {
-        this.fncGetDataStep();
-
         if (this.fncValidData())
         {
-            this.httpService.put('/course', this.fncGetDataStep(), localStorage.getItem('auth-token'))
-                .then(response => {
-                    if (response.status !== 501) {
-                        return response.json();
-                    }
-                    throw new Error('Falha de autenticação.');
+            this.courseRepository.update(this.fncGetDataStep())
+                .then(success =>
+                {
+                    this.setState({'course': success});
                 })
-                .then(success => {
-                    PubSub.publish('crud-get-course',success);
-                    this.fncHandleClose();
-                })
-                .catch(error => {
-                    this.setState({msg: error.message});
+                .catch(error =>
+                {
+                    console.log(error);
                 });
         }
 
-        PubSub.publish('close-edit-step');
-        this.setState({open: false});
     };
+
+    fncHandleOpen = () =>  this.setState({open: true});
 
     fncGetDataStep = () =>
     {
-        let course = {
+        let course =
+        {
             '_id': this.state.step._id,
             'steps': [{'order': this.state.step.order, 'name': this.state.step.name, 'description': this.state.step.description}]
         };
@@ -64,6 +58,7 @@ class Steps extends Component {
     fncCanStep = () =>
     {
         PubSub.publish('close-edit-step');
+        PubSub.publish('go-crud',this.state.course);
         this.setState({open: false});
     };
 
@@ -71,7 +66,13 @@ class Steps extends Component {
     {
         const {stepIndex} = this.state;
 
-        if (stepIndex < 3) {
+        if (stepIndex < 3)
+        {
+            if (stepIndex===0)
+            {
+                this.fncMakeSave();
+            }
+
             this.setState({stepIndex: stepIndex + 1});
         }
     };
@@ -223,15 +224,22 @@ class Steps extends Component {
             <RaisedButton
                 backgroundColor="#0ac752"
                 labelStyle={{color: 'white'}}
-                label={stepIndex === 3 ? 'Concluir' : 'Proximo'}
+                label={stepIndex === 3 ? 'Concluir' : 'Salvar e Continuar'}
                 primary={true}
-                onTouchTap={stepIndex === 3 ? this.fncHandleSave : this.fncHandleNext}
+                onTouchTap={stepIndex === 3 ? this.fncCanStep : this.fncHandleNext}
                 style={{float: 'right', marginRight: '10px'}}/>
             ,
         ];
 
         return (
             <div>
+                <RaisedButton
+                    label={this.state.step.name}
+                    backgroundColor="#2dc7a2"
+                    onTouchTap={() =>this.fncHandleOpen()}
+                    labelStyle={{color: '#FFF'}}
+                    style={{marginTop: '5px',width:'89%'}}>
+                </RaisedButton>
                 <Dialog
                     title="Adicionando uma etapa"
                     actions={actions}
@@ -261,6 +269,5 @@ class Steps extends Component {
         );
     }
 }
-
 
 export default Steps;

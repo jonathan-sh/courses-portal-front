@@ -28,7 +28,6 @@ class App extends Component {
             menu:[],
             entity: JSON.parse(localStorage.getItem('entity'))
         };
-        this.URl = 'http://localhost:3000';
 
     }
 
@@ -61,10 +60,6 @@ class App extends Component {
         this.setState(modal);
     };
 
-    goToHome = ()=>{
-        history.push('/');
-    };
-
     buildCourseMenu = () =>{
         let grades = JSON.parse(localStorage.getItem('grade'));
         if (grades!==undefined && grades!==null)
@@ -82,7 +77,8 @@ class App extends Component {
         }
     };
 
-    buildMenu = (list) =>{
+    buildMenu = (list) =>
+    {
         let item = list.map((item, index) =>
             <div key={index}>
                 <MenuItem
@@ -149,12 +145,19 @@ class App extends Component {
                         icon={<Avatar src={srcImage} size={30}/>}
                     />
                 }
-            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
             style={{marginRight: '5px'}}>
             <MenuItem
+                style={{width:'160px'}}
+                primaryText="Dashbord"
+                onClick={()=> {history.push('/provider/about');}}
+
+            />
+            <MenuItem
+                style={{width:'160px'}}
                 primaryText="Sair"
-                onTouchTap={() => this.logoff()}
+                 onTouchTap={() => this.logoff()}
             />
         </IconMenu>
     );
@@ -164,14 +167,13 @@ class App extends Component {
         localStorage.removeItem('entity');
         localStorage.removeItem('student');
         localStorage.removeItem('auth-token');
-        history.push('/login/student');
+        history.push('/');
     };
 
     render() {
         return (
             <div className="headerBar">
                 <AppBar
-                    onTitleTouchTap={this.goToHome}
                     titleStyle={{cursor: 'pointer'}}
                     showMenuIconButton={false}
                     title={<span >COURSE</span>}

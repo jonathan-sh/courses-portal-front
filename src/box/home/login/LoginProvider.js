@@ -5,7 +5,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
-import httpService from '../../../service/HttpService';
+import HttpService from '../../../service/HttpService';
 import history from '../../../service/router/History';
 
 export default class LoginProvider extends Component {
@@ -13,7 +13,6 @@ export default class LoginProvider extends Component {
     constructor() {
         super();
         this.state = { open: true, msg: '' };
-        this.httpService = new httpService();
     };
 
     setItemsLocalStorage = (objects) =>
@@ -32,22 +31,18 @@ export default class LoginProvider extends Component {
         return entity;
     };
 
-    makeLogin = (event) => {
-        event.preventDefault();
-        this.httpService.post('/login', this.makeDataForLogin())
-            .then(response => {
-                if (response.status !== 501 )
-                {
-                    return response.json();
-                }
-                throw new Error('Usuário ou senha incorreto!');
-            })
-            .then(success => {
-                console.log(success);
+    makeLogin = () =>
+    {
+        HttpService.make().post('/login', this.makeDataForLogin())
+            .then(success =>
+            {
                 this.setItemsLocalStorage(success);
                 history.push('/provider/about', success);
             })
-            .catch(error => {this.setState({'msg':error.message});});
+            .catch(error =>
+            {
+                console.log(error);
+            });
     };
 
     makeDataForLogin= () => {

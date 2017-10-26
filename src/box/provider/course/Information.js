@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import httpService from '../../../service/HttpService';
+import CourseRepository from '../../../repository/CourseRepository';
 import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
@@ -13,9 +13,10 @@ class Information extends Component {
 
     constructor(props) {
         super(props);
-        this.httpService = new httpService();
+        this.courseRepository = new CourseRepository();
+        this.isUpdate = false;
         this.state = {
-            open: true,
+            open: false,
             makeSave: false,
             errorText: {
                 name: '',
@@ -37,25 +38,28 @@ class Information extends Component {
 
     }
 
-    componentDidMount() {
-        this.fncFillInformation();
-    }
-
-    fncFillInformation = () =>
+    componentDidMount()
     {
-        if (this.props.course)
+        if (this.props.course && this.props.course._id)
         {
             this.setState({'course': this.props.course});
+            this.isUpdate = true;
+            PubSub.publish('header-label', 'Editando curso');
         }
-    };
+        else
+        {
+            this.setState({'open':true});
+            PubSub.publish('header-label', 'Criando curso');
+        }
+    }
 
     fncHandleOpen = () => this.setState({open: true});
 
-    fncCheckIfIsNew = () => {return this.props.course};
-
-    fncHandleClose = () => {
-        if (!this.state.isUpdate) {
-            PubSub.publish('switch-to-crud', false);
+    fncHandleClose = () =>
+    {
+        if(!this.isUpdate)
+        {
+            PubSub.publish('go-table');
         }
         this.setState({open: false});
     };
@@ -64,20 +68,15 @@ class Information extends Component {
         if (this.fncValidData()) {
             this.setState({makeSave: true});
 
-            this.httpService.post('/course', this.fncGetDataCourse(), localStorage.getItem('auth-token'))
-                .then(response => {
-                    if (response.status !== 501) {
-                        return response.json();
-                    }
-                    throw new Error('Falha de autenticação.');
+            this.courseRepository.save(this.fncGetDataCourse())
+                .then(success =>
+                {
+                    this.fncHandleClose();
+
                 })
-                .then(success => {
-                    PubSub.publish('switch-to-crud', false);
-                    PubSub.publish('search-courses');
-                    this.setState({crud: true, open: false});
-                })
-                .catch(error => {
-                    this.setState({msg: error.message});
+                .catch(error =>
+                {
+                    console.log(error);
                 });
         }
     };
@@ -86,21 +85,14 @@ class Information extends Component {
         if (this.fncValidData()) {
             this.setState({makeSave: true});
 
-            this.httpService.put('/course', this.state.course, localStorage.getItem('auth-token'))
-                .then(response => {
-                    if (response.status !== 501) {
-                        return response.json();
-                    }
-                    throw new Error('Falha de autenticação.');
-                })
-                .then(success => {
-                    this.setState({open: false});
-                    PubSub.publish('switch-to-crud', false);
-                    PubSub.publish('switch-to-crud', success);
-
+            this.courseRepository.update(this.state.course)
+                .then(success =>
+                {
+                    this.fncHandleClose();
+                    this.setState({makeSave: false});
                 })
                 .catch(error => {
-                    this.setState({msg: error.message});
+                    console.log(error);
                 });
         }
     };
@@ -154,14 +146,14 @@ class Information extends Component {
         this.setState(course);
     };
 
-   handleChange = () => {
+    handleChange = () => {
         let course = this.state.course;
         course['status'] = !this.state.course.status;
         this.setState(course);
     };
 
-    render() {
-
+    render()
+    {
         let actions = [
             <FlatButton
                 label="Cancelar"
@@ -169,8 +161,8 @@ class Information extends Component {
                 onTouchTap={this.fncHandleClose}
             />,
             <RaisedButton
-                label={(this.fncCheckIfIsNew()) ? 'Salvar' : 'Atualizar' }
-                onTouchTap={(this.fncCheckIfIsNew()) ?  this.fncMakeSave : this.fncMakeUpdate }
+                label={(!this.isUpdate) ? 'Salvar' : 'Atualizar'}
+                onTouchTap={(!this.isUpdate) ? this.fncMakeSave : this.fncMakeUpdate}
                 backgroundColor="#0ac752"
                 labelStyle={{color: 'white'}}
                 style={{float: 'right', marginRight: '10px'}}/>
@@ -180,9 +172,9 @@ class Information extends Component {
         return (
             <div>
                 {
-                    (this.fncCheckIfIsNew) ?
+                    (!this.isUpdate) ?
                         null
-                    :
+                        :
                         <RaisedButton
                             label={"INFORMAÇÕES BÁSICAS DO CURSO - [ " + this.state.course.name + " ]"}
                             fullWidth={true}
@@ -263,5 +255,6 @@ class Information extends Component {
         );
     }
 }
+
 
 export default Information;

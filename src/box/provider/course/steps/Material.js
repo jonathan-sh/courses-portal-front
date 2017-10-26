@@ -2,7 +2,7 @@
  * Created by Igor Martucelli on 13/08/2017.
  */
 import React, {Component} from 'react';
-import Dropzone from '../../../service/Dropzone';
+import Dropzone from '../../../../service/Dropzone';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';

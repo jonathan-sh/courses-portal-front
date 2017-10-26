@@ -4,14 +4,14 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import httpService from './../../../service/HttpService';
+import ProviderRepository from './../../../repository/ProviderRepository';
 import PubSub from 'pubsub-js';
 
 class Footer extends Component
 {
     constructor(props) {
         super(props);
-        this.httpService = new httpService();
+        this.providerRepository = new ProviderRepository();
         this.state =
         {
             errorText: '',
@@ -32,12 +32,7 @@ class Footer extends Component
         if(this.isValidationField())
         {
             let data = this.getData();
-            this.httpService.put('/provider', data, localStorage.getItem('auth-token'))
-                .then(response => {
-                    if (response.status === 200) {
-                        return response.json();
-                    }
-                })
+            this.providerRepository.update(data)
                 .then(success => {PubSub.publish('show-message', 'Home face alterada com sucesso!');})
                 .catch(error => {PubSub.publish('show-message', error);});
         }

@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import SubGrade from './SubGrade';
 import PubSub from 'pubsub-js';
 import array from '../../../service/Array';
-import httpService from './../../../service/HttpService';
+import ProviderRepository from './../../../repository/ProviderRepository';
 import _ from 'lodash';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import NewIco from 'material-ui/svg-icons/content/add';
@@ -17,7 +17,7 @@ class Grade extends Component
     constructor(props)
     {
         super(props);
-        this.httpService = new httpService();
+        this.providerRepository = new ProviderRepository();
         this.array = new array();
         this.state =
         {
@@ -162,16 +162,10 @@ class Grade extends Component
 
     makeUpdateProvider = (message) =>
     {
-        this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status !== 501 )
-                {
-                    return response.json();
-                }
-                throw new Error('Falha de autenticação.');
-            })
-            .then(success => {this.responseUpdate(success, message);})
-            .catch(error => {PubSub.publish('show-message', error);});
+        this.providerRepository
+            .update(this.state.provider)
+            .then(success =>this.responseUpdate(success, message))
+            .catch(error => PubSub.publish('show-message', error));
 
     };
 

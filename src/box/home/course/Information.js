@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import { Step, Stepper, StepButton, StepContent,} from 'material-ui/Stepper';
 import HeaderBar from './../bar/HeaderBar';
-import httpService from '../../../service/HttpService';
+import HttpService from '../../../service/HttpService';
 import history from '../../../service/router/History';
+import _ from 'lodash';
+
 
 export default class Information extends Component {
 
     constructor(props) {
         super(props);
-        this.httpService = new httpService();
         this.state = {course: {name: '-'}, stepIndex: 0,steps: []};
         this.fncGetInformation();
     };
@@ -16,17 +17,14 @@ export default class Information extends Component {
 
     fncGetInformation = () => {
 
-        this.httpService.get('/course/information/' + this.props.match.params.id)
-            .then(response => {
-                if (response.status !== 501 && response.status !== 406) {
-                    return response.json();
-                }
-            })
-            .then(success => {
+        HttpService.make().get('/course/information/' + this.props.match.params.id)
+            .then(success =>
+            {
                 this.setState({course: success});
-                this.mountSteps();
+                this.mountSteps(success.steps);
             })
-            .catch(error => {
+            .catch(error =>
+            {
                 history.push('/not-found/course');
             });
 
@@ -34,26 +32,23 @@ export default class Information extends Component {
     };
 
 
-    mountSteps = () =>
+    mountSteps = (newSteps) =>
     {
-        if(this.state.course.steps!==undefined && this.state.course.steps!==null)
-        {
-            let steps = this.state.course.steps.map((step, index) =>
-                <Step key={index}>
-                    <StepButton onClick={() => this.setState({stepIndex: index})}>
-                        <div style={{color:'rgba(255, 255, 255, 1)'}}>{step.name}</div>
-                    </StepButton>
-                    <StepContent>
-                        <p>
-                            {step.description}
-                        </p>
+        let steps = _.sortBy(newSteps, ['order']).map((step, index) =>
+            <Step key={index}>
+                <StepButton onClick={() => this.setState({stepIndex: index})}>
+                    <div style={{color:'rgba(255, 255, 255, 1)'}}>{step.name}</div>
+                </StepButton>
+                <StepContent>
+                    <p>
+                        {step.description}
+                    </p>
 
-                    </StepContent>
-                </Step>
-            );
+                </StepContent>
+            </Step>
+        );
 
-            this.setState({'steps': steps});
-        };
+        this.setState({'steps': steps});
     };
 
 

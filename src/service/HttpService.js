@@ -1,59 +1,101 @@
-const URL = "http://127.0.0.1:4212";
+const API_URL = "http://127.0.0.1:4212";
 
+
+/**
+ * Abstraction of the ~GenericHttpRequest~ for each existing url
+ */
 class HttpService {
 
+    static make = () =>
+    {
+        if(!this.HTTP_SERVICE_INSTANCE)
+        {
+            this.HTTP_SERVICE_INSTANCE = new GenericHttpRequest(API_URL);
+        }
+        return this.HTTP_SERVICE_INSTANCE;
+    };
 
-    get(uri, token) {
+}
+export default HttpService;
 
-        const requestInfo = {
-            method: 'GET',
-            headers: this.makeHeaders(token)
-        };
 
-        return fetch(URL + uri, requestInfo);
+/**
+ * Generic class to make requests
+ */
+class GenericHttpRequest {
+
+    constructor(url)
+    {
+        this.URL = url;
     }
 
-    post(uri, data, token) {
-
-        const requestInfo = {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: this.makeHeaders(token)
-        };
-
-        return fetch(URL + uri, requestInfo);
+    get(uri)
+    {
+        return this.makeRequest('GET', uri);
     }
 
-    put(uri, data, token) {
-
-        const requestInfo = {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers:this.makeHeaders(token)
-        };
-
-        return fetch(URL + uri, requestInfo);
+    post(uri, data)
+    {
+        return this.makeRequest('POST', uri, data);
     }
 
-    delete(uri, data, token) {
-
-        const requestInfo = {
-            method: 'DELETE',
-            body: JSON.stringify(data),
-            headers:this.makeHeaders(token)
-        };
-
-        return fetch(URL + uri, requestInfo);
+    put(uri, data) {
+        return this.makeRequest('PUT', uri, data);
     }
 
-    makeHeaders(token) {
+    deleteOne(uri, data) {
+        return this.makeRequest('DELETE', uri, data);
+    }
+
+    makeRequest(method, uri, data)
+    {
+        let requestInfo = this.makeRequestInfo(method,data);
+        return fetch(this.URL + uri, requestInfo)
+            .then(response =>
+            {
+                if (response.status === 200 || response.status === 201)
+                {
+                    return response.json();
+                }
+                if (response.status === 401)
+                {
+                    throw this.sendError("unauthorized");
+                }
+                if (response.status === 404)
+                {
+                    throw this.sendError("not found");
+                }
+                console.log(response);
+                throw this.sendError("http request error");
+
+            });
+    }
+
+    sendError(value){
+        let error = value;
+        return error;
+    }
+
+    makeRequestInfo(method,data)
+    {
+        let info =
+            {
+                method: method,
+                body: JSON.stringify(data),
+                headers:this.makeHeaders()
+            };
+        return info
+    }
+
+    makeHeaders()
+    {
+        let token = localStorage.getItem('auth-token');
         return new Headers({
             'Content-type': 'application/json;charset=UTF-8',
             'X-Auth-Token': token === undefined ? '-' : token
-        })
+        });
     }
-
-
 }
 
-export default HttpService;
+
+

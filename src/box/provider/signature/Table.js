@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
-import httpService from '../../../service/HttpService';
+import HttpService from '../../../service/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import BuildIco from 'material-ui/svg-icons/av/playlist-play';
 import TextField from 'material-ui/TextField';
@@ -10,10 +10,10 @@ import _ from 'lodash';
 class TableSignature extends Component {
 
 
-    constructor() {
+    constructor()
+    {
         super();
         this.state = {rows: [], signatures: []};
-        this.httpService = new httpService();
 
     }
 
@@ -46,37 +46,32 @@ class TableSignature extends Component {
 
 
     fncUpdateSignature = (data) => {
-        this.httpService.put('/student', data, localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                }
-            })
-            .then(success => {
+        HttpService.make().put('/student', data)
+
+            .then(success =>
+            {
                 let signatures = _.remove(this.state.signatures, (o) => {
-                    return o._id !== success._id
-                })
+                                            return o._id !== success._id
+                                         });
                 signatures.push(success);
                 this.setState({signatures: signatures})
                 this.fncMakeRows(this.state.signatures);
             })
-            .catch(error => {
+            .catch(error =>
+            {
                 this.setState({msg: error.message});
             });
     };
 
     fncGetSignatures = () => {
-        this.httpService.get('/student/signature', localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                }
-            })
-            .then(success => {
+        HttpService.make().get('/student/signature', localStorage.getItem('auth-token'))
+            .then(success =>
+            {
                 this.setState({signatures: success});
                 this.fncMakeRows(this.state.signatures);
             })
-            .catch(error => {
+            .catch(error =>
+            {
                 this.setState({msg: error.message});
             });
     };

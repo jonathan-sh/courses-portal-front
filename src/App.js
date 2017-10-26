@@ -2,14 +2,13 @@ import "./style/css/index.css";
 import React, {Component} from "react";
 import HeaderBar from "./box/home/bar/HeaderBar";
 import Paper from 'material-ui/Paper';
-import httpService from './service/HttpService';
+import HttpService from './service/HttpService';
 
 class App extends Component
 {
     constructor()
     {
         super();
-        this.httpService = new httpService();
         this.state =
         {
             welcome: '',
@@ -34,18 +33,14 @@ class App extends Component
 
     getDataForPlatform = () =>
     {
-        this.httpService.get('/home')
-            .then(response => {
-                if (response.status !== 501 )
+        HttpService.make().get('/home')
+                .then(success => {
+                    this.setItemsLocalStorage(success);
+                })
+                .catch(error =>
                 {
-                    return response.json();
-                }
-                throw new Error('Falha ao carregar dados da plataforma!');
-            })
-            .then(success => {
-                this.setItemsLocalStorage(success);
-            })
-            .catch(error => {console.log(error)});
+                    console.log(error)
+                });
     };
 
     createAboutComponent = () =>

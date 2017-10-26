@@ -15,13 +15,31 @@ export default class GetResponseYesNo extends React.Component {
         this.setState({open: true});
     };
 
-    fncOnYesCase = () =>
+    fncIfYesCase = () =>
     {
-        this.props.fncIfYesOnTouchTap();
-        this.fncHandleClose();
+        try
+        {
+            console.log(this.props.fncOnYesCase);
+            this.props.fncOnYesCase();
+        }
+        catch (error)
+        {
+            console.log('fncOnYesCase not declared')
+        }
+        this.setState({open: false});
     };
 
-    fncHandleClose = () => {
+
+    fncIfNoCase = () =>
+    {
+        try
+        {
+            this.props.fncOnNoCase();
+        }
+        catch (error)
+        {
+            console.log('fncOnNoCase not declared')
+        }
         this.setState({open: false});
     };
 
@@ -31,24 +49,24 @@ export default class GetResponseYesNo extends React.Component {
             <FlatButton
                 label="SIM"
                 primary={true}
-                onClick={this.fncOnYesCase}
+                onClick={this.fncIfYesCase}
             />,
             <FlatButton
                 label="NÃO"
                 primary={true}
                 keyboardFocused={true}
-                onClick={this.fncHandleClose}
+                onClick={this.fncIfNoCase}
             />
         ];
 
         return (
             <div>
                 <RaisedButton
-                    label={this.props.btnLabel}
-                    backgroundColor={this.props.btnBackgroundColor}
-                    icon={this.props.btnIcon}
-                    style={this.props.btnStyle}
-                    labelStyle={this.props.btnLabelStyle}
+                    label={this.props.btLabel}
+                    backgroundColor={this.props.btBackgroundColor}
+                    icon={this.props.btIcon}
+                    style={this.props.btStyle}
+                    labelStyle={this.props.btLabelStyle}
                     onClick={this.fncHandleOpen} />
                 <Dialog
                     title={this.props.title}

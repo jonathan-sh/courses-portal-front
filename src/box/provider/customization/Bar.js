@@ -7,14 +7,14 @@ import Grade from './Grade';
 import PubSub from 'pubsub-js';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import NewIco from 'material-ui/svg-icons/content/add';
-import httpService from './../../../service/HttpService';
+import ProviderRepository from './../../../repository/ProviderRepository';
 
 class Bar extends Component
 {
     constructor(props)
     {
         super(props);
-        this.httpService = new httpService();
+        this.providerRepository = new ProviderRepository();
         this.state =
         {
             showGrade: false,
@@ -80,16 +80,10 @@ class Bar extends Component
 
     makeUpdateProvider = (message) =>
     {
-        this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status !== 501 )
-                {
-                    return response.json();
-                }
-                throw new Error('Falha de autenticação.');
-            })
-            .then(success => {this.responseUpdate(success, message);})
-            .catch(error => {PubSub.publish('show-message', error);});
+        this.providerRepository
+            .update(this.state.provider)
+            .then(success => this.responseUpdate(success, message))
+            .catch(error => PubSub.publish('show-message', error));
     };
 
     responseUpdate = (response, message) =>

@@ -8,7 +8,7 @@ import TextField from 'material-ui/TextField';
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
-import httpService from '../../../service/HttpService';
+import HttpService from '../../../service/HttpService';
 import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 
@@ -17,7 +17,6 @@ import Snackbar from 'material-ui/Snackbar';
 class SendEmail extends Component {
     constructor(props) {
         super(props);
-        this.httpService = new httpService();
         this.state = {
             stepIndex: 0, open: true, email: {subject: "", html: "", text: "", recipients: []},
             makeSend: false,
@@ -35,34 +34,26 @@ class SendEmail extends Component {
     }
 
     fncFillStudents = () => {
-        this.httpService.get('/student/signature', localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                }
-            })
-            .then(success => {
-                this.setState({signatures: success});
-                this.fncMakeRows(this.state.signatures);
-            })
-            .catch(error => {
-                this.setState({msg: error.message});
-            });
+        HttpService.make().get('/student/signature')
+                          .then(success => {
+                              this.setState({signatures: success});
+                              this.fncMakeRows(this.state.signatures);
+                          })
+                          .catch(error => {
+                              this.setState({msg: error.message});
+                          });
     };
 
     fncSendEmail = (data) => {
         this.setState({sending: true});
-        this.httpService.post('/provider/send-email', data, localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                }
-            })
-            .then(success => {
+        HttpService.make().post('/provider/send-email', data)
+            .then(success =>
+            {
                 this.setState({sending: false});
                 this.setState({response: success});
             })
-            .catch(error => {
+            .catch(error =>
+            {
                 this.setState({msg: error.message});
             });
     };

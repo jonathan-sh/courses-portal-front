@@ -4,42 +4,34 @@ import NewIco from 'material-ui/svg-icons/content/add';
 import BackIco from 'material-ui/svg-icons/content/reply-all';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
-import Crud from "./Crud";
+import CrudCourse from "./CrudCourse";
 
 class Course extends Component {
 
     constructor()
     {
         super();
-        this.state = {isCrud: false};
+        this.state = {isCrud: false,course:null};
     }
 
-    componentDidMount(){
+    componentDidMount()
+    {
         PubSub.publish('header-label','Pesquisar curso');
-        PubSub.subscribe('switch-to-crud', this.fncInCrud);
+        PubSub.subscribe('go-table', this.fncGoToFind);
+        PubSub.subscribe('go-crud' , this.fncGoToCrud);
     }
 
-    fncGoToCrud = () => this.setState({'isCrud': true});
-
-    fncGoToFind = () => this.setState({'isCrud': false});
-
-    fncInCrud = (key, course) => {
-        if (course !== undefined && course !==false)
-        {
-            this.setState({'course': course});
-            this.setState({'isCrud': true});
-            this.setState({'showTable': false});
-        }
-        else
-        {
-            this.fncGoToFind();
-        }
-
+    fncGoToCrud = (key, course) =>
+    {
+        this.setState({'course': course});
+        this.setState({'isCrud': true});
     };
 
-
-
-    fncCheck = () => {return this.state.newCourse || this.state.isCrud};
+    fncGoToFind = () =>
+    {
+        this.setState({'isCrud': false});
+        this.setState({'course': null});
+    };
 
     render() {
         return (
@@ -48,15 +40,15 @@ class Course extends Component {
                 <br/>
 
                     <RaisedButton
-                        label={(this.fncCheck())? 'voltar a lista de cursos' : 'adicionar um curso novo'}
-                        backgroundColor={this.fncCheck()? '#ff7500' : '#0ac752'}
-                        icon={this.fncCheck()? <BackIco color='#FFF'/> : <NewIco color='#FFF'/>}
-                        onTouchTap={(this.fncCheck())? this.fncGoToFind : this.fncGoToCrud }
+                        label={(this.state.isCrud)? 'voltar para lista de cursos' : 'adicionar um curso novo'}
+                        backgroundColor={(this.state.isCrud)? '#ff7500' : '#0ac752'}
+                        icon={(this.state.isCrud)? <BackIco color='#FFF'/> : <NewIco color='#FFF'/>}
+                        onTouchTap={(this.state.isCrud)? this.fncGoToFind : this.fncGoToCrud }
                         fullWidth={true}
                         labelStyle={{color: 'white'}}
                     />
 
-                {this.state.isCrud ? <Crud course={false}/>  : <TableFound/>}
+                {this.state.isCrud ? <CrudCourse course={this.state.course} />  : <TableFound/>}
 
             </div>
         )

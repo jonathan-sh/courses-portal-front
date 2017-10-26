@@ -25,7 +25,7 @@ class HeaderBar extends Component
         localStorage.removeItem('provider');
         localStorage.removeItem('courses');
         localStorage.removeItem('entity');
-        history.push('/login/provider');
+        history.push('/');
     };
 
     render()

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
-import httpService from '../../../service/HttpService';
+import CourseRepository from '../../../repository/CourseRepository';
 import GetResponseYesNo from '../../../component/GetResponseYesNo';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
@@ -12,66 +12,64 @@ import _ from 'lodash';
 
 class TableFind extends Component {
 
-
     constructor() {
         super();
         this.state = {rows: '', courses: '', course: '',};
-        this.httpService = new httpService();
+        this.courseRepository = new CourseRepository();
     }
 
-    styles = {
+    styles =
+        {
         tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
         tableBody: {cursor: 'pointer'},
     };
 
-    componentDidMount() {
-        PubSub.publish('header-label', 'Pesquisar curso');
-        PubSub.subscribe('search-courses', this.fncGetCourses);
+    componentDidMount()
+    {
         this.fncGetCourses();
     }
 
     fncGetCourses = () => {
-        this.httpService.get('/course', localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status !== 501) {
-                    return response.json();
-                }
-                throw new Error('Falha de autenticação.');
-            })
+        this.courseRepository.getAll()
             .then(success => {
                 this.setState({'courses': success});
                 localStorage.setItem('courses', JSON.stringify(success));
                 this.fncMakeRows(success);
             })
-            .catch(error => {
-                this.setState({msg: error.message});
+            .catch(error =>
+            {
+              console.log(error);
             });
 
     };
 
     fncMakeRows = (courses) => {
         courses = _.sortBy(courses, ['name']);
+
         let rows = courses.map((course) =>
             <TableRow key={course._id}>
                 <TableRowColumn>{course.name}</TableRowColumn>
                 <TableRowColumn>{course.status ? 'ativo' : 'inativo'}</TableRowColumn>
                 <TableRowColumn>
                    <span style={{display: 'inline-flex'}}>
-                        <RaisedButton
-                            label="editar"
-                            backgroundColor="#00a1fc"
-                            onTouchTap={() => this.fncEditCourse(course)}
-                            icon={<EditIco color="#FFF"/>}
-                            labelStyle={{color: 'white'}}/>
+                         <RaisedButton
+                             label="editar"
+                             backgroundColor="#00a1fc"
+                             onTouchTap={() => this.fncEditCourse(course)}
+                             icon={<EditIco color="#FFF"/>}
+                             labelStyle={{color: 'white'}}/>
+
                         <GetResponseYesNo
-                            fncIfYesOnTouchTap={() => this.fncDeleteCourse(course)}
+                            fncOnYesCase={() => this.courseRepository
+                                                    .delete(course)
+                                                    .then(this.fncGetCourses)}
                             title={"Antenção, deletando curso"}
                             question={"Você realmente deseja deletar o curso [ "+course.name +" ] ?"}
-                            btnLabel="delete"
-                            btnBackgroundColor="#ff2930"
-                            btnIcon={<DeleteIco color="#FFF"/>}
-                            btnStyle={{marginLeft: '5%'}}
-                            btnLabelStyle={{color: 'white'}}/>
+                            btLabel="delete"
+                            btBackgroundColor="#ff2930"
+                            btIcon={<DeleteIco color="#FFF"/>}
+                            btStyle={{marginLeft: '5%'}}
+                            btLabelStyle={{color: 'white'}}/>
                        </span>
                 </TableRowColumn>
             </TableRow>
@@ -80,15 +78,10 @@ class TableFind extends Component {
         this.setState({'rows': rows});
     };
 
-    fncEditCourse = (course) => {
-        PubSub.publish('switch-to-crud', course);
-    };
+    fncEditCourse = (course) => PubSub.publish('go-crud',course);
 
-    fncDeleteCourse = (course) => {
-        alert('Delete curse ' + course.name);
-    };
-
-    fncFilterRows = () => {
+    fncFilterRows = () =>
+    {
         let filter = this.search.input.value;
         filter = filter.toUpperCase();
         let result = _.filter(this.state.courses, (o) => {
