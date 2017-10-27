@@ -4,8 +4,6 @@ import SendEmail from './SendEmail';
 import RaisedButton from 'material-ui/RaisedButton';
 import SendIco from 'material-ui/svg-icons/content/send';
 
-
-
 class Marketing extends Component {
 
     constructor(props)

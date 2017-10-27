@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
-import CourseRepository from '../../../service/repository/CourseService';
+import courseService from '../../../service/repository/CourseService';
 import GetResponseYesNo from '../../../component/GetResponseYesNo';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
@@ -9,14 +9,12 @@ import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
 import _ from 'lodash';
 
-
-class TableFind extends Component {
+class TableCourse extends Component {
 
     constructor()
     {
         super();
         this.state = {rows: '', courses: '', course: '',};
-        this.courseRepository = new CourseRepository();
     };
 
     componentDidMount()
@@ -26,17 +24,17 @@ class TableFind extends Component {
 
     fncGetCourses = () =>
     {
-        this.courseRepository.getAll()
-                             .then(success =>
-                             {
-                                 this.setState({'courses': success});
-                                 localStorage.setItem('courses', JSON.stringify(success));
-                                 this.fncMakeRows(success);
-                             })
-                             .catch(error =>
-                             {
-                               console.log(error);
-                             });
+        courseService.getAll()
+                     .then(success =>
+                     {
+                         this.setState({'courses': success});
+                         localStorage.setItem('courses', JSON.stringify(success));
+                         this.fncMakeRows(success);
+                     })
+                     .catch(error =>
+                     {
+                       console.log(error);
+                     });
 
     };
 
@@ -58,7 +56,7 @@ class TableFind extends Component {
                              labelStyle={{color: 'white'}}/>
 
                         <GetResponseYesNo
-                            fncOnYesCase={() => this.courseRepository
+                            fncOnYesCase={() => courseService
                                                     .delete(course)
                                                     .then(this.fncGetCourses)}
                             title={"Antenção, deletando curso"}
@@ -136,4 +134,4 @@ class TableFind extends Component {
     };
 }
 
-export default TableFind;
+export default TableCourse;

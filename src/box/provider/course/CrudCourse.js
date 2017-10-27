@@ -39,12 +39,14 @@ class CrudCourse extends Component {
     {
         let st = _.sortBy(steps, ['order']);
         this.steps = st.map((step) =>
-            <div key={step.order} style={{marginBottom: '0.5%'}}>
+            <div key={step.order} style={{marginBottom: '0.5%', display:'flex'}}>
 
-                <div style={{display: 'inline'}}>
 
+                <div style={{width:'89%'}}>
                     <Step step={step}/>
+                </div>
 
+                <div style={{marginLeft: '1%',minWidth:'10%', marginTop:'6px'}}>
                     <GetResponseYesNo
                         fncOnYesCase={() => console.log("não implementado.")}
                         title={"Antenção, deletando etapa"}
@@ -52,10 +54,9 @@ class CrudCourse extends Component {
                         btLabel="delete"
                         btBackgroundColor="#ff2930"
                         btIcon={<DeleteIco color="#FFF"/>}
-                        btStyle={{marginLeft: '1%',  width:'10%', marginTop:'6px'}}
+                        btStyle={{width:'100%'}}
                         btLabelStyle={{color: 'white'}}/>
                 </div>
-
             </div>
         );
         this.setState({steps: steps});
@@ -76,6 +77,7 @@ class CrudCourse extends Component {
                             <Information course={this.state.course}/>
                             <br/>
                             <span className="subTopic">Etapas: </span>
+                            <br/>
                             <br/>
                             {this.steps}
                             <AddStep course={this.state.course}/>

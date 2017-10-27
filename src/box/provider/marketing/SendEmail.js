@@ -12,8 +12,6 @@ import httpService from '../../../service/http/HttpService';
 import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 
-
-
 class SendEmail extends Component {
     constructor(props)
     {
@@ -207,13 +205,6 @@ class SendEmail extends Component {
         return result.length > 0;
     };
 
-    styles =
-    {
-        tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
-        tableBody: {cursor: 'pointer'},
-        toggle:{ maxWidth: 250, marginTop:'20px'}
-    };
-
     getStepContent(stepIndex)
     {
         switch (stepIndex) {
@@ -301,6 +292,13 @@ class SendEmail extends Component {
             default:
                 return ((<span>error</span>))
         }
+    };
+
+    styles =
+    {
+            tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
+            tableBody: {cursor: 'pointer'},
+            toggle:{ maxWidth: 250, marginTop:'20px'}
     };
 
     render()

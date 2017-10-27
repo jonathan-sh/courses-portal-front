@@ -7,7 +7,8 @@ import PubSub from 'pubsub-js';
 
 class ActionMessage extends Component
 {
-    constructor() {
+    constructor()
+    {
         super();
         this.state =
         {
@@ -16,7 +17,7 @@ class ActionMessage extends Component
         };
 
         PubSub.subscribe('show-message', this.makeMessage);
-    }
+    };
 
     makeMessage = (topic, message) =>
     {

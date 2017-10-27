@@ -7,15 +7,15 @@ import AddProve from './Prove';
 import AddMaterial from './Material';
 import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
-import CourseRepository from '../../../../service/repository/CourseService';
-
+import courseService from '../../../../service/repository/CourseService';
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 
-class Steps extends Component {
-    constructor(props) {
+class Steps extends Component
+{
+    constructor(props)
+    {
         super(props);
-        this.courseRepository = new CourseRepository();
         this.state = {
              showStep: true,
              stepIndex: 0,
@@ -24,21 +24,15 @@ class Steps extends Component {
              errorText: {name: '', description: ''},
              course:''
         };
-    }
+    };
 
     fncMakeSave = () =>
     {
         if (this.fncValidData())
         {
-            this.courseRepository.update(this.fncGetDataStep())
-                .then(success =>
-                {
-                    this.setState({'course': success});
-                })
-                .catch(error =>
-                {
-                    console.log(error);
-                });
+            courseService.update(this.fncGetDataStep())
+                         .then(success => this.setState({'course': success}))
+                         .catch(error  => console.log(error));
         }
 
     };
@@ -81,7 +75,8 @@ class Steps extends Component {
     {
         const {stepIndex} = this.state;
 
-        if (stepIndex > 0) {
+        if (stepIndex > 0)
+        {
             this.setState({stepIndex: stepIndex - 1});
         }
     };
@@ -131,11 +126,13 @@ class Steps extends Component {
 
         this.setState({'errorText': errorText});
 
-        if (this.name === undefined || this.state.step.name === '') {
+        if (this.name === undefined || this.state.step.name === '')
+        {
             errorText.name = 'Informe um nome';
             status = false;
         }
-        if (this.description === undefined || this.state.step.description === '') {
+        if (this.description === undefined || this.state.step.description === '')
+        {
             errorText.description = 'Informe uma descrição';
             status = false;
         }
@@ -235,10 +232,10 @@ class Steps extends Component {
             <div>
                 <RaisedButton
                     label={this.state.step.name}
-                    backgroundColor="#2dc7a2"
+                    backgroundColor="#00bcd4"
                     onTouchTap={() =>this.fncHandleOpen()}
                     labelStyle={{color: '#FFF'}}
-                    style={{marginTop: '5px',width:'89%'}}>
+                    style={{marginTop: '5px',width:'100%'}}>
                 </RaisedButton>
                 <Dialog
                     title="Adicionando uma etapa"

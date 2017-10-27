@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 export default class GetResponseYesNo extends React.Component {
+
     constructor(props)
     {
         super(props);
@@ -26,17 +27,10 @@ export default class GetResponseYesNo extends React.Component {
         this.setState({open: false});
     };
 
-
     fncIfNoCase = () =>
     {
-        try
-        {
-            this.props.fncOnNoCase();
-        }
-        catch (error)
-        {
-            console.log('fncOnNoCase not declared')
-        }
+        try{this.props.fncOnNoCase(); }
+        catch (error) {console.log('fncOnNoCase not declared')}
         this.setState({open: false});
     };
 
@@ -76,5 +70,5 @@ export default class GetResponseYesNo extends React.Component {
                 </Dialog>
             </div>
         );
-    }
+    };
 }

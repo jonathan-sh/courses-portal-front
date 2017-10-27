@@ -4,30 +4,31 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import LinearProgress from 'material-ui/LinearProgress';
-import CourseRepository from '../../../../service/repository/CourseService';
+import courseService from '../../../../service/repository/CourseService';
 import NewIco from 'material-ui/svg-icons/content/add';
 import PubSub from 'pubsub-js';
 
 class Material extends Component {
+
     constructor(props) {
         super(props);
-        this.courseRepository = new CourseRepository();
-        this.state = {
+        this.state =
+        {
             open: false,
             step: {name: '', description: ''},
             errorText: {name: '', description: ''}
         };
     };
 
-    componentWillMount() {
+    componentWillMount()
+    {
         this.fncFillInformation();
-    }
+    };
 
     fncFillInformation = () =>
     {
         if (this.props.course !== undefined)
         {
-
             this.setState({'course': this.props.course});
             this.cleanData();
         }
@@ -47,55 +48,60 @@ class Material extends Component {
         this.setState({open: true});
     };
 
-    fncHandleClose = () => { this.setState({open: false});};
+    fncHandleClose = () => {this.setState({open: false})};
 
-    fncHandleSave = () => {
+    fncHandleSave = () =>
+    {
         this.fncGetDataStep();
         if (this.fncValidData()) {
             this.setState({makeSave: true});
-            this.courseRepository.update(this.fncGetDataStep())
-                .then(success =>
-                {
-                    PubSub.publish('reload-course' , success);
-                    this.setState({makeSave: false});
-                    this.fncHandleClose();
-                })
-                .catch(error =>
-                {
-                    console.log(error);
-                });
+            courseService.update(this.fncGetDataStep())
+                         .then(success =>
+                         {
+                             PubSub.publish('reload-course' , success);
+                             this.setState({makeSave: false});
+                             this.fncHandleClose();
+                         })
+                         .catch(error =>
+                         {
+                             console.log(error);
+                         });
 
         }
     };
 
     fncGetDataStep = () =>
     {
-        let course = {
+        let course =
+        {
             '_id': this.state.course._id,
             'steps': [{'name': this.state.step.name, 'description': this.state.step.description}]
         };
         return course;
     };
 
-
-    setData = (event, value, attribute) => {
+    setData = (event, value, attribute) =>
+    {
         let step = this.state.step;
         step[attribute] = value;
         this.setState(step);
     };
 
-    fncValidData = () => {
+    fncValidData = () =>
+    {
         let status = true;
 
         let errorText = {name: '', description: ''};
 
         this.setState({'errorText': errorText});
 
-        if (this.name === undefined || this.name.input.value === '') {
+        if (this.name === undefined || this.name.input.value === '')
+        {
             errorText.name = 'Informe um nome';
             status = false;
         }
-        if (this.description === undefined || this.description.input.value === '') {
+        if (this.description === undefined || this.description.input.value === '')
+        {
             errorText.description = 'Informe uma descrição';
             status = false;
         }
@@ -105,9 +111,10 @@ class Material extends Component {
         return status;
     };
 
-
-    render() {
-        const actions = [
+    render()
+    {
+        const actions =
+        [
             <FlatButton
                 label="Cancelar"
                 primary={true}
@@ -157,7 +164,7 @@ class Material extends Component {
                 </Dialog>
             </div>
         );
-    }
+    };
 }
 
 export default Material;

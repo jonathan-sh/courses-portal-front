@@ -66,6 +66,7 @@ class GenericHttpRequest {
                     throw this.sendError("not found");
                 }
                 console.log(response);
+                console.log(response.json());
                 throw this.sendError("http request error");
 
             });

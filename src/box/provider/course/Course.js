@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import TableFound from './Table';
+import TableFound from './TableCourse';
 import NewIco from 'material-ui/svg-icons/content/add';
 import BackIco from 'material-ui/svg-icons/content/reply-all';
 import RaisedButton from 'material-ui/RaisedButton';

@@ -163,7 +163,7 @@ class Information extends Component {
                             label={"INFORMAÇÕES BÁSICAS DO CURSO - [ " + this.state.course.name + " ]"}
                             fullWidth={true}
                             labelStyle={{color: '#FFF'}}
-                            backgroundColor="#2dc7a2"
+                            backgroundColor="#0e5a86"
                             onTouchTap={this.fncHandleOpen}
                             style={{marginTop: '20px'}}/>
                 }
