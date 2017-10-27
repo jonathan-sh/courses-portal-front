@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
-import CourseRepository from '../../../repository/CourseRepository';
+import CourseRepository from '../../../service/repository/CourseService';
 import GetResponseYesNo from '../../../component/GetResponseYesNo';
 import RaisedButton from 'material-ui/RaisedButton';
 import EditIco from 'material-ui/svg-icons/content/create';
@@ -12,38 +12,36 @@ import _ from 'lodash';
 
 class TableFind extends Component {
 
-    constructor() {
+    constructor()
+    {
         super();
         this.state = {rows: '', courses: '', course: '',};
         this.courseRepository = new CourseRepository();
-    }
-
-    styles =
-        {
-        tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
-        tableBody: {cursor: 'pointer'},
     };
 
     componentDidMount()
     {
         this.fncGetCourses();
-    }
+    };
 
-    fncGetCourses = () => {
+    fncGetCourses = () =>
+    {
         this.courseRepository.getAll()
-            .then(success => {
-                this.setState({'courses': success});
-                localStorage.setItem('courses', JSON.stringify(success));
-                this.fncMakeRows(success);
-            })
-            .catch(error =>
-            {
-              console.log(error);
-            });
+                             .then(success =>
+                             {
+                                 this.setState({'courses': success});
+                                 localStorage.setItem('courses', JSON.stringify(success));
+                                 this.fncMakeRows(success);
+                             })
+                             .catch(error =>
+                             {
+                               console.log(error);
+                             });
 
     };
 
-    fncMakeRows = (courses) => {
+    fncMakeRows = (courses) =>
+    {
         courses = _.sortBy(courses, ['name']);
 
         let rows = courses.map((course) =>
@@ -91,7 +89,14 @@ class TableFind extends Component {
         this.fncMakeRows(result);
     };
 
-    render() {
+    styles =
+    {
+        tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
+        tableBody: {cursor: 'pointer'},
+    };
+
+    render()
+    {
         return (
 
             <div>
@@ -128,7 +133,7 @@ class TableFind extends Component {
             </div>
 
         )
-    }
+    };
 }
 
 export default TableFind;

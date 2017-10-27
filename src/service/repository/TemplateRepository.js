@@ -1,4 +1,4 @@
-import HttpService from '../service/HttpService';
+import HttpService from '../http/HttpService';
 
 class TemplateRepository
 {

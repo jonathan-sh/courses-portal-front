@@ -5,7 +5,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
-import httpService from '../../../service/HttpService';
+import httpService from '../../../service/http/HttpService';
 import history from '../../../service/router/History';
 import LinearProgress from 'material-ui/LinearProgress';
 

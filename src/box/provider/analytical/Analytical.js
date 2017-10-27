@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PubSub from 'pubsub-js';
 import HighCharts from "highcharts";
 import AddFunnel from "highcharts/modules/funnel";
-import HttpService from './../../../service/HttpService';
+import HttpService from '../../../service/http/HttpService';
 
 class Analytical extends Component {
 

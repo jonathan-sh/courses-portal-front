@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import SubGrade from './SubGrade';
 import PubSub from 'pubsub-js';
 import array from '../../../service/Array';
-import ProviderRepository from './../../../repository/ProviderRepository';
+import providerService from '../../../service/repository/ProviderService';
 import _ from 'lodash';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import NewIco from 'material-ui/svg-icons/content/add';
@@ -17,7 +17,6 @@ class Grade extends Component
     constructor(props)
     {
         super(props);
-        this.providerRepository = new ProviderRepository();
         this.array = new array();
         this.state =
         {
@@ -162,7 +161,7 @@ class Grade extends Component
 
     makeUpdateProvider = (message) =>
     {
-        this.providerRepository
+        providerService
             .update(this.state.provider)
             .then(success =>this.responseUpdate(success, message))
             .catch(error => PubSub.publish('show-message', error));

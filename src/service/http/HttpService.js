@@ -27,25 +27,25 @@ class GenericHttpRequest {
     constructor(url)
     {
         this.URL = url;
-    }
+    };
 
     get(uri)
     {
         return this.makeRequest('GET', uri);
-    }
+    };
 
     post(uri, data)
     {
         return this.makeRequest('POST', uri, data);
-    }
+    };
 
     put(uri, data) {
         return this.makeRequest('PUT', uri, data);
-    }
+    };
 
     deleteOne(uri, data) {
         return this.makeRequest('DELETE', uri, data);
-    }
+    };
 
     makeRequest(method, uri, data)
     {
@@ -69,12 +69,13 @@ class GenericHttpRequest {
                 throw this.sendError("http request error");
 
             });
-    }
+    };
 
-    sendError(value){
+    sendError(value)
+    {
         let error = value;
         return error;
-    }
+    };
 
     makeRequestInfo(method,data)
     {
@@ -85,7 +86,7 @@ class GenericHttpRequest {
                 headers:this.makeHeaders()
             };
         return info
-    }
+    };
 
     makeHeaders()
     {
@@ -94,7 +95,7 @@ class GenericHttpRequest {
             'Content-type': 'application/json;charset=UTF-8',
             'X-Auth-Token': token === undefined ? '-' : token
         });
-    }
+    };
 }
 
 

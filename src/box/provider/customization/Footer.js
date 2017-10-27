@@ -4,14 +4,13 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import ProviderRepository from './../../../repository/ProviderRepository';
+import providerService from '../../../service/repository/ProviderService';
 import PubSub from 'pubsub-js';
 
 class Footer extends Component
 {
     constructor(props) {
         super(props);
-        this.providerRepository = new ProviderRepository();
         this.state =
         {
             errorText: '',
@@ -32,7 +31,7 @@ class Footer extends Component
         if(this.isValidationField())
         {
             let data = this.getData();
-            this.providerRepository.update(data)
+            providerService.update(data)
                 .then(success => {PubSub.publish('show-message', 'Home face alterada com sucesso!');})
                 .catch(error => {PubSub.publish('show-message', error);});
         }

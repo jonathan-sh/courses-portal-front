@@ -12,14 +12,14 @@ class Course extends Component {
     {
         super();
         this.state = {isCrud: false,course:null};
-    }
+    };
 
     componentDidMount()
     {
         PubSub.publish('header-label','Pesquisar curso');
         PubSub.subscribe('go-table', this.fncGoToFind);
         PubSub.subscribe('go-crud' , this.fncGoToCrud);
-    }
+    };
 
     fncGoToCrud = (key, course) =>
     {
@@ -33,7 +33,8 @@ class Course extends Component {
         this.setState({'course': null});
     };
 
-    render() {
+    render()
+    {
         return (
             <div>
 
@@ -52,7 +53,7 @@ class Course extends Component {
 
             </div>
         )
-    }
+    };
 }
 
 export default Course;

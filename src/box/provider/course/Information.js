@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import CourseRepository from '../../../repository/CourseRepository';
+import courseRepository from '../../../service/repository/CourseService';
 import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
@@ -11,32 +11,19 @@ import Toggle from 'material-ui/Toggle';
 
 class Information extends Component {
 
-    constructor(props) {
+    constructor(props)
+    {
         super(props);
-        this.courseRepository = new CourseRepository();
         this.isUpdate = false;
-        this.state = {
+        this.state =
+        {
             open: false,
             makeSave: false,
-            errorText: {
-                name: '',
-                description: '',
-                objective: '',
-                price: '',
-                hours: ''
-            },
-            course: {
-                _id: null,
-                name: '',
-                description: '',
-                objective: '',
-                price: '',
-                hours: '',
-                status: false
-            }
+            errorText: {name: '', description: '', objective: '', price: '', hours: ''},
+            course: {_id: null, name: '', description: '', objective: '', price: '', hours: '', status: false}
         };
 
-    }
+    };
 
     componentDidMount()
     {
@@ -51,7 +38,7 @@ class Information extends Component {
             this.setState({'open':true});
             PubSub.publish('header-label', 'Criando curso');
         }
-    }
+    };
 
     fncHandleOpen = () => this.setState({open: true});
 
@@ -64,28 +51,24 @@ class Information extends Component {
         this.setState({open: false});
     };
 
-    fncMakeSave = () => {
-        if (this.fncValidData()) {
+    fncMakeSave = () =>
+    {
+        if (this.fncValidData())
+        {
             this.setState({makeSave: true});
 
-            this.courseRepository.save(this.fncGetDataCourse())
-                .then(success =>
-                {
-                    this.fncHandleClose();
-
-                })
-                .catch(error =>
-                {
-                    console.log(error);
-                });
+            courseRepository.save(this.fncGetDataCourse())
+                            .then(success => this.fncHandleClose())
+                            .catch(error => console.log(error));
         }
     };
 
-    fncMakeUpdate = () => {
-        if (this.fncValidData()) {
+    fncMakeUpdate = () =>
+    {
+        if (this.fncValidData())
+        {
             this.setState({makeSave: true});
-
-            this.courseRepository.update(this.state.course)
+            courseRepository.update(this.state.course)
                 .then(success =>
                 {
                     this.fncHandleClose();
@@ -97,7 +80,8 @@ class Information extends Component {
         }
     };
 
-    fncGetDataCourse = () => {
+    fncGetDataCourse = () =>
+    {
         let course = {
             name: this.name.input.value,
             description: this.description.input.value,
@@ -109,22 +93,18 @@ class Information extends Component {
         return course;
     };
 
-    fncValidData = () => {
+    fncValidData = () =>
+    {
         let status = true;
         let course = this.fncGetDataCourse();
-
-        let errorText = {
-            name: '',
-            description: '',
-            objective: '',
-            price: '',
-            hours: ''
-        };
+        let errorText = {name: '', description: '', objective: '', price: '', hours: ''};
 
         this.setState({'errorText': errorText});
 
-        _.forEach(course, (value, key) => {
-            if (!this.fncValidValue(value)) {
+        _.forEach(course, (value, key) =>
+        {
+            if (!this.fncValidValue(value))
+            {
                 status = false;
                 errorText[key] = 'Informe este campo';
             }
@@ -136,17 +116,20 @@ class Information extends Component {
 
     };
 
-    fncValidValue = (value) => {
+    fncValidValue = (value) =>
+    {
         return value !== undefined && value !== ""
     };
 
-    setData = (event, value, attribute) => {
+    setData = (event, value, attribute) =>
+    {
         let course = this.state.course;
         course[attribute] = value;
         this.setState(course);
     };
 
-    handleChange = () => {
+    handleChange = () =>
+    {
         let course = this.state.course;
         course['status'] = !this.state.course.status;
         this.setState(course);
@@ -154,7 +137,8 @@ class Information extends Component {
 
     render()
     {
-        let actions = [
+        let actions =
+        [
             <FlatButton
                 label="Cancelar"
                 primary={true}
@@ -253,7 +237,7 @@ class Information extends Component {
 
             </div>
         );
-    }
+    };
 }
 
 

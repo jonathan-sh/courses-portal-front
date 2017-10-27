@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
-import HttpService from '../../../service/HttpService';
+import HttpService from '../../../service/http/HttpService';
 import RaisedButton from 'material-ui/RaisedButton';
 import BuildIco from 'material-ui/svg-icons/av/playlist-play';
 import TextField from 'material-ui/TextField';
@@ -9,24 +9,19 @@ import _ from 'lodash';
 
 class TableSignature extends Component {
 
-
     constructor()
     {
         super();
         this.state = {rows: [], signatures: []};
-
-    }
-
-    componentDidMount() {
-        this.fncGetSignatures();
-    }
-
-    styles = {
-        tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
-        tableBody: {cursor: 'pointer'},
     };
 
-    fncChangeSignatureStatus = (student) => {
+    componentDidMount()
+    {
+        this.fncGetSignatures();
+    };
+
+    fncChangeSignatureStatus = (student) =>
+    {
         let signature = {
             "_id": student._id,
             "signature": !student.signature
@@ -34,7 +29,8 @@ class TableSignature extends Component {
         this.fncUpdateSignature(signature);
     };
 
-    fncFilterRows = () => {
+    fncFilterRows = () =>
+    {
         let filter = this.search.input.value;
         filter = filter.toUpperCase();
         let result = _.filter(this.state.signatures, (o) => {
@@ -44,8 +40,8 @@ class TableSignature extends Component {
         this.fncMakeRows(result);
     };
 
-
-    fncUpdateSignature = (data) => {
+    fncUpdateSignature = (data) =>
+    {
         HttpService.make().put('/student', data)
 
             .then(success =>
@@ -63,7 +59,8 @@ class TableSignature extends Component {
             });
     };
 
-    fncGetSignatures = () => {
+    fncGetSignatures = () =>
+    {
         HttpService.make().get('/student/signature', localStorage.getItem('auth-token'))
             .then(success =>
             {
@@ -76,8 +73,8 @@ class TableSignature extends Component {
             });
     };
 
-
-    fncMakeRows = (signatures) => {
+    fncMakeRows = (signatures) =>
+    {
 
         signatures = _.sortBy(signatures, ['name', 'email']);
 
@@ -100,8 +97,14 @@ class TableSignature extends Component {
         this.setState({'rows': rows});
     };
 
+    styles =
+    {
+        tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
+        tableBody: {cursor: 'pointer'},
+    };
 
-    render() {
+    render()
+    {
         return (
 
             <div>
@@ -138,7 +141,7 @@ class TableSignature extends Component {
             </div>
 
         )
-    }
+    };
 }
 
 export default TableSignature;

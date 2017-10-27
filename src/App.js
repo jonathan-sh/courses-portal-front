@@ -2,7 +2,7 @@ import "./style/css/index.css";
 import React, {Component} from "react";
 import HeaderBar from "./box/home/bar/HeaderBar";
 import Paper from 'material-ui/Paper';
-import HttpService from './service/HttpService';
+import HttpService from './service/http/HttpService';
 
 class App extends Component
 {

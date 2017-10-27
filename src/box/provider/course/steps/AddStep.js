@@ -4,7 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import LinearProgress from 'material-ui/LinearProgress';
-import CourseRepository from '../../../../repository/CourseRepository';
+import CourseRepository from '../../../../service/repository/CourseService';
 import NewIco from 'material-ui/svg-icons/content/add';
 import PubSub from 'pubsub-js';
 

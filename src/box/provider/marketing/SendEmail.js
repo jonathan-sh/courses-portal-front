@@ -8,16 +8,18 @@ import TextField from 'material-ui/TextField';
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
-import HttpService from '../../../service/HttpService';
+import httpService from '../../../service/http/HttpService';
 import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 
 
 
 class SendEmail extends Component {
-    constructor(props) {
+    constructor(props)
+    {
         super(props);
-        this.state = {
+        this.state =
+        {
             stepIndex: 0, open: true, email: {subject: "", html: "", text: "", recipients: []},
             makeSend: false,
             errorText: {subject: "", text: "", html: "", recipients: ""},
@@ -27,14 +29,16 @@ class SendEmail extends Component {
             response:false,
         };
         this.keyRowsSelected = [];
-    }
+    };
 
-    componentDidMount() {
-        this.fncFillStudents()
-    }
+    componentDidMount()
+    {
+        this.fncGetStudents()
+    };
 
-    fncFillStudents = () => {
-        HttpService.make().get('/student/signature')
+    fncGetStudents = () =>
+    {
+        httpService.make().get('/student/signature')
                           .then(success => {
                               this.setState({signatures: success});
                               this.fncMakeRows(this.state.signatures);
@@ -44,9 +48,10 @@ class SendEmail extends Component {
                           });
     };
 
-    fncSendEmail = (data) => {
+    fncSendEmail = (data) =>
+    {
         this.setState({sending: true});
-        HttpService.make().post('/provider/send-email', data)
+        httpService.make().post('/provider/send-email', data)
             .then(success =>
             {
                 this.setState({sending: false});
@@ -58,19 +63,23 @@ class SendEmail extends Component {
             });
     };
 
-    fncCanStep = () => {
+    fncCanStep = () =>
+    {
         PubSub.publish('close-send-email');
         this.setState({open: false});
     };
 
-    fncSetData = (event, value, attribute) => {
+    fncSetData = (event, value, attribute) =>
+    {
         let email = this.state.email;
         email[attribute] = value;
         this.setState(email);
     };
 
-    fncValidAndSendEmail = () => {
-        let email = {
+    fncValidAndSendEmail = () =>
+    {
+        let email =
+        {
             subject: this.state.email.subject,
             html: this.state.email.html,
             text: this.state.email.text,
@@ -80,7 +89,8 @@ class SendEmail extends Component {
 
     };
 
-    fncHandleNext = () => {
+    fncHandleNext = () =>
+    {
         const {stepIndex} = this.state;
         let status = true;
 
@@ -105,11 +115,13 @@ class SendEmail extends Component {
         }
     };
 
-    fncValidValue = (value) => {
+    fncValidValue = (value) =>
+    {
         return value !== undefined && value !== ""
     };
 
-    fncHandlePrev = () => {
+    fncHandlePrev = () =>
+    {
         const {stepIndex} = this.state;
 
         if (stepIndex > 0) {
@@ -117,7 +129,8 @@ class SendEmail extends Component {
         }
     };
 
-    fncFilterRows = () => {
+    fncFilterRows = () =>
+    {
         let filter = this.search.input.value;
         filter = filter.toUpperCase();
         let result = _.filter(this.state.signatures, (o) => {
@@ -127,10 +140,9 @@ class SendEmail extends Component {
         this.fncMakeRows(result);
     };
 
-    fncMakeRows = (signatures) => {
-
+    fncMakeRows = (signatures) =>
+    {
         signatures = _.sortBy(signatures, ['name', 'email']);
-
         let rows = signatures.map((student) =>
             <TableRow key={student._id} selected={this.isSelectedRow(student.email)}>
                 <TableRowColumn>{student.name}</TableRowColumn>
@@ -142,7 +154,8 @@ class SendEmail extends Component {
         this.setState({'rows': rows});
     };
 
-    rowSelected = (item) => {
+    rowSelected = (item) =>
+    {
         let rows = this.state.rows;
         this.keyRowsSelected = [];
         if (item === 'all') {
@@ -186,21 +199,23 @@ class SendEmail extends Component {
 
     };
 
-
-    isSelectedRow = (id) => {
+    isSelectedRow = (id) =>
+    {
         let result = _.filter(this.keyRowsSelected, (o) => {
             return o === id
         });
         return result.length > 0;
     };
 
-    styles = {
+    styles =
+    {
         tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
         tableBody: {cursor: 'pointer'},
         toggle:{ maxWidth: 250, marginTop:'20px'}
     };
 
-    getStepContent(stepIndex) {
+    getStepContent(stepIndex)
+    {
         switch (stepIndex) {
             case 0:
                 return (
@@ -286,9 +301,10 @@ class SendEmail extends Component {
             default:
                 return ((<span>error</span>))
         }
-    }
+    };
 
-    render() {
+    render()
+    {
         const {stepIndex} = this.state;
 
         const actions = [
@@ -341,10 +357,7 @@ class SendEmail extends Component {
                 </Dialog>
             </div>
         );
-    }
-
+    };
 
 }
-
-
 export default SendEmail;

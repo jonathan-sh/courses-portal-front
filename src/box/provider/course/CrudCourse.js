@@ -10,21 +10,22 @@ import Step from "./steps/Step";
 
 class CrudCourse extends Component {
 
-    constructor(props) {
+    constructor(props)
+    {
         super(props);
         this.state = {course: [],steps:[]};
         this.isUpdate = false;
+    };
 
-    }
-
-    componentWillMount() {
+    componentWillMount()
+    {
         PubSub.publish('header-label', 'Editando curso');
         PubSub.subscribe('reload-course',this.fncReload);
         if (this.props.course && this.props.course._id)
         {
             this.fncReload(null, this.props.course);
         }
-    }
+    };
 
     fncReload = (key, course) =>
     {
@@ -34,7 +35,8 @@ class CrudCourse extends Component {
         this.fncMapSteps(course.steps);
     };
 
-    fncMapSteps = (steps) => {
+    fncMapSteps = (steps) =>
+    {
         let st = _.sortBy(steps, ['order']);
         this.steps = st.map((step) =>
             <div key={step.order} style={{marginBottom: '0.5%'}}>
@@ -60,8 +62,8 @@ class CrudCourse extends Component {
 
     };
 
-
-    render() {
+    render()
+    {
         return (
             <div>
                 {
@@ -85,7 +87,7 @@ class CrudCourse extends Component {
 
             </div>
         );
-    }
+    };
 }
 
 export default CrudCourse;

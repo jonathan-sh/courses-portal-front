@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Step, Stepper, StepButton, StepContent,} from 'material-ui/Stepper';
 import HeaderBar from './../bar/HeaderBar';
-import HttpService from '../../../service/HttpService';
+import HttpService from '../../../service/http/HttpService';
 import history from '../../../service/router/History';
 import _ from 'lodash';
 

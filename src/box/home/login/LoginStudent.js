@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
 import history from '../../../service/router/History';
-import httpService from '../../../service/HttpService';
+import httpService from '../../../service/http/HttpService';
 
 export default class LoginStudent extends Component {
 

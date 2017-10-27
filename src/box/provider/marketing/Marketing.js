@@ -8,19 +8,24 @@ import SendIco from 'material-ui/svg-icons/content/send';
 
 class Marketing extends Component {
 
-    constructor(props) {
+    constructor(props)
+    {
         super(props);
         this.state = {sendEmail: false};
-    }
-    componentDidMount(){
+    };
+
+    componentDidMount()
+    {
         PubSub.publish('header-label',"Marketing");
         PubSub.subscribe('close-send-email', this.fncCloseSendEmail);
-    }
+    };
 
-    fncCloseSendEmail = () =>  {this.setState({sendEmail: false}); };
-    fncShowSendEmail = () =>  {this.setState({sendEmail: true}); };
+    fncCloseSendEmail = () => this.setState({sendEmail: false});
 
-    render() {
+    fncShowSendEmail =  () => this.setState({sendEmail: true});
+
+    render()
+    {
         return (
             <div>
                 <br/>
@@ -36,7 +41,7 @@ class Marketing extends Component {
                 { this.state.sendEmail? <SendEmail/> : null}
             </div>
         )
-    }
+    };
 }
 
 export default Marketing;

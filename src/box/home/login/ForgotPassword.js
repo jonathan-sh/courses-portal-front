@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
 import Toggle from 'material-ui/Toggle';
-import httpService from '../../../service/HttpService';
+import httpService from '../../../service/http/HttpService';
 
 export default class ForgotPassword extends Component {
 

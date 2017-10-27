@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import httpService from './../../../service/HttpService';
+import httpService from '../../../service/http/HttpService';
 import NewIco from 'material-ui/svg-icons/content/add';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import EditIco from 'material-ui/svg-icons/content/create';
@@ -16,7 +16,6 @@ class Body extends Component
     constructor()
     {
         super();
-        this.httpService = new httpService();
         this.state =
         {
             provider: JSON.parse(localStorage.getItem('provider')),
@@ -108,7 +107,7 @@ class Body extends Component
 
     makeUpdateProvider = (message) =>
     {
-        this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
+        httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
             .then(response => {
                 if (response.status !== 501 )
                 {

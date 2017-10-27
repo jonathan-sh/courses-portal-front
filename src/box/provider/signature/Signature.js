@@ -4,17 +4,19 @@ import Table from './Table';
 
 class Signature extends Component {
 
-    componentDidMount(){
+    componentDidMount()
+    {
         PubSub.publish('header-label',"Matriculas")
-    }
+    };
 
-    render() {
+    render()
+    {
         return (
             <div>
                 <Table/>
             </div>
         )
-    }
+    };
 }
 
 export default Signature;

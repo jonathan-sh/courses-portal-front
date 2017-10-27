@@ -8,12 +8,9 @@ export default class GetResponseYesNo extends React.Component {
     {
         super(props);
         this.state ={ open: false };
-    }
-
-
-    fncHandleOpen = () => {
-        this.setState({open: true});
     };
+
+    fncHandleOpen = () => this.setState({open: true});
 
     fncIfYesCase = () =>
     {
@@ -43,7 +40,8 @@ export default class GetResponseYesNo extends React.Component {
         this.setState({open: false});
     };
 
-    render() {
+    render()
+    {
         const actions =
         [
             <FlatButton

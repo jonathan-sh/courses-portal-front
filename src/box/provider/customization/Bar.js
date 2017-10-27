@@ -7,14 +7,13 @@ import Grade from './Grade';
 import PubSub from 'pubsub-js';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import NewIco from 'material-ui/svg-icons/content/add';
-import ProviderRepository from './../../../repository/ProviderRepository';
+import providerService from '../../../service/repository/ProviderService';
 
 class Bar extends Component
 {
     constructor(props)
     {
         super(props);
-        this.providerRepository = new ProviderRepository();
         this.state =
         {
             showGrade: false,
@@ -80,7 +79,7 @@ class Bar extends Component
 
     makeUpdateProvider = (message) =>
     {
-        this.providerRepository
+        providerService
             .update(this.state.provider)
             .then(success => this.responseUpdate(success, message))
             .catch(error => PubSub.publish('show-message', error));

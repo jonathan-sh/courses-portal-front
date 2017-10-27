@@ -5,7 +5,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
-import HttpService from '../../../service/HttpService';
+import HttpService from '../../../service/http/HttpService';
 import history from '../../../service/router/History';
 
 export default class LoginProvider extends Component {
@@ -31,8 +31,18 @@ export default class LoginProvider extends Component {
         return entity;
     };
 
+
+    fncLogoff = () =>
+    {
+        localStorage.removeItem('entity');
+        localStorage.removeItem('student');
+        localStorage.removeItem('auth-token');
+    };
+
+
     makeLogin = () =>
     {
+        this.fncLogoff();
         HttpService.make().post('/login', this.makeDataForLogin())
             .then(success =>
             {

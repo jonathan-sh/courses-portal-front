@@ -7,7 +7,7 @@ import AddProve from './Prove';
 import AddMaterial from './Material';
 import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
-import CourseRepository from '../../../../repository/CourseRepository';
+import CourseRepository from '../../../../service/repository/CourseService';
 
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';

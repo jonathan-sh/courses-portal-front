@@ -1,8 +1,8 @@
 import TemplateRepository from "./TemplateRepository";
 
-class CourseRepository extends TemplateRepository{
+class CourseService extends TemplateRepository{
     constructor(){
         super('/course');
     }
 }
-export default CourseRepository;
+export default new CourseService();
