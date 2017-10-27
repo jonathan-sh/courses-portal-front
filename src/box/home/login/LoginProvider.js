@@ -51,7 +51,7 @@ export default class LoginProvider extends Component {
             })
             .catch(error =>
             {
-                console.log(error);
+                this.setState({'msg': 'Usuário ou senha incorreto'});
             });
     };
 
@@ -68,6 +68,18 @@ export default class LoginProvider extends Component {
         history.push('/');
     };
 
+    onEnter = (event) =>
+    {
+        switch(event.key)
+        {
+            case 'Enter':
+                this.makeLogin(event);
+                break;
+            default:
+                break;
+        }
+    };
+
     render() {
         const actions = [
             <FlatButton
@@ -81,13 +93,15 @@ export default class LoginProvider extends Component {
                 primary={true}
                 onClick={() => this.handleClose(true)}
             />,
-            <RaisedButton onClick={this.makeLogin.bind(this)}
+            <RaisedButton onClick={this.makeLogin}
                           label="Fazer login"
                           primary={true}  />,
         ];
 
 
-        const style = {title:{fontFamily: 'Roboto',fontWeight: 300, textAlign:'center'}};
+        const style = {title:{fontFamily: 'Roboto',fontWeight: 300, textAlign:'center'},
+                       body:{paddingBottom: '0px', minHeight: '180px'},
+                       error:{textAlign:'center'}};
 
         return (
             <div>
@@ -95,7 +109,7 @@ export default class LoginProvider extends Component {
                     titleStyle={style.title}
                     title="Login empresarial"
                     actions={actions}
-                    bodyStyle={{minHeight: '180px'}}
+                    bodyStyle={style.body}
                     modal={true}
                     autoScrollBodyContent={false}
                     open={this.state.open}
@@ -113,7 +127,9 @@ export default class LoginProvider extends Component {
                         type="password"
                         fullWidth={true}
                         ref={(input) => { this.password = input; }}
+                        onKeyDown={this.onEnter}
                     />
+                    <p style={style.error}>&nbsp;{this.state.msg}</p>
                 </Dialog>
             </div>
         );

@@ -34,6 +34,7 @@ class ActionMessage extends Component
                     open={this.state.show}
                     message={this.state.message}
                     autoHideDuration={2500}
+                    style={{zIndex: '9'}}
                     onRequestClose={this.handleRequestClose}
                 />
             </div>

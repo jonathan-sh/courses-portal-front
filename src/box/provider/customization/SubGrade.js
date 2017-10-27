@@ -17,6 +17,7 @@ class SubGrade extends Component {
         {
             open: true,
             courses: '',
+            title: props.subGrade === undefined ? 'Adicionando ' : 'Alterando ',
             subGrade: this.fncControlSubGrade(props.subGrade),
             errorText: {description:'', courses:''}
         };
@@ -146,7 +147,7 @@ class SubGrade extends Component {
     render() {
         return (
             <Dialog
-                title="Adicionando sub categotia"
+                title={this.state.title + 'sub categoria'}
                 autoScrollBodyContent={true}
                 actions={this.actions}
                 modal={true}

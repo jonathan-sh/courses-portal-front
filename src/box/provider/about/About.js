@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import httpService from '../../../service/http/HttpService';
+import providerService from '../../../service/repository/ProviderService';
 import PubSub from 'pubsub-js';
 
 class About extends Component
@@ -9,7 +9,6 @@ class About extends Component
     constructor()
     {
         super();
-        this.httpService = new httpService();
         this.state =
         {
             provider: JSON.parse(localStorage.getItem('provider')),
@@ -21,27 +20,20 @@ class About extends Component
         PubSub.publish('header-label','Sobre');
     };
 
-    makeUpdateProvider = () =>
+    makeUpdateProvider = (message) =>
     {
-        this.httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status !== 501 )
-                {
-                    return response.json();
-                }
-                throw new Error('Falha de autenticação.');
-            })
-            .then(success => {
-                this.responseUpdate(success);
-            })
-            .catch(error => { console.log(error);});
+        providerService
+            .update(this.state.provider)
+            .then(success =>this.responseUpdate(success, message))
+            .catch(error => PubSub.publish('show-message', error));
 
     };
 
-    responseUpdate = (response) =>
+    responseUpdate = (response, message) =>
     {
         response.password = null;
         this.setState({'provider':response});
+        PubSub.publish('show-message', message);
         localStorage.setItem('provider', JSON.stringify(response));
         this.clearPasswords();
     };
@@ -119,7 +111,8 @@ class About extends Component
     {
         if(this.isValidationFields())
         {
-            this.makeUpdateProvider();
+            const message = 'Perfil atualizado com sucesso!';
+            this.makeUpdateProvider(message);
         }
     };
 

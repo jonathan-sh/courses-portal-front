@@ -2,8 +2,8 @@
  * Created by Igor Martucelli on 26/08/2017.
  */
 import React, {Component} from 'react';
+import providerService from '../../../service/repository/ProviderService';
 import TextField from 'material-ui/TextField';
-import httpService from '../../../service/http/HttpService';
 import NewIco from 'material-ui/svg-icons/content/add';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import EditIco from 'material-ui/svg-icons/content/create';
@@ -92,7 +92,7 @@ class Body extends Component
         this.header.input.value === '' ?
             (errors.header = errorHeader) : (errors.header = '');
 
-        this.description.props.value === '' || this.description.props.value.length < 330 ?
+        this.description.props.value === '' || this.description.props.value.length <= 330 ?
             (errors.description = errorDescription) : (errors.description = '');
 
         this.setState({'errorsText': errors});
@@ -107,16 +107,10 @@ class Body extends Component
 
     makeUpdateProvider = (message) =>
     {
-        httpService.put('/provider', this.state.provider, localStorage.getItem('auth-token'))
-            .then(response => {
-                if (response.status !== 501 )
-                {
-                    return response.json();
-                }
-                throw new Error('Falha de autenticação.');
-            })
-            .then(success => {this.responseUpdate(success, message);})
-            .catch(error => { PubSub.publish('show-message', error);});
+        providerService
+            .update(this.state.provider)
+            .then(success =>this.responseUpdate(success, message))
+            .catch(error => PubSub.publish('show-message', error));
     };
 
     responseUpdate = (response, message) =>
@@ -133,6 +127,11 @@ class Body extends Component
         let topic = this.state.topic;
         topic[attribute] = value;
         this.setState({'topic':topic});
+
+        if(attribute === 'description' && value !== "")
+        {
+            this.isValidationFields();
+        }
     };
 
     fncHandleSave = (event, attribute, position) =>

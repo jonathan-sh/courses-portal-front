@@ -76,10 +76,15 @@ class Grade extends Component
             if(this.state.indexSubGrade === undefined)
             {
                 grade.subGrades.push(subGrade);
+                PubSub.publish('show-message', 'Sub categoria ' + subGrade.description + ' adicionada com sucesso!');
             }
             else
             {
-                grade.subGrades[this.state.indexSubGrade] = subGrade;
+                if(this.state.indexSubGrade !== "")
+                {
+                    grade.subGrades[this.state.indexSubGrade] = subGrade;
+                    PubSub.publish('show-message', 'Sub categoria ' + subGrade.description + ' alterada com sucesso!')
+                }
             }
 
             this.setState({'grade': grade});
@@ -93,16 +98,16 @@ class Grade extends Component
                     label={subGrade.description}
                     backgroundColor="#2dc7a2"
                     labelStyle={{color: '#FFF'}}
-                    style={{marginTop: '10px',  width: '87%'}}
+                    style={{marginTop: '10px',  width: '80%'}}
                     onTouchTap = {(object, position) => this.fncShowSubGrade(subGrade, index)}
                 />
                 <RaisedButton
                     label="delete"
                     backgroundColor="#ff2930"
                     icon={<DeleteIco color="#FFF"/>}
-                    style={{marginLeft:'0.7%'}}
+                    style={{marginLeft: '1%', width: '19%'}}
                     labelStyle={{color: 'white'}}
-                    onTouchTap = {(position, attribute) => this.fncDeleteGrade(index, 'subGrades')}
+                    onTouchTap = {(position, attribute, object) => this.fncDeleteSubGrade(index, 'subGrades', subGrade)}
                 />
             </div>
             );
@@ -156,6 +161,7 @@ class Grade extends Component
     {
         localStorage.removeItem('sub-grade');
         PubSub.publish('show-grade', {showGrade: false, message: null});
+        PubSub.publish('list-grade', null);
         this.setState({'open': false});
     };
 
@@ -237,12 +243,22 @@ class Grade extends Component
         return false;
     };
 
-    fncDeleteGrade = (index, attribute) =>
+    fncDeleteSubGrade = (index, attribute, subGrade) =>
     {
         let grade = this.state.grade;
+        PubSub.publish('show-message', 'Sub categoria ' + subGrade.description + ' deletada com sucesso!');
         grade[attribute].splice(index, 1);
-        this.setState({'grade': grade});
-        PubSub.publish('sub-grade', grade.subGrades);
+        this.setState({'grade': grade, 'indexSubGrade': ''});
+        PubSub.publish('sub-grade', null);
+    };
+
+    titleActionGrade()
+    {
+        if(!this.state.isUpdate)
+        {
+            return "Adicionando categoria";
+        }
+        return "Alterando categoria";
     };
 
     actions = [
@@ -261,7 +277,7 @@ class Grade extends Component
     render() {
         return (
             <Dialog
-                title="Adicionando categotia"
+                title={this.titleActionGrade()}
                 autoScrollBodyContent={true}
                 actions={this.actions}
                 modal={true}
@@ -292,7 +308,7 @@ class Grade extends Component
                     backgroundColor="#0ac752"
                     icon={<NewIco color="#FFF"/>}
                     labelStyle={{color: 'white'}}
-                    style={{float: 'right', margin: '20px 0 20px 20px'}} />
+                    style={{float: 'right', margin: '20px 0 20px 20px', width: '19%'}} />
                 <br/>
 
                 {this.state.showSubGrade ? <SubGrade subGrade={this.state.whatSubGrade}/>  : null}

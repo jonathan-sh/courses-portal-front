@@ -83,7 +83,7 @@ class App extends Component {
             <div key={index}>
                 <MenuItem
                     value={item.description}
-                        onTouchTap={() => {window.open('/course/'+item._id, '_self')}}
+                    onTouchTap={() => {window.open('/course/'+item._id, '_self')}}
                     primaryText={item.name} />
 
             </div>
@@ -137,14 +137,14 @@ class App extends Component {
     (
         <IconMenu
             iconButtonElement=
-                {
-                    <FlatButton
-                        labelPosition="before"
-                        style={this.style.btLabel}
-                        label={'Olá, ' + this.state.entity.name}
-                        icon={<Avatar src={srcImage} size={30}/>}
-                    />
-                }
+            {
+                <FlatButton
+                    labelPosition="before"
+                    style={this.style.btLabel}
+                    label={'Olá, ' + this.state.entity.name}
+                    icon={<Avatar src={srcImage} size={30}/>}
+                />
+            }
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
             style={{marginRight: '5px'}}>
@@ -167,6 +167,7 @@ class App extends Component {
         localStorage.removeItem('entity');
         localStorage.removeItem('student');
         localStorage.removeItem('auth-token');
+        this.setState({'entity': null});
         history.push('/');
     };
 
