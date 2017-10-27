@@ -5,6 +5,7 @@ import AddStep from './steps/AddStep';
 import PubSub from 'pubsub-js';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import GetResponseYesNo from '../../../component/GetResponseYesNo';
+import courseStepService from '../../../service/repository/CourseStepService';
 import _ from 'lodash';
 import Step from "./steps/Step";
 
@@ -38,17 +39,20 @@ class CrudCourse extends Component {
     fncMapSteps = (steps) =>
     {
         let st = _.sortBy(steps, ['order']);
-        this.steps = st.map((step) =>
-            <div key={step.order} style={{marginBottom: '0.5%', display:'flex'}}>
+        this.steps = st.map((step, index) =>
+            <div key={index} style={{marginBottom: '0.5%', display:'flex'}}>
 
 
                 <div style={{width:'89%'}}>
-                    <Step step={step}/>
+                    <Step step={step} courseId ={this.props.course._id}/>
                 </div>
 
                 <div style={{marginLeft: '1%',minWidth:'10%', marginTop:'6px'}}>
                     <GetResponseYesNo
-                        fncOnYesCase={() => console.log("não implementado.")}
+                        fncOnYesCase={() => courseStepService.delete(step,this.state.course._id)
+                                                             .then((success) => this.fncReload(null, success))
+                                                             .catch((error) => console.log(error))
+                                     }
                         title={"Antenção, deletando etapa"}
                         question={"Você realmente deseja deletar a etapa [ " + step.name + " ] ?"}
                         btLabel="delete"

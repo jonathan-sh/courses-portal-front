@@ -26,7 +26,8 @@ class App extends Component {
             showModalForgotPassword:false,
             showModalLoginProvider:false,
             menu:[],
-            entity: JSON.parse(localStorage.getItem('entity'))
+            entity: JSON.parse(localStorage.getItem('entity')),
+            menuCurso:false
         };
 
     }
@@ -70,6 +71,7 @@ class App extends Component {
                        rightIcon={<ArrowDropRight />}
                        value={grade.description}
                        primaryText={grade.description}
+                       open={this.state.menuCurso}
                        menuItems={(grade.courses.length>0)? this.buildMenu(grade.courses) : null} />
                </div>
             );
@@ -98,6 +100,9 @@ class App extends Component {
                 iconButtonElement={<FlatButton style={this.style.btLabel} label="Cursos" />}
                 anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                onMouseEnter={()=>this.setState({'menuCurso':true})}
+                onRequestChange={()=>this.setState({'menuCurso':false})}
+                open={this.state.menuCurso}
                 style={{marginRight: '5px'}}>
                 {this.state.menu}
             </IconMenu>

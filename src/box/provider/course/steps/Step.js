@@ -7,7 +7,7 @@ import AddProve from './Prove';
 import AddMaterial from './Material';
 import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
-import courseService from '../../../../service/repository/CourseService';
+import courseStepService from '../../../../service/repository/CourseStepService';
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 
@@ -20,7 +20,7 @@ class Steps extends Component
              showStep: true,
              stepIndex: 0,
              open: false,
-             step: {_id: props.step._id, order: props.step.order, name: props.step.name, description: props.step.description},
+             step: props.step,
              errorText: {name: '', description: ''},
              course:''
         };
@@ -30,9 +30,9 @@ class Steps extends Component
     {
         if (this.fncValidData())
         {
-            courseService.update(this.fncGetDataStep())
-                         .then(success => this.setState({'course': success}))
-                         .catch(error  => console.log(error));
+            courseStepService.update(this.fncGetDataStep())
+                             .then(success => this.setState({'course': success}))
+                             .catch(error  => console.log(error));
         }
 
     };
@@ -41,18 +41,21 @@ class Steps extends Component
 
     fncGetDataStep = () =>
     {
-        let course =
+        let steps =
         {
-            '_id': this.state.step._id,
-            'steps': [{'order': this.state.step.order, 'name': this.state.step.name, 'description': this.state.step.description}]
+            'courseId':this.props.courseId,
+            '_id':this.props.step._id,
+            'order': this.state.step.order,
+            'name': this.state.step.name,
+            'description': this.state.step.description
         };
-        return course;
+        return steps;
     };
 
     fncCanStep = () =>
     {
-        PubSub.publish('close-edit-step');
-        PubSub.publish('go-crud',this.state.course);
+        PubSub.publish('reload-course',this.state.course);
+        this.setState({stepIndex: 0});
         this.setState({open: false});
     };
 

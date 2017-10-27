@@ -4,7 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import LinearProgress from 'material-ui/LinearProgress';
-import courseService from '../../../../service/repository/CourseService';
+import courseStepService from '../../../../service/repository/CourseStepService';
 import NewIco from 'material-ui/svg-icons/content/add';
 import PubSub from 'pubsub-js';
 
@@ -55,29 +55,30 @@ class Material extends Component {
         this.fncGetDataStep();
         if (this.fncValidData()) {
             this.setState({makeSave: true});
-            courseService.update(this.fncGetDataStep())
-                         .then(success =>
-                         {
-                             PubSub.publish('reload-course' , success);
-                             this.setState({makeSave: false});
-                             this.fncHandleClose();
-                         })
-                         .catch(error =>
-                         {
-                             console.log(error);
-                         });
+            courseStepService.save(this.fncGetDataStep())
+                             .then(success =>
+                             {
+                                 PubSub.publish('reload-course' , success);
+                                 this.setState({makeSave: false});
+                                 this.fncHandleClose();
+                             })
+                             .catch(error =>
+                             {
+                                 console.log(error);
+                             });
 
         }
     };
 
     fncGetDataStep = () =>
     {
-        let course =
+        let step =
         {
-            '_id': this.state.course._id,
-            'steps': [{'name': this.state.step.name, 'description': this.state.step.description}]
+            'courseId': this.state.course._id,
+            'name': this.state.step.name,
+            'description': this.state.step.description
         };
-        return course;
+        return step;
     };
 
     setData = (event, value, attribute) =>
