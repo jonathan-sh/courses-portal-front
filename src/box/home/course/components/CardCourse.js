@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
@@ -67,18 +68,23 @@ class CardCourse extends Component
     {
         let courses = grade.courses;
 
-        return courses.map((card, index) =>
+        return courses.map((course, index) =>
             <Card id={grade.description+index} key={index} style={{width: '23.47%', marginRight: '2%'}}>
                 <CardMedia>
                     <img src={this.state.image} alt=''/>
                 </CardMedia>
-                <CardTitle style={{paddingBottom: '0%'}} titleStyle={{fontSize: '20px', fontWeight: '300'}} title={card.name}/>
+                <CardTitle style={{paddingBottom: '0%'}} titleStyle={{fontSize: '20px', fontWeight: '300'}} title={course.name}/>
                 <CardText>
-                    {card.description}
+                    {course.description}
                 </CardText>
                 <Divider />
                 <CardActions style={{textAlign:'right', paddingRight: '0'}}>
-                    {this.state.access}
+                    <RaisedButton
+                        label="Acessar curso"
+                        backgroundColor={this.props.styleAccess}
+                        labelStyle={{color: 'white'}}
+                        onTouchTap={() => history.push('/course/' + course._id)}
+                    />
                 </CardActions>
             </Card>
         );

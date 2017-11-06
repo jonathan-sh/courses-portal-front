@@ -5,7 +5,6 @@ import React, {Component} from "react";
 import HeaderBar from './../bar/HeaderBar';
 import '../../../style/css/listCourse.css'
 import srcImage from '../../../style/img/course-not-found-2.jpg';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import SearchCourse from './../course/components/SearchCourse'
 import CardCourse from './../course/components/CardCourse';
@@ -33,31 +32,19 @@ class ListCourses extends Component
         canNotAccess:'#ff4081'
     };
 
-    verifyAccess = () =>
+    styleAccess = () =>
     {
         if(this.state.student !== null && this.state.student !== undefined)
         {
             if(this.state.student.signature)
             {
-                return <RaisedButton
-                            label="Acessar curso"
-                            backgroundColor={this.style.canAccess}
-                            labelStyle={{color: 'white'}}
-                        />;
+                return this.style.canAccess;
             }
 
-            return <RaisedButton
-                label="Acessar curso"
-                backgroundColor={this.style.canNotAccess}
-                labelStyle={{color: 'white'}}
-            />;
+            return this.style.canNotAccess;
         }
 
-        return <RaisedButton
-                    label="Acessar curso"
-                    backgroundColor={this.style.canNotAccess}
-                    labelStyle={{color: 'white'}}
-                />;
+        return this.style.canNotAccess;
     };
 
     fncFilterCourses = () =>
@@ -95,14 +82,14 @@ class ListCourses extends Component
                     this.state.isFilter ?
                         <SearchCourse
                             grade={this.state.grade}
-                            access={this.verifyAccess()}
+                            styleAccess={this.styleAccess()}
                             image={srcImage}
                             filter={this.search.input.value.toUpperCase()}
                         />
                         :
                         <CardCourse
                             image={srcImage}
-                            access={this.verifyAccess()}
+                            styleAccess={this.styleAccess()}
                             grade={this.state.grade}
                         />
                 }

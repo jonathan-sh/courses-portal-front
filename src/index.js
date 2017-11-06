@@ -40,7 +40,7 @@ const Main = () => (
             </Router>
         </BrowserRouter>
     </MuiThemeProvider>
-)
+);
 
 ReactDOM.render(<Main />, document.getElementById('root'));
 

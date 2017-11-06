@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import Divider from 'material-ui/Divider';
 import array from '../../../../service/Array';
+import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
+import history from '../../../../service/router/History';
 
 class SearchCourse extends Component
 {
@@ -15,14 +17,11 @@ class SearchCourse extends Component
             componentBox: '',
             courses: ''
         };
-
-        this.createComponent = this.createComponent.bind(this);
     };
 
     componentDidMount()
     {
         this.createListCourses();
-
         PubSub.subscribe('refresh-filter', this.refreshFilter);
     };
 
@@ -47,7 +46,6 @@ class SearchCourse extends Component
         }
 
         this.setState({'courses': list});
-
         this.createComponent(list, filter);
     };
 
@@ -75,7 +73,12 @@ class SearchCourse extends Component
                                     <div style={{padding: '2%', fontSize: '20px'}}>{course.name}</div>
                                     <div style={{padding: '2%'}}>{course.description}</div>
                                     <div style={{padding: '2%', float: 'right'}}>
-                                        {this.props.access}
+                                        <RaisedButton
+                                            label="Acessar curso"
+                                            backgroundColor={this.props.styleAccess}
+                                            labelStyle={{color: 'white'}}
+                                            onTouchTap={() => history.push('/course/' + course._id)}
+                                        />
                                     </div>
                                 </div>
                             </div>
