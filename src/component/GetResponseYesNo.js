@@ -52,7 +52,7 @@ export default class GetResponseYesNo extends React.Component {
         ];
 
         return (
-            <div>
+            <div style={{display: 'inline'}}>
                 <RaisedButton
                     label={this.props.btLabel}
                     backgroundColor={this.props.btBackgroundColor}

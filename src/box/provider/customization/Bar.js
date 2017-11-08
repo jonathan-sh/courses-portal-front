@@ -8,6 +8,7 @@ import PubSub from 'pubsub-js';
 import DeleteIco from 'material-ui/svg-icons/content/delete-sweep';
 import NewIco from 'material-ui/svg-icons/content/add';
 import providerService from '../../../service/repository/ProviderService';
+import GetResponseYesNo from '../../../component/GetResponseYesNo';
 
 class Bar extends Component
 {
@@ -55,14 +56,15 @@ class Bar extends Component
                         style={{marginTop: '10px', width: '80%'}}
                         onTouchTap = {(object, position) => this.fncShowGrade(grade, index)}
                     />
-                    <RaisedButton
-                        label="delete"
-                        backgroundColor="#ff2930"
-                        icon={<DeleteIco color="#FFF"/>}
-                        style={{marginLeft:'1%',width: '19%'}}
-                        labelStyle={{color: 'white'}}
-                        onTouchTap = {(object, position) => this.fncDeleteGrade(grade, index, 'grades')}
-                    />
+                    <GetResponseYesNo
+                        fncOnYesCase={(object, position) => this.fncDeleteGrade(grade, index, 'grades')}
+                        title={"Atenção, deletando grade"}
+                        question={"Você realmente deseja deletar a grade [ "+grade.description +" ] ?"}
+                        btLabel="delete"
+                        btBackgroundColor="#ff2930"
+                        btIcon={<DeleteIco color="#FFF"/>}
+                        btStyle={{marginLeft:'1%',width: '19%'}}
+                        btLabelStyle={{color: 'white'}}/>
                 </div>
             );
 

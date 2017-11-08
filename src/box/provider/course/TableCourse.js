@@ -47,7 +47,6 @@ class TableCourse extends Component {
                 <TableRowColumn>{course.name}</TableRowColumn>
                 <TableRowColumn>{course.status ? 'ativo' : 'inativo'}</TableRowColumn>
                 <TableRowColumn>
-                   <span style={{display: 'inline-flex'}}>
                          <RaisedButton
                              label="editar"
                              backgroundColor="#00a1fc"
@@ -66,7 +65,6 @@ class TableCourse extends Component {
                             btIcon={<DeleteIco color="#FFF"/>}
                             btStyle={{marginLeft: '5%'}}
                             btLabelStyle={{color: 'white'}}/>
-                       </span>
                 </TableRowColumn>
             </TableRow>
         );

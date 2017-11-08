@@ -10,6 +10,7 @@ import EditIco from 'material-ui/svg-icons/content/create';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import PubSub from 'pubsub-js';
+import GetResponseYesNo from '../../../component/GetResponseYesNo';
 
 class Body extends Component
 {
@@ -52,14 +53,15 @@ class Body extends Component
                         style={{marginTop: '10px', width: '80%'}}
                         onTouchTap= {(object, position) => this.switchAction(topic, index)}
                     />
-                    <RaisedButton
-                        label="delete"
-                        backgroundColor="#ff2930"
-                        icon={<DeleteIco color="#FFF"/>}
-                        style={{marginLeft:'1%',width:'19%'}}
-                        labelStyle={{color: 'white'}}
-                        onTouchTap={(object, position, attribute) => this.fncHandleDelete(topic, index, 'topics')}
-                    />
+                    <GetResponseYesNo
+                        fncOnYesCase={(object, position, attribute) => this.fncHandleDelete(topic, index, 'topics')}
+                        title={"Atenção, deletando tópico"}
+                        question={"Você realmente deseja deletar o tópico [ "+topic.header +" ] ?"}
+                        btLabel="delete"
+                        btBackgroundColor="#ff2930"
+                        btIcon={<DeleteIco color="#FFF"/>}
+                        btStyle={{marginLeft:'1%',width: '19%'}}
+                        btLabelStyle={{color: 'white'}}/>
                 </div>
             );
 
@@ -80,7 +82,7 @@ class Body extends Component
     isValidationFields = () =>
     {
         const errorHeader = 'Informe o título';
-        const errorDescription = 'Informe o conteúdo, esse campo exige pelomenos 330 caracteres para melhor aparição na home';
+        const errorDescription = 'Informe o conteúdo';
         let errors =
             {
                 header:'',
@@ -92,7 +94,7 @@ class Body extends Component
         this.header.input.value === '' ?
             (errors.header = errorHeader) : (errors.header = '');
 
-        this.description.props.value === '' || this.description.props.value.length <= 330 ?
+        this.description.props.value === '' ?
             (errors.description = errorDescription) : (errors.description = '');
 
         this.setState({'errorsText': errors});
@@ -127,11 +129,6 @@ class Body extends Component
         let topic = this.state.topic;
         topic[attribute] = value;
         this.setState({'topic':topic});
-
-        if(attribute === 'description' && value !== "")
-        {
-            this.isValidationFields();
-        }
     };
 
     fncHandleSave = (event, attribute, position) =>
