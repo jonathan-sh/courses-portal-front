@@ -1,9 +1,6 @@
 import React, {Component} from "react";
 import PubSub from 'pubsub-js';
 import SendEmail from './SendEmail';
-import RaisedButton from 'material-ui/RaisedButton';
-import SendIco from 'material-ui/svg-icons/content/send';
-
 class Marketing extends Component {
 
     constructor(props)
@@ -27,16 +24,7 @@ class Marketing extends Component {
         return (
             <div>
                 <br/>
-                <RaisedButton
-                    label={'Enviar email'}
-                    backgroundColor={'#0ac752'}
-                    icon={<SendIco color='#FFF'/>}
-                    onTouchTap={() => this.fncShowSendEmail()}
-                    fullWidth={true}
-                    labelStyle={{color: 'white'}}
-                />
-
-                { this.state.sendEmail? <SendEmail/> : null}
+                <SendEmail/>
             </div>
         )
     };

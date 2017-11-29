@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import PubSub from 'pubsub-js';
 import CrudCourse from "./CrudCourse";
 
-
 class Course extends Component {
 
     constructor()

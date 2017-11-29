@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import SendIco from 'material-ui/svg-icons/content/send';
 import _ from 'lodash';
 import Dialog from 'material-ui/Dialog';
-import PubSub from 'pubsub-js';
 import TextField from 'material-ui/TextField';
 import {Step, StepLabel, Stepper,} from 'material-ui/Stepper';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,} from 'material-ui/Table';
@@ -11,6 +11,8 @@ import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import httpService from '../../../service/http/HttpService';
 import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
+import ConfigEmail from './ConfigEmail';
+
 
 class SendEmail extends Component {
     constructor(props)
@@ -18,7 +20,7 @@ class SendEmail extends Component {
         super(props);
         this.state =
         {
-            stepIndex: 0, open: true, email: {subject: "", html: "", text: "", recipients: []},
+            stepIndex: 0, open: false, email: {subject: "", html: "", text: "", recipients: []},
             makeSend: false,
             errorText: {subject: "", text: "", html: "", recipients: ""},
             signatures: [],
@@ -59,12 +61,6 @@ class SendEmail extends Component {
             {
                 this.setState({msg: error.message});
             });
-    };
-
-    fncCanStep = () =>
-    {
-        PubSub.publish('close-send-email');
-        this.setState({open: false});
     };
 
     fncSetData = (event, value, attribute) =>
@@ -301,6 +297,18 @@ class SendEmail extends Component {
             toggle:{ maxWidth: 250, marginTop:'20px'}
     };
 
+
+
+    fncHandleOpen = () =>
+    {
+        this.setState({open: true});
+    };
+
+    fncHandleClose = () =>
+    {
+        this.setState({open: false})
+    };
+
     render()
     {
         const {stepIndex} = this.state;
@@ -309,7 +317,7 @@ class SendEmail extends Component {
             <FlatButton
                 label={stepIndex === 0 ? 'Cancelar' : 'Voltar'}
                 primary={true}
-                onTouchTap={stepIndex === 0 ? this.fncCanStep : this.fncHandlePrev}
+                onTouchTap={stepIndex === 0 ? this.fncHandleClose : this.fncHandlePrev}
             />,
             <RaisedButton
                 backgroundColor="#0ac752"
@@ -323,6 +331,19 @@ class SendEmail extends Component {
 
         return (
             <div>
+
+                <div>
+                     <RaisedButton
+                         label={'Enviar email'}
+                         backgroundColor={'#0ac752'}
+                         icon={<SendIco color='#FFF'/>}
+                         onTouchTap={() => this.fncHandleOpen()}
+                         style={{width:'79%', float:'left'}}
+                         labelStyle={{color: 'white'}}
+                     />
+                    <ConfigEmail/>
+                </div>
+
                 <Dialog
                     title="Enviando email"
                     autoScrollBodyContent={true}
@@ -350,7 +371,7 @@ class SendEmail extends Component {
                         open={this.state.response}
                         message="Emails diparados com sucesso."
                         autoHideDuration={5000}
-                        onRequestClose={this.fncCanStep}
+                        onRequestClose={this.fncHandleClose}
                     />
                 </Dialog>
             </div>
