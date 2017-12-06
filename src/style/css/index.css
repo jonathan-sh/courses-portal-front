@@ -64,6 +64,17 @@ p{
     display: inline-flex;
 }
 
+.subTopicBack{
+    font-family: 'Roboto';
+    font-weight: 400;
+    text-align: left;
+    width: 100%;
+    background: rgb(0, 188, 212);
+    padding: 10px;
+    color: #fff;
+    display: inline-flex;
+}
+
 
 .home{
     background-image: url("./../img/home-background.jpg");

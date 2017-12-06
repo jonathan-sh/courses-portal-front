@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import PubSub from 'pubsub-js';
 import SendEmail from './SendEmail';
+import SaleTable from './sale/SaleTable';
+
 class Marketing extends Component {
 
     constructor(props)
@@ -25,6 +27,7 @@ class Marketing extends Component {
             <div>
                 <br/>
                 <SendEmail/>
+                <SaleTable/>
             </div>
         )
     };

@@ -292,9 +292,9 @@ class SendEmail extends Component {
 
     styles =
     {
-            tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
-            tableBody: {cursor: 'pointer'},
-            toggle:{ maxWidth: 250, marginTop:'20px'}
+        tableHeader: {backgroundColor: '#f1f1f1', textAlign: 'left', fontSize: '20px'},
+        tableBody: {cursor: 'pointer'},
+        toggle:{ maxWidth: 250, marginTop:'20px'}
     };
 
 
@@ -333,6 +333,7 @@ class SendEmail extends Component {
             <div>
 
                 <div>
+                     <h4 className={"subTopicBack"}>Email</h4>
                      <RaisedButton
                          label={'Enviar email'}
                          backgroundColor={'#0ac752'}

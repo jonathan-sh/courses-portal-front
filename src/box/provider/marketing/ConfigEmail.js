@@ -100,7 +100,7 @@ class ConfigEmail extends Component {
                     backgroundColor={'#f2862d'}
                     icon={<GearIco color='#FFF'/>}
                     onTouchTap={() => this.fncHandleOpen()}
-                    style={{width:'18%'}}
+                    style={{width:'19%', float:'right'}}
                     labelStyle={{color: 'white'}}
                 />
 
