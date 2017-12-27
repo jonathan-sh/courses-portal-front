@@ -39,6 +39,7 @@ class SaleTable extends Component {
         let rows = sales.map((sale, index) =>
             <TableRow key={index}>
                 <TableRowColumn>{data.notNull(sale.name)}</TableRowColumn>
+                <TableRowColumn>{data.notNull(sale.code)}</TableRowColumn>
                 <TableRowColumn>{data.notNull(sale.start)}</TableRowColumn>
                 <TableRowColumn>{data.notNull(sale.end)}</TableRowColumn>
                 <TableRowColumn>{sale.status? 'active' : 'deactivated'}</TableRowColumn>
@@ -77,9 +78,10 @@ class SaleTable extends Component {
                         displaySelectAll={false}
                         style={this.styles.tableHeader}>
                         <TableRow>
-                            <TableHeaderColumn>Sale name</TableHeaderColumn>
-                            <TableHeaderColumn>Start</TableHeaderColumn>
-                            <TableHeaderColumn>End</TableHeaderColumn>
+                            <TableHeaderColumn>Nome</TableHeaderColumn>
+                            <TableHeaderColumn>Código</TableHeaderColumn>
+                            <TableHeaderColumn>Inicio</TableHeaderColumn>
+                            <TableHeaderColumn>Fim</TableHeaderColumn>
                             <TableHeaderColumn>Status</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
