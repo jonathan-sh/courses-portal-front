@@ -3,6 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import providerService from '../../../service/repository/ProviderService';
 import PubSub from 'pubsub-js';
+import Dropzone from '../../../service/Dropzone';
 
 class About extends Component
 {
@@ -116,6 +117,11 @@ class About extends Component
         }
     };
 
+    uploadFile = () =>
+    {
+        PubSub.publish('dropzone-make-upload');
+    };
+
     render()
     {
         return (
@@ -170,6 +176,20 @@ class About extends Component
                     style={{float: 'right', margin: '20px 0 20px 20px'}}/>
 
                 <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Dropzone limitFile={true}/>
+
+                <RaisedButton
+                    label="salvar"
+                    backgroundColor="#0ac752"
+                    labelStyle={{color: 'white'}}
+                    keyboardFocused={true}
+                    onTouchTap={this.uploadFile}
+                    style={{float: 'right', margin: '20px 0 20px 20px'}}/>
             </div>
         )
     }
