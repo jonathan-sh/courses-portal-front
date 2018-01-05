@@ -1,0 +1,13 @@
+#host {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filepicker.dropzone .dz-preview.dz-image-preview {
+    background: none;
+}
+
+.filepicker.dropzone .dz-preview.dz-image-preview .dz-image {
+    border-radius: 5px;
+}
